@@ -7,7 +7,7 @@
 //
 //  Source des données : data/content.json
 //  Régénérer          : php tools/build.php
-//  Généré le          : 19/09/2026 à 22:12
+//  Généré le          : 19/09/2026 à 22:14
 // ═══════════════════════════════════════════════════════════════
 
 const CONFIG = {
@@ -196,32 +196,19 @@ const CONFIG = {
                     "Jusqu'à 3 personnes"
                 ],
                 "image": {
-                    "src": "uploads/chambre-lit-baldaquin-52286be5-med.jpg",
-                    "webp": "uploads/chambre-lit-baldaquin-52286be5-med.webp",
+                    "src": "uploads/comfort-triple-01-063a697f-small.jpg",
+                    "webp": "uploads/comfort-triple-01-063a697f-small.webp",
                     "srcset": {
-                        "webp": "uploads/chambre-lit-baldaquin-52286be5-thumb.webp 320w, uploads/chambre-lit-baldaquin-52286be5-small.webp 640w, uploads/chambre-lit-baldaquin-52286be5-med.webp 1280w",
-                        "jpg": "uploads/chambre-lit-baldaquin-52286be5-thumb.jpg 320w, uploads/chambre-lit-baldaquin-52286be5-small.jpg 640w, uploads/chambre-lit-baldaquin-52286be5-med.jpg 1280w"
+                        "webp": "uploads/comfort-triple-01-063a697f-thumb.webp 320w, uploads/comfort-triple-01-063a697f-small.webp 558w",
+                        "jpg": "uploads/comfort-triple-01-063a697f-thumb.jpg 320w, uploads/comfort-triple-01-063a697f-small.jpg 558w"
                     },
                     "sizes": "(max-width: 639px) 92vw, (max-width: 1023px) 48vw, 600px",
-                    "alt": "Chambre avec lit à baldaquin et moustiquaire, mobilier en bois local, suspensions en vannerie et ouverture sur le jardin",
-                    "width": 1280,
-                    "height": 720,
+                    "alt": "Lit à baldaquin et coussins bleus brodés, banc en bois brut au pied du lit",
+                    "width": 558,
+                    "height": 496,
                     "eager": false
                 },
                 "gallery": [
-                    {
-                        "src": "uploads/chambre-lit-baldaquin-52286be5-med.jpg",
-                        "webp": "uploads/chambre-lit-baldaquin-52286be5-med.webp",
-                        "srcset": {
-                            "webp": "uploads/chambre-lit-baldaquin-52286be5-thumb.webp 320w, uploads/chambre-lit-baldaquin-52286be5-small.webp 640w, uploads/chambre-lit-baldaquin-52286be5-med.webp 1280w",
-                            "jpg": "uploads/chambre-lit-baldaquin-52286be5-thumb.jpg 320w, uploads/chambre-lit-baldaquin-52286be5-small.jpg 640w, uploads/chambre-lit-baldaquin-52286be5-med.jpg 1280w"
-                        },
-                        "sizes": "(max-width: 900px) 94vw, 880px",
-                        "alt": "Chambre avec lit à baldaquin et moustiquaire, mobilier en bois local, suspensions en vannerie et ouverture sur le jardin",
-                        "width": 1280,
-                        "height": 720,
-                        "eager": false
-                    },
                     {
                         "src": "uploads/comfort-triple-01-063a697f-small.jpg",
                         "webp": "uploads/comfort-triple-01-063a697f-small.webp",
@@ -304,45 +291,19 @@ const CONFIG = {
                     "Jusqu'à 3 personnes"
                 ],
                 "image": {
-                    "src": "uploads/images-3-91832ad7-small.jpg",
-                    "webp": "uploads/images-3-91832ad7-small.webp",
+                    "src": "uploads/standard-triple-01-5de95294-small.jpg",
+                    "webp": "uploads/standard-triple-01-5de95294-small.webp",
                     "srcset": {
-                        "webp": "uploads/images-3-91832ad7-thumb.webp 320w, uploads/images-3-91832ad7-small.webp 536w",
-                        "jpg": "uploads/images-3-91832ad7-thumb.jpg 320w, uploads/images-3-91832ad7-small.jpg 536w"
+                        "webp": "uploads/standard-triple-01-5de95294-thumb.webp 320w, uploads/standard-triple-01-5de95294-small.webp 608w",
+                        "jpg": "uploads/standard-triple-01-5de95294-thumb.jpg 320w, uploads/standard-triple-01-5de95294-small.jpg 608w"
                     },
                     "sizes": "(max-width: 639px) 92vw, (max-width: 1023px) 48vw, 600px",
-                    "alt": "Chambre avec lit double, tables de chevet et baie vitrée donnant sur l'extérieur",
-                    "width": 536,
-                    "height": 373,
+                    "alt": "Les deux lits de la chambre triple, murs en enduit ocre",
+                    "width": 608,
+                    "height": 444,
                     "eager": false
                 },
                 "gallery": [
-                    {
-                        "src": "uploads/images-3-91832ad7-small.jpg",
-                        "webp": "uploads/images-3-91832ad7-small.webp",
-                        "srcset": {
-                            "webp": "uploads/images-3-91832ad7-thumb.webp 320w, uploads/images-3-91832ad7-small.webp 536w",
-                            "jpg": "uploads/images-3-91832ad7-thumb.jpg 320w, uploads/images-3-91832ad7-small.jpg 536w"
-                        },
-                        "sizes": "(max-width: 900px) 94vw, 880px",
-                        "alt": "Chambre avec lit double, tables de chevet et baie vitrée donnant sur l'extérieur",
-                        "width": 536,
-                        "height": 373,
-                        "eager": false
-                    },
-                    {
-                        "src": "uploads/images-4-ea73bfbe-thumb.jpg",
-                        "webp": "uploads/images-4-ea73bfbe-thumb.webp",
-                        "srcset": {
-                            "webp": "uploads/images-4-ea73bfbe-thumb.webp 194w",
-                            "jpg": "uploads/images-4-ea73bfbe-thumb.jpg 194w"
-                        },
-                        "sizes": "(max-width: 900px) 94vw, 880px",
-                        "alt": "Vue d'ensemble de la chambre et de son couchage",
-                        "width": 194,
-                        "height": 259,
-                        "eager": false
-                    },
                     {
                         "src": "uploads/standard-triple-01-5de95294-small.jpg",
                         "webp": "uploads/standard-triple-01-5de95294-small.webp",
@@ -412,32 +373,19 @@ const CONFIG = {
                     "Cour intérieure"
                 ],
                 "image": {
-                    "src": "uploads/images-4-e88c2c6d-thumb.jpg",
-                    "webp": "uploads/images-4-e88c2c6d-thumb.webp",
+                    "src": "uploads/double-jardin-01-0b8d07d4-small.jpg",
+                    "webp": "uploads/double-jardin-01-0b8d07d4-small.webp",
                     "srcset": {
-                        "webp": "uploads/images-4-e88c2c6d-thumb.webp 259w",
-                        "jpg": "uploads/images-4-e88c2c6d-thumb.jpg 259w"
+                        "webp": "uploads/double-jardin-01-0b8d07d4-thumb.webp 320w, uploads/double-jardin-01-0b8d07d4-small.webp 603w",
+                        "jpg": "uploads/double-jardin-01-0b8d07d4-thumb.jpg 320w, uploads/double-jardin-01-0b8d07d4-small.jpg 603w"
                     },
                     "sizes": "(max-width: 639px) 92vw, (max-width: 1023px) 48vw, 600px",
-                    "alt": "Deux lits accolés sous moustiquaire, murs clairs et rideaux",
-                    "width": 259,
-                    "height": 194,
+                    "alt": "Lit à baldaquin avec moustiquaire et tête de lit en bois brut, ventilateur et ouverture sur la cour",
+                    "width": 603,
+                    "height": 434,
                     "eager": false
                 },
                 "gallery": [
-                    {
-                        "src": "uploads/images-4-e88c2c6d-thumb.jpg",
-                        "webp": "uploads/images-4-e88c2c6d-thumb.webp",
-                        "srcset": {
-                            "webp": "uploads/images-4-e88c2c6d-thumb.webp 259w",
-                            "jpg": "uploads/images-4-e88c2c6d-thumb.jpg 259w"
-                        },
-                        "sizes": "(max-width: 900px) 94vw, 880px",
-                        "alt": "Deux lits accolés sous moustiquaire, murs clairs et rideaux",
-                        "width": 259,
-                        "height": 194,
-                        "eager": false
-                    },
                     {
                         "src": "uploads/double-jardin-01-0b8d07d4-small.jpg",
                         "webp": "uploads/double-jardin-01-0b8d07d4-small.webp",

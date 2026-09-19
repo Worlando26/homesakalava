@@ -1,6 +1,6 @@
 {
     "version": 1,
-    "updated_at": "2026-09-19T22:12:39+02:00",
+    "updated_at": "2026-09-19T22:14:10+02:00",
     "settings": {
         "showPrices": true,
         "priceFallback": "250.000Ar"
@@ -866,14 +866,13 @@
                     "Jusqu'à 3 personnes"
                 ],
                 "mediaIds": [
-                    "chambre-lit-baldaquin-52286be5",
                     "comfort-triple-01-063a697f",
                     "comfort-triple-02-02ade22d",
                     "comfort-triple-03-969cc933",
                     "comfort-triple-04-6a29e70f",
                     "comfort-triple-05-3d7857ac"
                 ],
-                "coverId": "chambre-lit-baldaquin-52286be5",
+                "coverId": "comfort-triple-01-063a697f",
                 "gradient": "linear-gradient(145deg, #1a2a3a 0%, #3a6a90 100%)",
                 "active": true
             },
@@ -891,14 +890,12 @@
                     "Jusqu'à 3 personnes"
                 ],
                 "mediaIds": [
-                    "images-3-91832ad7",
-                    "images-4-ea73bfbe",
                     "standard-triple-01-5de95294",
                     "standard-triple-02-05bcb866",
                     "standard-triple-03-34dc5ff8",
                     "standard-triple-04-209f99b5"
                 ],
-                "coverId": "images-3-91832ad7",
+                "coverId": "standard-triple-01-5de95294",
                 "gradient": "linear-gradient(145deg, #4a6a7a 0%, #6a8a9a 100%)",
                 "active": true
             },
@@ -916,14 +913,13 @@
                     "Cour intérieure"
                 ],
                 "mediaIds": [
-                    "images-4-e88c2c6d",
                     "double-jardin-01-0b8d07d4",
                     "double-jardin-02-00a2e652",
                     "double-jardin-03-e5182ca1",
                     "double-jardin-04-a718b05c",
                     "double-jardin-05-465e8294"
                 ],
-                "coverId": "images-4-e88c2c6d",
+                "coverId": "double-jardin-01-0b8d07d4",
                 "gradient": "linear-gradient(145deg, #2a4a2f 0%, #5a8a60 100%)",
                 "active": true
             },
