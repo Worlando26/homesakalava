@@ -10,6 +10,13 @@ function initCarousel() {
 
   if (!viewport || !track) return;
 
+  // Le carrousel doit rester manipulable meme si GSAP ne s'est pas charge
+  // (CDN bloque, connexion coupee) : on bascule alors sur des transformations
+  // CSS directes, sans inertie.
+  const hasGsap = typeof gsap !== 'undefined';
+  const setX  = (x) => { track.style.transform = 'translate3d(' + x + 'px,0,0)'; };
+  const killT = () => { if (hasGsap) gsap.killTweensOf(track); };
+
   const CARD_GAP = 16;
   let currentX   = 0;
   let isDragging = false;
@@ -35,11 +42,15 @@ function initCarousel() {
 
   function moveTo(x, duration) {
     currentX = clamp(x);
-    gsap.to(track, {
-      x: currentX,
-      duration: duration !== undefined ? duration : 0.55,
-      ease: 'power3.out',
-    });
+    if (hasGsap) {
+      gsap.to(track, {
+        x: currentX,
+        duration: duration !== undefined ? duration : 0.55,
+        ease: 'power3.out',
+      });
+    } else {
+      setX(currentX);
+    }
   }
 
   function snapToNearest() {
@@ -78,7 +89,7 @@ function initCarousel() {
     lastT      = Date.now();
     velX       = 0;
     viewport.style.cursor = 'grabbing';
-    gsap.killTweensOf(track);
+    killT();
   });
 
   window.addEventListener('mousemove', e => {
@@ -88,7 +99,7 @@ function initCarousel() {
     velX = (e.clientX - lastX) / Math.max(1, now - lastT);
     lastX = e.clientX;
     lastT = now;
-    gsap.set(track, { x: clamp(startXCur + delta) });
+    if (hasGsap) { gsap.set(track, { x: clamp(startXCur + delta) }); } else { setX(clamp(startXCur + delta)); }
     currentX = clamp(startXCur + delta);
   });
 
@@ -110,7 +121,7 @@ function initCarousel() {
     lastX     = startX;
     lastT     = Date.now();
     velX      = 0;
-    gsap.killTweensOf(track);
+    killT();
   }, { passive: true });
 
   viewport.addEventListener('touchmove', e => {
@@ -119,7 +130,7 @@ function initCarousel() {
     velX  = (e.touches[0].clientX - lastX) / Math.max(1, now - lastT);
     lastX = e.touches[0].clientX;
     lastT = now;
-    gsap.set(track, { x: clamp(startXCur + delta) });
+    if (hasGsap) { gsap.set(track, { x: clamp(startXCur + delta) }); } else { setX(clamp(startXCur + delta)); }
     currentX = clamp(startXCur + delta);
   }, { passive: true });
 
@@ -134,7 +145,7 @@ function initCarousel() {
   // ── Resize ────────────────────────────────────────────────
   window.addEventListener('resize', () => {
     currentX = clamp(currentX);
-    gsap.set(track, { x: currentX });
+    if (hasGsap) { gsap.set(track, { x: currentX }); } else { setX(currentX); }
     updateArrows();
   });
 

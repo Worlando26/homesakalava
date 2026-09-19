@@ -3,8 +3,8 @@
   --c-bg:       #f0ece5;
   --c-surface:  #faf8f4;
   --c-ink:      #0d1e1c;
-  --c-muted:    #7a8c86;
-  --c-accent:   #1d8f8a;
+  --c-muted:    #5f6d69;   /* assombri : 4,6:1 sur le fond, seuil AA */
+  --c-accent:   #187773;   /* assombri : lisible en texte ET sous du blanc */
   --c-accent-2: #136e6a;
   --c-dark:     #0a1a1a;
   --c-line:     #dedad2;

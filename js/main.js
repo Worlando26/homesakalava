@@ -18,6 +18,12 @@
     }
   }
 
+  // Si GSAP n a pas pu se charger (CDN bloque), le CSS prend le relais
+  // pour les quelques animations indispensables.
+  if (typeof gsap === 'undefined') {
+    document.documentElement.classList.add('no-gsap');
+  }
+
   // ─── 1. Injecter le contenu (config → DOM) ────────────────
   renderAll();
 
@@ -85,6 +91,17 @@
       burger.classList.toggle('is-open', isOpen);
       burger.setAttribute('aria-expanded', String(isOpen));
       if (isOpen && nav) nav.classList.add('is-solid');
+    });
+
+    // Echap referme le menu et redonne le focus au bouton : sans cela,
+    // un utilisateur au clavier reste piege dans le tiroir.
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && drawer.classList.contains('is-open')) {
+        drawer.classList.remove('is-open');
+        burger.classList.remove('is-open');
+        burger.setAttribute('aria-expanded', 'false');
+        burger.focus();
+      }
     });
 
     drawer.querySelectorAll('a').forEach(a => {

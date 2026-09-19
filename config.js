@@ -7,7 +7,7 @@
 //
 //  Source des données : data/content.json
 //  Régénérer          : php tools/build.php
-//  Généré le          : 19/09/2026 à 03:32
+//  Généré le          : 19/09/2026 à 03:38
 // ═══════════════════════════════════════════════════════════════
 
 const CONFIG = {
@@ -17,7 +17,7 @@ const CONFIG = {
         "tagline": "Maison d'hôtes les pieds dans le sable, à Nosy Be"
     },
     "theme": {
-        "accent": "#1d8f8a",
+        "accent": "#187773",
         "dark": "#0a1a1a",
         "bg": "#f0ece5"
     },

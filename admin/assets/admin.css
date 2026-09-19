@@ -10,8 +10,8 @@
   --c-bg:      #f0ece5;
   --c-surface: #ffffff;
   --c-ink:     #0d1e1c;
-  --c-muted:   #6c7d78;
-  --c-accent:  #1d8f8a;
+  --c-muted:   #5f6e6a;
+  --c-accent:  #187773;
   --c-accent-2:#136e6a;
   --c-dark:    #0a1a1a;
   --c-line:    #ddd8d0;
@@ -195,7 +195,7 @@ textarea { min-height: 110px; line-height: 1.6; resize: vertical; }
 input:focus, textarea:focus, select:focus {
   outline: none;
   border-color: var(--c-accent);
-  box-shadow: 0 0 0 3px rgba(29,143,138,.16);
+  box-shadow: 0 0 0 3px rgba(24,119,115,.2);
 }
 input[type="file"] {
   width: 100%;
@@ -435,4 +435,21 @@ input[type="file"] {
 
 @media (prefers-reduced-motion: reduce) {
   * { transition: none !important; animation: none !important; }
+}
+
+/* Sur ecran tactile, :hover reste colle apres le tap : on le neutralise. */
+@media (hover: none) {
+  .shortcut:hover { transform: none; }
+}
+
+/* Tres petits ecrans : les lignes de liste passent en colonne pour que le
+   bouton "Modifier" ne compresse pas le texte a quelques caracteres. */
+@media (max-width: 400px) {
+  .row {
+    grid-template-columns: auto 1fr;
+    row-gap: 8px;
+  }
+  .row__actions { grid-column: 1 / -1; }
+  .row__actions .btn { width: 100%; }
+  .media-grid { grid-template-columns: repeat(auto-fill, minmax(125px, 1fr)); }
 }

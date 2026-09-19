@@ -94,8 +94,20 @@ function parseHtml(html) {
   const tagRe = /<(\/?)([a-zA-Z][\w-]*)((?:\s+[^\s=>/]+(?:\s*=\s*(?:"[^"]*"|'[^']*'|[^\s>]+))?)*)\s*(\/?)>/g;
   const voids = new Set(['meta','link','img','br','hr','input','source','path','polyline','line','circle','rect','use']);
   let m;
+  let lastIndex = 0;
   while ((m = tagRe.exec(html))) {
     const [, close, tag, attrStr, selfClose] = m;
+
+    // Texte situé entre deux balises : sans lui, les intitulés écrits en dur
+    // dans index.html seraient invisibles pour les contrôles d'accessibilité.
+    const between = html.slice(lastIndex, m.index).trim();
+    if (between && !/^<!--/.test(between)) {
+      const t = new Node('#text');
+      t.textContent = between.replace(/\s+/g, ' ');
+      stack[stack.length - 1].appendChild(t);
+    }
+    lastIndex = tagRe.lastIndex;
+
     if (close) { if (stack.length > 1) stack.pop(); continue; }
     const node = new Node(tag);
     const attrRe = /([^\s=]+)(?:\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s>]+)))?/g;
@@ -175,6 +187,44 @@ const rendered = tree.textContent;
 // 4. Aucun numéro ou e-mail inventé
 const invented = rendered.match(/\+261[\d\sX]+|[a-z0-9._-]+@[a-z0-9.-]+\.[a-z]{2,}/gi) || [];
 invented.filter(v => !v.includes('exemple.com')).forEach(v => problems.push('Coordonnée en dur dans le rendu : ' + v));
+
+// 5. Hiérarchie des titres : un seul h1, et jamais de niveau saute
+const headings = [];
+(function collect(n) {
+  n.children.forEach(c => {
+    const m = /^H([1-6])$/.exec(c.tagName);
+    if (m) headings.push({ level: +m[1], text: c.textContent.trim().slice(0, 40) });
+    collect(c);
+  });
+})(tree);
+
+const h1s = headings.filter(h => h.level === 1);
+if (h1s.length !== 1) problems.push(`${h1s.length} balise(s) h1 (il en faut exactement une)`);
+
+let previous = 1;
+headings.forEach(h => {
+  if (h.level > previous + 1) {
+    problems.push(`Niveau de titre saute : h${previous} puis h${h.level} ("${h.text}")`);
+  }
+  previous = h.level;
+});
+
+// 6. Tout lien doit avoir un intitulé perceptible (texte ou aria-label)
+let mute = 0;
+tree.querySelectorAll('A').forEach(a => {
+  const hasText  = a.textContent.trim().length > 0;
+  const hasLabel = (a.attrs['aria-label'] || '').trim().length > 0;
+  if (!hasText && !hasLabel) mute++;
+});
+if (mute) problems.push(`${mute} lien(s) sans intitulé lisible (ni texte, ni aria-label)`);
+
+// 7. Tout bouton doit être de type explicite : sans type, un <button> dans
+//    un formulaire le soumet, ce qui provoque des envois accidentels
+let untyped = 0;
+tree.querySelectorAll('BUTTON').forEach(b => { if (!b.attrs.type) untyped++; });
+if (untyped) problems.push(`${untyped} bouton(s) sans attribut type`);
+
+console.log(`Titres : ${headings.map(h => 'h' + h.level).join(' ')}`);
 
 console.log(`Rendu exécuté : ${countNodes(tree)} nœuds, ${imgs} <img>.`);
 if (warnings.length) console.log('Avertissements :', warnings.join(' | '));

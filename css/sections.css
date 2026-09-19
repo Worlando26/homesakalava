@@ -1131,3 +1131,49 @@
   .acces__row-value  { padding-top: 0; border-top: none; }
   .acces__rows > :nth-child(2) { border-top: none; }
 }
+
+/* ══════════════════════════════════════════════════
+   AJUSTEMENTS MOBILE
+   Le gerant et la clientele sont majoritairement sur telephone :
+   en cas d arbitrage, c est le mobile qui l emporte.
+   ══════════════════════════════════════════════════ */
+
+/* Les effets de survol ne s appliquent qu aux appareils qui survolent
+   reellement. Sur un ecran tactile, :hover reste "colle" apres le tap et
+   donne l impression d un bouton bloque. */
+@media (hover: none) {
+  .btn:hover,
+  .card:hover .card__bg,
+  .activite-card:hover,
+  .amenity-pill:hover { transform: none; }
+}
+
+@media (max-width: 480px) {
+  /* Les libelles des boutons sont modifiables depuis l admin : un texte
+     long ne doit pas deborder de l ecran, il passe a la ligne. */
+  .btn {
+    white-space: normal;
+    text-align: center;
+    line-height: 1.3;
+    max-width: 100%;
+  }
+
+  /* Le bouton du bas de page prend toute la largeur : cible plus sure au
+     pouce, et plus de risque de debordement. */
+  .footer__cta-btn,
+  .trusted__btn { width: 100%; }
+
+  /* L encart central des services touchait les bords de l ecran. */
+  .trusted__card { min-width: 0; width: 100%; }
+
+  /* Les pastilles d equipement des cartes chambre : deux lignes maximum,
+     pour que le tarif reste visible sans faire deborder la carte. */
+  .ideal-card { height: clamp(370px, 112vw, 430px); }
+}
+
+/* Tres petits ecrans (iPhone SE et equivalents, 320 px) */
+@media (max-width: 360px) {
+  .ideal-card  { width: calc(100vw - 52px); }
+  .float-card  { width: clamp(96px, 30vw, 130px); height: clamp(116px, 36vw, 160px); }
+  .reputation__score-value { font-size: 44px; }
+}

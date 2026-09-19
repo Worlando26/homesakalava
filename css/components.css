@@ -360,3 +360,8 @@ picture.hero__pic {
 }
 .activite-card:hover { border-color: var(--c-accent); transform: translateY(-2px); }
 .activite-card svg   { width: 20px; height: 20px; color: var(--c-accent); flex-shrink: 0; }
+
+/* Repli sans GSAP : si le CDN est bloque, l'accordeon s'anime en CSS pur.
+   La classe .no-gsap est posee par js/main.js. */
+.no-gsap .faq-item__body { transition: max-height .35s ease; }
+.no-gsap .faq-item__icon { transition: transform .25s ease; }

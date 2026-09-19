@@ -12,3 +12,8 @@ storage/originals/*
 # Divers
 Thumbs.db
 .DS_Store
+
+# Fichiers de l ancien site Talinjoo (autre hotel, autre ville), deplaces
+# hors du site le 19/09/2026. Conserves sur disque, hors versionnement.
+# Recuperables aussi depuis le commit initial (git show 9eef186).
+_archive_ancien_site/
