@@ -4,11 +4,14 @@
 **Branche de travail :** `refonte-home-sakalava` (la branche `main` n'a pas été touchée)
 **Commits :** 6 commits de travail au-dessus d'un commit de référence
 
-> **Une seconde passe a suivi la mission initiale** : campagne de tests,
-> correction des bugs trouvés, et préparation à l'hébergement.
-> Elle est décrite dans la **section 8**, en fin de rapport. Si vous ne
-> lisez qu'une chose, lisez celle-là : elle contient une faille de sécurité
-> corrigée et la marche à suivre pour mettre le site en ligne.
+> **Ce rapport couvre trois sessions.**
+> **Section 8** — tests, bugs corrigés (dont une faille de sécurité) et
+> préparation à l'hébergement.
+> **Section 9** — refonte en site multi-pages et multilingue, page
+> « Nos chambres », photos des chambres, tarifs.
+>
+> Si vous ne lisez qu'une chose, lisez la **section 9.4** : ce qu'il reste
+> à vérifier, dont deux photos qui ne semblent pas être les vôtres.
 
 ---
 
@@ -924,3 +927,269 @@ Dans cet ordre :
 | Fichier sensible dans `livraison/` | Aucun |
 | Page de diagnostic | 24 contrôles au vert, 2 avertissements attendus en local |
 | Photos d'origine (`photos_sakalava/`) | Intactes |
+
+---
+
+# 9. Refonte multi-pages et multilingue
+
+Session menée en autonomie, sans validation intermédiaire, conformément à
+la consigne. Un commit par étape, pour pouvoir en annuler une seule.
+
+| Commit | Étape |
+|---|---|
+| `e97d33c` | 1 · Prix par chambre |
+| `be73e85` | 2 · 4 à 5 photos par chambre |
+| `4f78cfa` | 3-4-5 · Multi-pages, page Nos chambres, navbar |
+| `8cd9507` | 6 · Quatre langues |
+| `f9a61ed` | Correctifs de la vérification finale |
+
+---
+
+## 9.1 Ce qui a été fait
+
+### 1 — Un prix par chambre
+
+Le champ existait déjà dans l'admin (un écran par chambre) avec un
+interrupteur global d'affichage ; il était simplement vide et masqué.
+
+Les tarifs sont renseignés et affichés. Chaque montant se modifie seul, et
+l'interrupteur global permet de tout remasquer d'un clic.
+
+| Chambre | Tarif |
+|---|---|
+| Comfort Triple | 56 € |
+| Standard Triple | 43 € |
+| Double vue jardin | 44 € |
+| Double avec terrasse | 44 € |
+| Standard Double | 24 € |
+
+### 2 — Les photos des chambres
+
+| Chambre | Photos |
+|---|---|
+| Comfort Triple | 5 |
+| Standard Triple | 4 |
+| Double vue jardin | 5 |
+| Double avec terrasse | 5 |
+| Standard Double | **3** |
+
+Toutes en WebP avec repli JPEG, trois largeurs, chargement différé et texte
+alternatif rédigé un par un.
+
+### 3 — La page « Nos chambres »
+
+`chambres.html` reprend la mise en page des maquettes que vous aviez
+déposées dans chaque dossier d'`add_img` : grande photo à gauche avec sa
+bande de vignettes cliquables, panneau de détails à droite (superficie,
+équipements en pastilles, description, tarif, équipements communs). Les
+blocs alternent gauche/droite sur grand écran.
+
+Un clic sur une chambre depuis l'accueil mène à `chambres.html#identifiant`.
+
+### 4 — La navigation
+
+**Nos chambres · Le restaurant · Activités · Accès & Contact**, avec
+l'onglet courant signalé.
+
+### 5 — Activités et Accès en pages dédiées
+
+Retirées de l'accueil, elles ont chacune leur page. Le formulaire de contact
+accompagne la page Accès, et reste aussi sur l'accueil.
+
+### 6 — Quatre langues
+
+FR à la racine, puis `en/`, `de/`, `it/`. **16 pages.**
+
+Tout est traduit, y compris le message pré-rédigé du formulaire : un
+visiteur allemand reçoit un e-mail en allemand.
+
+---
+
+## 9.2 Décisions prises seul
+
+### D20 — Le HTML des pages est désormais généré
+
+`index.html` n'est plus un fichier source mais un fichier **généré**.
+
+Quatre pages × quatre langues = 16 fichiers HTML. Les maintenir à la main
+condamnait la moindre correction de navigation à être reportée seize fois,
+avec une certitude d'oubli. `lib/pages.php` contient un seul jeu de
+gabarits.
+
+> **Conséquence pour vous :** ne modifiez plus `index.html` ni les autres
+> `.html` directement, vos changements seraient écrasés. Tout passe par
+> l'admin, ou par `lib/pages.php` pour la structure.
+
+### D21 — Une langue = un sous-dossier
+
+Alternatives écartées : un paramètre d'URL (`?lang=en`) ou un basculement
+en JavaScript. Les deux donnent une seule adresse pour quatre langues :
+Google n'indexe alors qu'une version, et le travail de traduction est perdu
+pour le référencement.
+
+Avec un dossier par langue, chaque version a son adresse, son titre, sa
+description, et les quatre se déclarent mutuellement en `hreflang`. Le
+sélecteur fonctionne sans JavaScript.
+
+### D22 — Le français reste la source, les autres langues sont des surcouches
+
+`data/content.json` porte le français. `data/i18n/en.json`, `de.json`,
+`it.json` ne reprennent **que les textes traduits**.
+
+Tout ce qui manque retombe sur le français. Une traduction incomplète
+affiche donc du français, jamais du vide. C'est ce qui permettra d'ajouter
+une cinquième langue progressivement.
+
+### D23 — La première photo est la photo principale
+
+Un seul réglage au lieu de deux (ordre + photo principale). Deux réglages
+séparés, ce sont deux occasions de se contredire.
+
+### D24 — Les tarifs viennent des captures Booking, avant remise Genius
+
+`add_img/price/` contenait votre grille tarifaire Booking. J'ai retenu le
+tarif **avant** remise Genius : cette remise est propre à Booking et n'a pas
+de sens sur votre site.
+
+> **À valider :** ce sont vos tarifs Booking. En réservation directe, vous
+> n'avez pas de commission à payer — beaucoup de maisons en profitent pour
+> proposer un peu moins cher.
+
+### D25 — Les galeries ne contiennent que les photos d'add_img
+
+Vos cinq photos téléversées depuis l'admin ont été retirées des galeries de
+chambre, mais **pas supprimées** : elles restent dans la médiathèque et sur
+les blocs « jardin » et « restaurant ».
+
+Deux d'entre elles faisaient 194×259 et 259×194 px, trop petites pour une
+couverture de chambre. Voir aussi le point 9.4.
+
+### D26 — Plafond de cinq photos par chambre
+
+Au-delà, la fiche devient une planche-contact et le visiteur décroche.
+
+### D27 — Un lien, pas une carte cliquable
+
+Sur le carrousel de l'accueil, un lien explicite « Voir la chambre » plutôt
+qu'une carte entièrement cliquable : le carrousel se manipule au glissé du
+doigt, et un glissé ne doit jamais déclencher une navigation par accident.
+
+### D28 — Les maquettes ne sont pas des photos
+
+Les cinq grandes captures (une par dossier) montrent la fiche Booking
+complète, avec son panneau de texte et sa barre d'enregistrement d'écran.
+Elles servent de **référence de mise en page** et ne sont pas publiées,
+comme vous l'avez demandé.
+
+---
+
+## 9.3 Vérifications finales
+
+| Contrôle | Résultat |
+|---|---|
+| Compilation du site | 21 fichiers générés, sans erreur |
+| Rendu des 16 pages | 16 / 16 sans problème |
+| Pages servies en HTTP | 16 / 16 en 200 |
+| Liens internes et ancres | aucun lien mort |
+| Page chambres : images | 27, dont 26 différées et 1 immédiate |
+| Textes alternatifs | tous présents |
+| Back-office | 67 / 67 tests |
+| Syntaxe PHP · JS · CSS | aucune erreur |
+| Barre de navigation à 320 px | tient (282 px estimés) |
+| Sitemap avec domaine | 16 URL, 64 liens alternatifs, XML valide |
+| `add_img/` | 30 fichiers, intact |
+
+### Deux bugs trouvés à la vérification finale, corrigés
+
+1. **Menu illisible sur les pages intérieures.** Elles portent `nav--solid`
+   dès le chargement, mais les règles de couleur ne visaient que `is-solid`,
+   posée au défilement : liens et logo blancs sur fond clair.
+2. **Première photo différée** sur la page des chambres : elle est pourtant
+   visible d'emblée, la page s'ouvrait sur un cadre vide.
+
+### Trois bugs trouvés pendant le travail, corrigés
+
+- `renderActivities` et `renderAccess` écrivaient dans des hooks déplacés
+  vers l'en-tête de page : plantage complet d'`activites.html` et
+  `acces.html`.
+- Deux liens du hero avaient perdu leur intitulé accessible.
+- **Chemins d'images :** sans préfixe, une page dans `en/` aurait cherché
+  ses photos dans `en/uploads/`. Le site aurait été sans aucune image dans
+  les trois langues étrangères.
+
+---
+
+## 9.4 À vérifier en priorité
+
+### 1. Le responsive sur un vrai téléphone
+
+C'est le seul contrôle que je ne peux pas faire : je n'ai pas de navigateur.
+L'analyse du CSS et le calcul de largeur ne remplacent pas un coup d'œil.
+
+Regardez en particulier :
+
+- la barre de navigation avec le sélecteur de langue en portrait ;
+- la page **Nos chambres** : bande de vignettes, alternance des blocs ;
+- le passage d'une langue à l'autre depuis une page intérieure.
+
+### 2. Deux photos qui ne semblent pas être les vôtres
+
+En inspectant la médiathèque, deux des photos que vous aviez téléversées
+posent question :
+
+- `images-3` (536×373) montre une chambre moderne, sol carrelé clair,
+  sommier sombre, climatiseur mural, piscine visible par la baie. Le style
+  ne correspond pas aux photos Booking de vos chambres — murs de pierre,
+  enduits ocre, lits à baldaquin, mobilier en bois brut.
+- `img-2309` et `whatsapp-image-2026-08-26` montrent de grandes piscines.
+  Or `about.txt` ne mentionne **aucune piscine** parmi vos espaces communs.
+
+Ces trois photos sont aujourd'hui sur les blocs « jardin » et
+« restaurant » de l'accueil. **Je ne les ai pas retirées** : je peux me
+tromper, c'est votre établissement. Mais si ce ne sont pas vos espaces,
+elles promettent au visiteur quelque chose qu'il ne trouvera pas.
+
+### 3. Les tarifs
+
+Voir D24 : ce sont vos tarifs Booking, à valider pour la réservation directe.
+
+### 4. Les traductions
+
+Elles sont complètes et relues, mais je ne suis pas traducteur assermenté.
+Si un client germanophone ou italophone de passage peut y jeter un œil, cela
+ne coûte rien. Les noms de chambres, en particulier, sont un choix
+éditorial : « Dreibettzimmer Comfort », « Tripla Comfort ».
+
+### 5. Ce qui reste en attente
+
+- **Standard Double n'a que 3 photos.** `add_img` n'en contenait que trois
+  d'utilisables ; la capture restée à la racine cadrait le même mur que
+  `standard-double-02`. Il en manque une de votre côté.
+- **Résolution des photos plafonnée à ~620 px.** Ce sont des captures
+  d'écran, elles ne peuvent pas être agrandies. Des photos d'origine
+  resteraient le meilleur gain possible sur ce site.
+- **Téléphone, e-mail et GPS** toujours à renseigner. Le formulaire de
+  contact reste désactivé tant que l'e-mail manque.
+- **Nom de domaine** à renseigner dans Réglages → Référencement : le
+  `hreflang` et le sitemap en dépendent, et ils sont le cœur du bénéfice
+  des quatre langues.
+
+### 6. `add_img/` n'a pas été supprimé
+
+30 fichiers, intacts, comme demandé. Vous pourrez le supprimer vous-même une
+fois le résultat validé — ou me le demander.
+
+---
+
+## 9.5 Ce qui a changé pour vous, au quotidien
+
+- **Ne modifiez plus les fichiers `.html`** : ils sont générés. Tout passe
+  par l'admin.
+- **Pour traduire un texte** que vous modifiez en français, éditez le
+  fichier de langue correspondant dans `data/i18n/`. Sans quoi la version
+  étrangère gardera l'ancien texte français.
+- **Ajouter une photo à une chambre :** Photos → envoyer, puis Chambres →
+  la chambre → choisir la photo dans une liste. La première de la liste
+  devient la photo de couverture.
+- **`php tools/build.php`** régénère les 16 pages. L'admin le fait tout
+  seul à chaque enregistrement.
