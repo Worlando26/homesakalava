@@ -1,0 +1,3 @@
+# Les donnees du site et le compte administrateur ne sont jamais servis par
+# le serveur web : ils ne sont lus que par PHP, cote serveur.
+Require all denied

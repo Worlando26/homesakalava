@@ -7,7 +7,7 @@
 //
 //  Source des données : data/content.json
 //  Régénérer          : php tools/build.php
-//  Généré le          : 19/09/2026 à 03:17
+//  Généré le          : 19/09/2026 à 03:32
 // ═══════════════════════════════════════════════════════════════
 
 const CONFIG = {

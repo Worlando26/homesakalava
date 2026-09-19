@@ -1,0 +1,59 @@
+# ══════════════════════════════════════════════════════════════════
+#  Home Sakalava — configuration Apache du site public
+#  Toutes les directives sont conditionnees : si un module manque,
+#  Apache ignore le bloc au lieu de renvoyer une erreur 500.
+# ══════════════════════════════════════════════════════════════════
+
+DirectoryIndex index.html index.php
+
+# ── En-tetes de securite ─────────────────────────────────────────
+<IfModule mod_headers.c>
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  Header always set X-Frame-Options "SAMEORIGIN"
+  # Le site n'a besoin d'aucune de ces permissions.
+  Header always set Permissions-Policy "geolocation=(), microphone=(), camera=(), payment=()"
+</IfModule>
+
+# ── Compression ──────────────────────────────────────────────────
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css text/plain text/xml
+  AddOutputFilterByType DEFLATE application/javascript application/json
+  AddOutputFilterByType DEFLATE image/svg+xml application/manifest+json
+</IfModule>
+
+# ── Mise en cache ────────────────────────────────────────────────
+<IfModule mod_expires.c>
+  ExpiresActive On
+  # Le HTML et config.js changent a chaque enregistrement en admin :
+  # ils ne doivent jamais etre mis en cache longtemps.
+  ExpiresByType text/html                 "access plus 0 seconds"
+  ExpiresByType text/css                  "access plus 7 days"
+  ExpiresByType application/javascript    "access plus 7 days"
+  ExpiresByType image/svg+xml             "access plus 1 month"
+  ExpiresByType image/jpeg                "access plus 1 year"
+  ExpiresByType image/webp                "access plus 1 year"
+  ExpiresByType image/png                 "access plus 1 year"
+</IfModule>
+
+<IfModule mod_headers.c>
+  # config.js est regenere a chaque modification du contenu : on impose au
+  # navigateur de verifier qu'il a bien la derniere version.
+  <FilesMatch "^config\.js$">
+    Header set Cache-Control "no-cache, must-revalidate"
+  </FilesMatch>
+</IfModule>
+
+# ── Fichiers qui ne doivent jamais etre servis ───────────────────
+<FilesMatch "^(about|gestionnaire|run_autonome)\.txt$">
+  Require all denied
+</FilesMatch>
+<FilesMatch "^(package\.json|package-lock\.json|RAPPORT\.md|\.gitignore)$">
+  Require all denied
+</FilesMatch>
+
+# ── Types MIME ───────────────────────────────────────────────────
+<IfModule mod_mime.c>
+  AddType image/webp .webp
+  AddType application/manifest+json .webmanifest
+</IfModule>
