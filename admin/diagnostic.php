@@ -155,6 +155,28 @@ $checks['Sécurité'][] = is_https()
         . 'proposé par votre hébergeur : sans lui, votre mot de passe circule '
         . 'en clair sur le réseau.');
 
+// Les sessions sont le point qui casse le plus souvent lors d'un changement
+// d'hébergeur : si leur dossier n'est pas accessible en écriture, la
+// connexion échoue sans message compréhensible.
+$sessionPath = session_save_path() ?: sys_get_temp_dir();
+$checks['Sécurité'][] = (is_dir($sessionPath) && is_writable($sessionPath))
+    ? probe('Sessions', 'ok', 'Le serveur peut enregistrer les sessions')
+    : probe('Sessions', 'error', "Dossier des sessions inaccessible en écriture ($sessionPath)",
+        "Sans cela, la connexion à l'administration échouera. Demandez à votre "
+        . "hébergeur de corriger session.save_path.");
+
+$journal = $root . '/data/erreurs.log';
+if (is_file($journal) && filesize($journal) > 0) {
+    $lignes = (int) count(file($journal) ?: []);
+    $checks['Sécurité'][] = probe('Journal des erreurs', 'warn',
+        "$lignes ligne(s) dans data/erreurs.log",
+        "Des erreurs ont été enregistrées. Ouvrez le fichier data/erreurs.log "
+        . "pour en voir le détail, ou transmettez-le à votre développeur. "
+        . "Vous pouvez le vider sans risque une fois le problème réglé.");
+} else {
+    $checks['Sécurité'][] = probe('Journal des erreurs', 'ok', 'Aucune erreur enregistrée');
+}
+
 $checks['Sécurité'][] = ini_get('display_errors')
     ? probe('Affichage des erreurs', 'error', 'Activé',
         'Les messages d\'erreur révèlent les chemins de vos fichiers aux '

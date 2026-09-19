@@ -28,6 +28,7 @@ require_once $root . '/lib/content.php';
 const EXCLUS = [
     // Identifiants — la règle absolue.
     'data/admin.json',
+    'data/erreurs.log',
 
     // Fiches de travail internes.
     'about.txt',

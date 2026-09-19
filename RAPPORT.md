@@ -2,8 +2,13 @@
 
 **Date :** 19 septembre 2026
 **Branche de travail :** `refonte-home-sakalava` (la branche `main` n'a pas été touchée)
-**Commits :** 3 commits de travail, un par phase, au-dessus d'un commit de référence
-**Bilan chiffré :** 59 fichiers modifiés, 8 062 lignes ajoutées, 672 supprimées
+**Commits :** 6 commits de travail au-dessus d'un commit de référence
+
+> **Une seconde passe a suivi la mission initiale** : campagne de tests,
+> correction des bugs trouvés, et préparation à l'hébergement.
+> Elle est décrite dans la **section 8**, en fin de rapport. Si vous ne
+> lisez qu'une chose, lisez celle-là : elle contient une faille de sécurité
+> corrigée et la marche à suivre pour mettre le site en ligne.
 
 ---
 
@@ -688,3 +693,234 @@ Dans cet ordre.
 arrive en collant du texte depuis un traitement de texte — était silencieusement
 vidée par le filtre de caractères de contrôle. Le texte disparaissait sans le
 moindre message d'erreur. L'encodage est désormais converti avant filtrage.
+
+---
+
+# 8. Seconde passe — tests, corrections et mise en ligne
+
+Cette section couvre le travail fait après la mission initiale, à votre
+demande : tester, réparer, améliorer, et rendre le site prêt à héberger.
+
+---
+
+## 8.1 Un banc de test du back-office
+
+J'ai écrit `tools/test-admin.php`, qui exerce l'administration à travers de
+vraies requêtes HTTP : il se connecte, enregistre, tente des injections,
+pousse les cas limites, puis **restaure le contenu tel qu'il était avant**.
+Vous pouvez le lancer sans crainte, même sur le site en production.
+
+```
+php tools/test-admin.php
+```
+
+**67 contrôles**, tous au vert aujourd'hui. Ils couvrent l'authentification,
+l'échappement, la validation côté serveur, les listes, les chambres, la
+galerie photos, et la page de diagnostic.
+
+Ce banc n'est pas décoratif : **il a trouvé quatre bugs**, dont un sérieux.
+
+---
+
+## 8.2 Les bugs trouvés et corrigés
+
+### Bug 1 — Une faille XSS dans les données structurées (sérieux)
+
+**Ce qui se passait.** Le bloc de données destiné à Google est écrit
+*à l'intérieur* d'une balise `<script>` de la page. L'encodage que
+j'utilisais ne protégeait pas les chevrons. Un texte contenant `</script>`
+saisi depuis l'administration refermait donc la balise, et tout ce qui
+suivait était exécuté comme du code par le navigateur des visiteurs.
+
+**Pourquoi c'est sérieux.** C'est une injection de code dans le site public.
+Même si vous êtes la seule personne à avoir accès à l'administration, ce
+type de faille ne doit jamais rester : elle transforme une erreur de frappe,
+ou un compte compromis, en prise de contrôle de la page vue par vos clients.
+
+**Correction.** Les chevrons, les guillemets et les esperluettes sont
+désormais encodés en séquences d'échappement. Le résultat reste du JSON
+parfaitement valide et lisible par Google — j'ai vérifié les deux.
+
+**Vérifié :** une tentative de sortie de balise est maintenant neutralisée,
+et le nombre de balises ouvertes et fermées de la page reste équilibré.
+
+### Bug 2 — Photos fantômes
+
+La page d'affectation acceptait n'importe quel identifiant de photo, y
+compris un qui ne désignait rien. Le site affichait alors une image cassée.
+Désormais, un identifiant inconnu est ignoré et la section retombe sur son
+dégradé de couleur.
+
+### Bug 3 — Avertissements silencieux
+
+Dès que la fiche de contact était incomplète, le générateur lisait des
+champs inexistants. Comme l'affichage des erreurs est désactivé (à raison),
+cela ne se voyait pas, mais remplissait le journal du serveur à chaque
+enregistrement.
+
+### Bug 4 — Données structurées figées
+
+L'adresse postale envoyée à Google était écrite en dur dans le code. Si vous
+aviez corrigé l'adresse dans l'administration, Google aurait continué de
+lire l'ancienne. Elle est maintenant **déduite des lignes que vous
+saisissez**, avec le code pays, les horaires convertis au format attendu,
+les coordonnées GPS dès que vous les renseignerez, et la note Booking tirée
+de la section réputation.
+
+---
+
+## 8.3 La lacune que j'avais laissée : les photos des chambres
+
+`gestionnaire.txt` demandait de pouvoir « ajouter, remplacer, supprimer et
+réordonner les photos d'une chambre » et « définir la photo principale ».
+Ma première version n'en gérait **qu'une seule**. C'était un manque réel, et
+il tombait mal puisque vous allez justement ajouter des photos.
+
+**Ce qui existe maintenant :**
+
+- Une chambre accepte **autant de photos que vous voulez**.
+- **La première est la photo principale** : celle qui s'affiche sur la carte.
+  J'ai délibérément fusionné « ordre » et « photo principale » en un seul
+  réglage — deux réglages séparés, c'est deux occasions de se contredire.
+- Pour retirer une photo d'une chambre, on remet sa liste sur
+  « aucune photo » : elle reste dans la bibliothèque.
+- Les doublons et les photos supprimées entre-temps sont écartés
+  automatiquement.
+
+**Côté visiteur**, un bouton « Voir les photos » ouvre une visionneuse.
+
+**Décision : un bouton explicite, pas une carte cliquable.** Le carrousel des
+chambres se manipule au glissé du doigt. Rendre la carte entière cliquable
+aurait fait ouvrir la visionneuse par accident à chaque glissement. Un bouton
+séparé évite ce conflit, et il est atteignable au clavier.
+
+La visionneuse est un vrai dialogue accessible : le focus y est enfermé,
+Échap ferme, les flèches changent de photo, le balayage fonctionne au doigt,
+et le focus revient sur le bouton d'origine à la fermeture. Elle n'utilise
+aucune librairie et fonctionne même si les CDN sont bloqués.
+
+---
+
+## 8.4 Créer et supprimer des chambres
+
+Vous pouvez maintenant **ajouter** une chambre et en **supprimer** une.
+
+Une chambre nouvellement créée est **masquée par défaut**. C'est volontaire :
+vous la complétez tranquillement, et elle n'apparaît en ligne que quand vous
+cochez « Afficher cette chambre ». Pas de carte vide visible par vos clients
+pendant que vous travaillez.
+
+La suppression demande confirmation et le rappelle : pour retirer une chambre
+temporairement, il vaut mieux la masquer.
+
+---
+
+## 8.5 Prêt à être hébergé
+
+### Une page de diagnostic
+
+Nouvel onglet **Diagnostic** dans l'administration. Elle contrôle :
+
+- la version de PHP et les extensions nécessaires,
+- les droits d'écriture sur `data/`, `uploads/`, `storage/` et la racine,
+- **la protection réelle des dossiers sensibles** — en les interrogeant
+  vraiment par une requête HTTP, comme le ferait un visiteur,
+- le HTTPS, les sessions, le journal des erreurs,
+- la présence effective des fichiers de photos.
+
+Chaque ligne en rouge ou en orange explique quoi faire, en français.
+
+**C'est le contrôle le plus utile après une mise en ligne.** Il détecte
+notamment le cas où l'hébergeur ignore les fichiers `.htaccess` — situation
+dans laquelle votre contenu et votre mot de passe haché seraient publiquement
+téléchargeables sans que rien ne le laisse deviner.
+
+### Un dossier prêt à téléverser
+
+```
+php tools/package.php
+```
+
+Crée un dossier `livraison/` contenant le site, **sans** votre compte
+administrateur, sans les fiches de travail internes (`about.txt`,
+`gestionnaire.txt`, ce rapport), sans les archives ni l'historique git, et
+sans les outils de développement qui n'ont rien à faire sur un serveur.
+
+Le script vérifie ensuite qu'aucun fichier sensible n'a suivi par erreur, et
+**s'arrête en erreur si c'est le cas**. Il vous rappelle aussi ce qui reste à
+compléter.
+
+Un fichier `LISEZ-MOI-AVANT-MISE-EN-LIGNE.txt` est déposé dans le dossier,
+avec les six étapes à suivre.
+
+### Adaptations pour l'hébergement mutualisé
+
+- **HTTPS derrière un répartiteur de charge** : la plupart des hébergeurs
+  gèrent le certificat en amont de PHP. Sans traitement particulier, le
+  cookie de session n'aurait jamais été marqué « sécurisé » en production.
+  Les en-têtes standards sont désormais reconnus.
+- **En-tête HSTS** dès que le site est en HTTPS.
+- **L'administration n'est plus mise en cache** par le navigateur : sur un
+  ordinateur partagé, le bouton « page précédente » pouvait réafficher une
+  page d'administration après déconnexion.
+- **Journal d'erreurs dédié** dans `data/erreurs.log`, dossier inaccessible
+  depuis le web. Sur beaucoup d'hébergements, les erreurs PHP partent sinon
+  dans un fichier introuvable : impossible de diagnostiquer à distance.
+- **Redirection HTTPS** préparée dans `.htaccess`, laissée commentée.
+  Activée avant que le certificat existe, elle rendrait le site inaccessible :
+  à vous de retirer les dièses une fois le certificat en place.
+- **Chemins relatifs** partout : le site fonctionne à la racine d'un domaine
+  comme dans un sous-dossier.
+
+---
+
+## 8.6 Ce qui reste vrai depuis le premier rapport
+
+Rien de ce qui précède n'annule les sections 1 à 7. En particulier :
+
+- **Les photos manquent toujours.** Quatre chambres sur cinq n'en ont
+  aucune. C'est le principal levier d'amélioration du site, et c'est
+  maintenant beaucoup plus facile à combler : plusieurs photos par chambre,
+  et une visionneuse pour les montrer.
+- **Le mot de passe provisoire est toujours à changer** (section 4, point 10).
+- **La version anglaise n'est toujours pas faite** (section 5).
+- **Rien n'a été testé sur un vrai téléphone** : je n'ai pas de navigateur
+  dans cet environnement.
+
+---
+
+## 8.7 Demain, pour saisir vos données
+
+Dans cet ordre :
+
+1. **Connectez-vous** et changez le mot de passe (Réglages).
+2. **Textes → Coordonnées** : téléphone, e-mail, GPS. Dès que l'e-mail est
+   saisi, le formulaire de contact du site s'active tout seul.
+3. **Photos** : envoyez tout ce que vous avez. Écrivez une phrase de
+   description pour chacune, c'est obligatoire et c'est ce que lisent les
+   personnes malvoyantes.
+4. **Chambres** : pour chaque chambre, le tarif, puis les photos. La première
+   photo de la liste est celle qui s'affichera sur la carte.
+5. **Réglages → Affichage des tarifs** : quand tous les prix sont saisis et
+   validés, basculez l'interrupteur. Ils apparaissent d'un coup.
+6. **Diagnostic** : vérifiez qu'il ne reste rien en rouge.
+7. Quand vous êtes prêt : `php tools/package.php`, puis les étapes du
+   `README.md`, section 9.
+
+---
+
+## Annexe 2 — Vérifications de la seconde passe
+
+| Contrôle | Résultat |
+|---|---|
+| Banc de test du back-office | 67 / 67 |
+| Test de rendu du site | Aucun problème |
+| Test de rendu du dossier `livraison/` | Aucun problème |
+| Syntaxe PHP (22 fichiers) | Aucune erreur |
+| Syntaxe JavaScript (6 fichiers) | Aucune erreur |
+| Équilibre des accolades CSS | Équilibré |
+| Sortie de balise `<script>` depuis l'admin | Neutralisée |
+| Données structurées après échappement | JSON valide, lisible |
+| Fichier sensible dans `livraison/` | Aucun |
+| Page de diagnostic | 24 contrôles au vert, 2 avertissements attendus en local |
+| Photos d'origine (`photos_sakalava/`) | Intactes |

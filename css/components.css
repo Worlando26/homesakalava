@@ -493,3 +493,13 @@ picture.hero__pic {
   .lightbox__pic,
   .lightbox__pic img { max-height: 58vh; }
 }
+
+/* Carte chambre sur petit ecran : la description se limite a deux lignes,
+   pour que le tarif et le bouton restent visibles sans deborder de la carte. */
+@media (max-width: 480px) {
+  .ideal-card__desc {
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+  }
+  .ideal-card__body { padding: 16px 15px; }
+}

@@ -20,3 +20,6 @@ _archive_ancien_site/
 
 # Dossier prepare pour la mise en ligne (regenere par tools/package.php)
 livraison/
+
+# Journal des erreurs PHP (genere a l execution)
+data/erreurs.log

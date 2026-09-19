@@ -16,6 +16,14 @@ error_reporting(E_ALL);
 
 define('APP_ROOT', dirname(__DIR__, 2));
 
+// Journal dédié dans data/, dossier refusé par le serveur web. Sans cela,
+// sur beaucoup d'hébergements mutualisés les erreurs partent dans un fichier
+// introuvable, voire nulle part : impossible alors de diagnostiquer quoi que
+// ce soit à distance.
+if (is_dir(APP_ROOT . '/data') && is_writable(APP_ROOT . '/data')) {
+    ini_set('error_log', APP_ROOT . '/data/erreurs.log');
+}
+
 require_once APP_ROOT . '/lib/content.php';
 require_once __DIR__ . '/auth.php';
 require_once __DIR__ . '/flash.php';
