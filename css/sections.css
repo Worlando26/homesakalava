@@ -59,8 +59,11 @@
 /* ── Section hero ─────────────────────────────────── */
 .hero {
   position: relative;
+  /* 100svh : evite le saut de hauteur quand la barre dadresse du
+     navigateur mobile apparait ou disparait au scroll. */
   height: 100vh;
-  min-height: 600px;
+  height: 100svh;
+  min-height: 560px;
   overflow: hidden;
   font-family: var(--font-body);
 }
@@ -306,8 +309,8 @@
 .carousel__viewport    { cursor: grab; }
 .carousel__viewport:active { cursor: grabbing; }
 .ideal-card {
-  width: clamp(220px, 28vw, 300px);
-  height: clamp(280px, 38vw, 380px);
+  width: clamp(260px, 30vw, 330px);
+  height: clamp(390px, 50vw, 480px);
   border-radius: var(--r-card);
 }
 
@@ -407,10 +410,6 @@
   border-radius: var(--r-pill);
   padding: 8px 8px 8px 16px;
 }
-.trusted__card-input {
-  background: transparent; border: none; outline: none;
-  color: rgba(255,255,255,.6); font-size: 13px; flex: 1;
-}
 .trusted__card-btn {
   width: 32px; height: 32px;
   background: var(--c-accent);
@@ -422,53 +421,6 @@
 }
 .trusted__card-btn:hover { background: var(--c-accent-2); }
 .trusted__card-btn svg   { width: 14px; height: 14px; }
-
-/* ── TESTIMONIAL ─────────────────────────────────── */
-.testimonial { background: var(--c-bg); }
-.testimonial__inner {
-  display: grid;
-  grid-template-columns: 1fr 1.4fr;
-  gap: clamp(32px, 6vw, 80px);
-  align-items: start;
-}
-.testimonial__intro {
-  font-size: 15px;
-  color: var(--c-muted);
-  line-height: 1.75;
-  margin-bottom: 28px;
-  max-width: 320px;
-}
-.testimonial__quote-icon {
-  font-family: var(--font-display);
-  font-size: clamp(80px, 12vw, 140px);
-  font-weight: 800;
-  color: var(--c-line);
-  line-height: 0.8;
-  margin-top: 8px;
-}
-.testimonial__title {
-  font-size: clamp(22px, 3vw, 36px);
-  margin-bottom: 20px;
-}
-.testimonial__body {
-  font-size: 15px;
-  color: var(--c-muted);
-  line-height: 1.8;
-  margin-bottom: 28px;
-}
-.testimonial__author {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-}
-.testimonial__avatar {
-  width: 48px; height: 48px;
-  border-radius: 50%;
-  flex-shrink: 0;
-  overflow: hidden;
-}
-.testimonial__author-name  { font-family: var(--font-display); font-size: 15px; font-weight: 700; }
-.testimonial__author-role  { font-size: 13px; color: var(--c-muted); margin-top: 1px; }
 
 /* ── FAQ ─────────────────────────────────────────── */
 .faq__inner {
@@ -786,7 +738,6 @@
   .amazing__bento  { grid-template-columns: 1fr 1fr; height: auto; }
   .amazing__bento .card { height: clamp(200px, 30vw, 300px); }
   .amazing__bento .card--big { grid-row: 1; grid-column: 1 / 3; height: clamp(220px, 32vw, 340px); }
-  .testimonial__inner { grid-template-columns: 1fr; }
   .faq__inner      { grid-template-columns: 1fr; }
   .faq__image      { display: none; }
   .footer__meta    { grid-template-columns: 1fr 1fr; }
@@ -797,9 +748,6 @@
 
 /* Mobile */
 @media (max-width: 639px) {
-  .hero__content   { flex-direction: column; align-items: flex-start; }
-  .hero__search    { width: 100%; min-width: 0; }
-  .hero__watermark { font-size: clamp(36px, 14vw, 80px); }
   .amazing__bento  { grid-template-columns: 1fr; height: auto; }
   .amazing__bento .card--big { grid-column: 1; }
   .trusted         { margin-inline: 10px; border-radius: var(--r-card); }
@@ -813,4 +761,373 @@
   .booking__field--full { grid-column: 1; }
   .booking__submit-row  { grid-column: 1; }
   .booking__form-wrap   { padding: 22px 18px; border-radius: var(--r-card); }
+}
+
+/* ══════════════════════════════════════════════════
+   SECTIONS AJOUTÉES — Home Sakalava
+   (réputation, restaurant, activités, accès)
+   ══════════════════════════════════════════════════ */
+
+/* ── RÉPUTATION ──────────────────────────────────── */
+.reputation__inner {
+  display: grid;
+  grid-template-columns: 1fr 1.1fr;
+  gap: clamp(32px, 6vw, 72px);
+  align-items: center;
+}
+.reputation__score {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-bottom: 18px;
+}
+.reputation__score-value {
+  font-family: var(--font-display);
+  font-size: clamp(46px, 8vw, 88px);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  color: var(--c-ink);
+}
+.reputation__score-label {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: clamp(20px, 3vw, 30px);
+  font-weight: 600;
+  color: var(--c-accent);
+}
+.reputation__intro {
+  color: var(--c-muted);
+  font-size: clamp(14px, 1.6vw, 17px);
+  max-width: 44ch;
+  margin-bottom: 20px;
+}
+.reputation__badge {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--c-ink);
+  background: var(--c-surface);
+  border: 1.5px solid var(--c-line);
+  border-radius: var(--r-pill);
+  padding: 7px 16px;
+}
+.reputation__bars {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.reputation__bar {
+  display: grid;
+  grid-template-columns: minmax(96px, 1.1fr) 3fr auto;
+  align-items: center;
+  gap: 14px;
+}
+.reputation__bar-label {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--c-ink);
+}
+.reputation__bar-track {
+  height: 7px;
+  border-radius: var(--r-pill);
+  background: var(--c-line);
+  overflow: hidden;
+}
+.reputation__bar-fill {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--c-accent);
+}
+.reputation__bar-value {
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--c-ink);
+  min-width: 2.6ch;
+  text-align: right;
+}
+.reputation__source {
+  margin-top: 18px;
+  font-size: 12px;
+  color: var(--c-muted);
+}
+
+/* ── CHAMBRES : équipements communs ──────────────── */
+.ideal__shared {
+  margin-top: clamp(32px, 5vw, 56px);
+  padding: clamp(22px, 3vw, 34px);
+  background: var(--c-surface);
+  border: 1.5px solid var(--c-line);
+  border-radius: var(--r-card);
+}
+.ideal__shared-title {
+  font-size: clamp(15px, 1.8vw, 19px);
+  margin-bottom: 16px;
+}
+.ideal__shared-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  gap: 10px 20px;
+}
+.ideal__shared-list li {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 13.5px;
+  color: var(--c-ink);
+}
+.ideal__shared-list svg {
+  width: 16px; height: 16px;
+  color: var(--c-accent);
+  flex-shrink: 0;
+}
+
+/* ── RESTAURANT ──────────────────────────────────── */
+.resto__inner {
+  display: grid;
+  grid-template-columns: 1fr 1.05fr;
+  gap: clamp(28px, 5vw, 64px);
+  align-items: center;
+}
+.resto__media {
+  border-radius: var(--r-frame);
+  min-height: clamp(280px, 42vw, 480px);
+  box-shadow: var(--shadow-card);
+  background: var(--c-line);
+}
+.resto__title {
+  font-size: clamp(26px, 4vw, 44px);
+  margin-bottom: 16px;
+}
+.resto__text {
+  color: var(--c-muted);
+  font-size: clamp(14px, 1.6vw, 17px);
+  max-width: 48ch;
+  margin-bottom: 24px;
+}
+.resto__list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 10px 22px;
+}
+.resto__list li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13.5px;
+  color: var(--c-ink);
+}
+.resto__list svg {
+  width: 18px; height: 18px;
+  color: var(--c-accent);
+  flex-shrink: 0;
+}
+.resto__note {
+  margin-top: 20px;
+  font-size: 13px;
+  color: var(--c-muted);
+  font-style: italic;
+}
+
+/* ── SERVICES : liste complète sous le stage ─────── */
+.trusted__services {
+  margin-top: clamp(40px, 5vw, 64px);
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 0 32px;
+  text-align: left;
+}
+.trusted__note {
+  margin-top: 18px;
+  font-size: 12.5px;
+  color: var(--c-muted);
+  font-style: italic;
+}
+.trusted__card-email {
+  flex: 1;
+  font-size: 13px;
+  color: rgba(255,255,255,.72);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ── ACTIVITÉS ───────────────────────────────────── */
+.activites__head { max-width: 620px; margin-bottom: clamp(24px, 4vw, 44px); }
+.activites__title {
+  font-size: clamp(26px, 4vw, 44px);
+  margin-bottom: 14px;
+}
+.activites__text {
+  color: var(--c-muted);
+  font-size: clamp(14px, 1.6vw, 17px);
+}
+.activites__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 12px;
+}
+.activites__note {
+  margin-top: 16px;
+  font-size: 12.5px;
+  color: var(--c-muted);
+  font-style: italic;
+}
+.activites__distances {
+  margin-top: clamp(32px, 5vw, 56px);
+  padding: clamp(22px, 3vw, 34px);
+  background: var(--c-dark);
+  border-radius: var(--r-card);
+  color: #fff;
+}
+.activites__dist-title {
+  font-family: var(--font-display);
+  font-size: clamp(15px, 1.8vw, 19px);
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+.activites__dist-list {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0;
+}
+.activites__dist-label,
+.activites__dist-value {
+  padding: 11px 0;
+  border-top: 1px solid rgba(255,255,255,.12);
+  font-size: 13.5px;
+}
+.activites__dist-label { color: rgba(255,255,255,.8); padding-right: 16px; }
+.activites__dist-value {
+  text-align: right;
+  font-weight: 600;
+  color: #fff;
+  white-space: nowrap;
+}
+
+/* ── ACCÈS & CONTACT ─────────────────────────────── */
+.acces__inner {
+  display: grid;
+  grid-template-columns: 1fr 1.1fr;
+  gap: clamp(28px, 5vw, 64px);
+  align-items: start;
+}
+.acces__title {
+  font-size: clamp(26px, 4vw, 44px);
+  margin-bottom: 14px;
+}
+.acces__text {
+  color: var(--c-muted);
+  font-size: clamp(14px, 1.6vw, 17px);
+  max-width: 46ch;
+  margin-bottom: 24px;
+}
+.acces__fb {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+}
+.acces__fb svg { width: 17px; height: 17px; }
+.acces__rows {
+  display: grid;
+  grid-template-columns: minmax(140px, auto) 1fr;
+  gap: 0;
+  background: var(--c-surface);
+  border: 1.5px solid var(--c-line);
+  border-radius: var(--r-card);
+  padding: clamp(6px, 1.5vw, 14px) clamp(18px, 2.5vw, 28px);
+}
+.acces__row-label,
+.acces__row-value {
+  padding: 13px 0;
+  border-top: 1px solid var(--c-line);
+  font-size: 13.5px;
+  line-height: 1.5;
+}
+.acces__rows > :nth-child(1),
+.acces__rows > :nth-child(2) { border-top: none; }
+.acces__row-label {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  color: var(--c-muted);
+  font-weight: 500;
+  padding-right: 18px;
+}
+.acces__row-label svg {
+  width: 16px; height: 16px;
+  color: var(--c-accent);
+  flex-shrink: 0;
+}
+.acces__row-value { color: var(--c-ink); font-weight: 500; }
+.acces__row-value a { text-decoration: underline; text-underline-offset: 3px; }
+
+/* ── RÉSERVATION : encart e-mail manquant + erreurs ── */
+.booking__notice {
+  background: #fff6e8;
+  border: 1.5px solid #e8c48f;
+  border-radius: var(--r-card);
+  padding: 18px 20px;
+  margin-bottom: 22px;
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: #5c3f10;
+}
+.booking__notice p { margin-bottom: 12px; }
+.booking__error {
+  grid-column: 1 / -1;
+  color: #8f2018;
+  background: #fdeceb;
+  border: 1.5px solid #e9b0ab;
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+/* ══ RESPONSIVE DES SECTIONS AJOUTÉES ═══════════════ */
+
+@media (max-width: 1023px) {
+  .reputation__inner { grid-template-columns: 1fr; }
+  .resto__inner      { grid-template-columns: 1fr; }
+  .resto__media      { min-height: clamp(220px, 46vw, 340px); order: -1; }
+  .acces__inner      { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 639px) {
+  /* Le nom de la maison ne doit jamais disparaitre sur mobile : la barre du
+     haut est masquee a cette largeur, on le reaffiche donc au-dessus du
+     titre du hero. */
+  .hero__headline-sub::before {
+    content: attr(data-brand);
+    display: block;
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 0.26em;
+    text-transform: uppercase;
+    color: #fff;
+    margin-bottom: 8px;
+  }
+
+  .reputation__bar {
+    grid-template-columns: 1fr auto;
+    gap: 4px 12px;
+  }
+  .reputation__bar-track { grid-column: 1 / -1; order: 3; }
+
+  .ideal__shared-list  { grid-template-columns: 1fr; }
+  .resto__list         { grid-template-columns: 1fr; }
+  .activites__grid     { grid-template-columns: 1fr; }
+  .trusted__services   { grid-template-columns: 1fr; }
+
+  /* Adresse et distances sur deux lignes plutot qu ecrasees sur une */
+  .activites__dist-list,
+  .acces__rows { grid-template-columns: 1fr; }
+  .activites__dist-value { text-align: left; white-space: normal; }
+  .acces__row-label  { padding-bottom: 2px; border-top: 1px solid var(--c-line); }
+  .acces__row-value  { padding-top: 0; border-top: none; }
+  .acces__rows > :nth-child(2) { border-top: none; }
 }

@@ -3,10 +3,116 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Talinjoo Hotel — Fort Dauphin</title>
+
+  <!-- BUILD:SEO -->
+  <title>Home Sakalava — Maison d&#039;hôtes au bord de la plage, Nosy Be</title>
+  <meta name="description" content="Cinq chambres tenues par Boda et Bakoly à Ampasikely, Nosy Be, à quelques pas de la plage de Djamanjary. Restaurant de fruits de mer, wifi et parking gratuits, navette aéroport. Noté 9,6/10 sur Booking.">
+  <meta name="theme-color" content="#0a1a1a">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Home Sakalava">
+  <meta property="og:title" content="Home Sakalava — Maison d&#039;hôtes au bord de la plage, Nosy Be">
+  <meta property="og:description" content="Cinq chambres tenues par Boda et Bakoly à Ampasikely, Nosy Be, à quelques pas de la plage de Djamanjary. Restaurant de fruits de mer, wifi et parking gratuits, navette aéroport. Noté 9,6/10 sur Booking.">
+  <meta property="og:locale" content="fr_FR">
+  <meta property="og:image" content="uploads/plage-coucher-soleil-59c20778-med.jpg">
+  <meta property="og:image:alt" content="Coucher de soleil sur la plage à marée basse, un arbre isolé se reflétant dans l&#039;eau, à quelques pas de Home Sakalava">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "LodgingBusiness",
+    "name": "Home Sakalava",
+    "description": "Cinq chambres tenues par Boda et Bakoly à Ampasikely, Nosy Be, à quelques pas de la plage de Djamanjary. Restaurant de fruits de mer, wifi et parking gratuits, navette aéroport. Noté 9,6/10 sur Booking.",
+    "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Ampasikely",
+        "addressLocality": "Dzamandzar",
+        "postalCode": "207",
+        "addressRegion": "Diana",
+        "addressCountry": "MG"
+    },
+    "numberOfRooms": 5,
+    "petsAllowed": true,
+    "availableLanguage": [
+        "fr",
+        "en"
+    ],
+    "amenityFeature": [
+        {
+            "@type": "LocationFeatureSpecification",
+            "name": "Wifi gratuit dans toute la maison",
+            "value": true
+        },
+        {
+            "@type": "LocationFeatureSpecification",
+            "name": "Parking privé gratuit sur place",
+            "value": true
+        },
+        {
+            "@type": "LocationFeatureSpecification",
+            "name": "Sécurité 24h/24",
+            "value": true
+        },
+        {
+            "@type": "LocationFeatureSpecification",
+            "name": "Ménage quotidien",
+            "value": true
+        },
+        {
+            "@type": "LocationFeatureSpecification",
+            "name": "Accès direct à la plage",
+            "value": true
+        },
+        {
+            "@type": "LocationFeatureSpecification",
+            "name": "Bureau d'excursions et conseils",
+            "value": true
+        },
+        {
+            "@type": "LocationFeatureSpecification",
+            "name": "Change de devises",
+            "value": true
+        },
+        {
+            "@type": "LocationFeatureSpecification",
+            "name": "Jeux de société",
+            "value": true
+        },
+        {
+            "@type": "LocationFeatureSpecification",
+            "name": "Navette aéroport",
+            "value": true
+        },
+        {
+            "@type": "LocationFeatureSpecification",
+            "name": "Location de voiture",
+            "value": true
+        }
+    ],
+    "sameAs": [
+        "https://www.facebook.com/home.sakalava.nosybe"
+    ],
+    "checkinTime": "12h00",
+    "checkoutTime": "11h00",
+    "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "9.6",
+        "bestRating": "10",
+        "ratingCount": 75
+    }
+}
+  </script>
+  <!-- /BUILD:SEO -->
+
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+  <link rel="manifest" href="site.webmanifest">
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&family=Cormorant+Garamond:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
   <link rel="stylesheet" href="css/reset.css">
   <link rel="stylesheet" href="css/variables.css">
   <link rel="stylesheet" href="css/base.css">
@@ -15,49 +121,56 @@
 </head>
 <body>
 
+  <!-- Lien d'évitement : première tabulation au clavier -->
+  <a class="skip-link" href="#ideal">Aller au contenu</a>
+
   <!-- ═══ NAV ═══ -->
-  <nav class="nav" data-nav>
+  <nav class="nav" data-nav aria-label="Navigation principale">
     <div class="nav__inner container">
-      <a class="nav__logo" data-nav-logo href="#"></a>
+      <a class="nav__logo" data-nav-logo href="#hero"></a>
       <ul class="nav__links" data-nav-links></ul>
       <div class="nav__actions">
-        <a class="btn btn--accent btn--pill nav__cta" data-nav-cta href="#faq"></a>
-        <button class="nav__burger" data-burger aria-label="Ouvrir le menu">
+        <a class="btn btn--accent btn--pill nav__cta" data-nav-cta href="#booking"></a>
+        <button class="nav__burger" data-burger type="button"
+                aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="nav-drawer">
           <span></span><span></span><span></span>
         </button>
       </div>
     </div>
-    <div class="nav__drawer" data-drawer>
+    <div class="nav__drawer" data-drawer id="nav-drawer">
       <ul data-drawer-links></ul>
     </div>
   </nav>
 
-  <!-- ═══ HERO GLASSMORPHISM ═══ -->
-  <section class="hero" data-section="hero">
+  <main id="contenu">
 
-    <!-- Fond plein écran -->
+  <!-- ═══ HERO ═══ -->
+  <section class="hero" data-section="hero" aria-label="Présentation">
+
     <div class="hero__img-wrap" data-hero-img></div>
     <div class="hero__overlay"></div>
 
     <!-- TOP BAR -->
     <header class="hero__topbar">
-      <button class="glass-pill hero__book-btn" data-hero-book>
-        <i data-lucide="menu"></i>
+      <button class="glass-pill hero__book-btn" data-hero-book type="button">
+        <i data-lucide="mail" aria-hidden="true"></i>
         <span data-hero-cta></span>
       </button>
       <div class="hero__brand">
         <div class="hero__brand-name" data-hero-logo></div>
         <div class="hero__brand-sub"  data-hero-logo-sub></div>
       </div>
-      <button class="glass-circle hero__more-btn">•••</button>
+      <a class="glass-circle hero__more-btn" data-hero-fb href="#acces" aria-label="Accès et contact">
+        <i data-lucide="map-pin" aria-hidden="true"></i>
+      </a>
     </header>
 
     <!-- BADGE haut droite -->
     <div class="glass-pill hero__badge">
       <span data-hero-badge></span>
-      <button class="glass-circle hero__badge-arrow">
-        <i data-lucide="arrow-up-right"></i>
-      </button>
+      <a class="glass-circle hero__badge-arrow" href="#acces" aria-label="Voir l'accès">
+        <i data-lucide="arrow-up-right" aria-hidden="true"></i>
+      </a>
     </div>
 
     <!-- TEXTE VERTICAL DROIT -->
@@ -69,32 +182,32 @@
       <h1 class="hero__headline-title" data-hero-headline-title></h1>
     </div>
 
-    <!-- BARRE BAS = 3 panneaux glassmorphism -->
+    <!-- BARRE BAS -->
     <div class="hero__bottombar">
-      <button class="glass-panel hero__nav-prev" data-hero-prev>
-        <i data-lucide="arrow-left" class="hero__nav-icon"></i>
-        <div class="hero__nav-info">
-          <span class="hero__nav-label">PRÉCÉDENT</span>
+      <a class="glass-panel hero__nav-prev" data-hero-prev href="#ideal">
+        <i data-lucide="arrow-left" class="hero__nav-icon" aria-hidden="true"></i>
+        <span class="hero__nav-info">
+          <span class="hero__nav-label">Chambre</span>
           <span class="hero__nav-room" data-hero-prev-name></span>
-        </div>
-      </button>
+        </span>
+      </a>
       <div class="glass-panel hero__features-panel" data-hero-features></div>
-      <button class="glass-panel hero__nav-next" data-hero-next>
-        <div class="hero__nav-info">
-          <span class="hero__nav-label">SUIVANT</span>
+      <a class="glass-panel hero__nav-next" data-hero-next href="#ideal">
+        <span class="hero__nav-info">
+          <span class="hero__nav-label">Chambre</span>
           <span class="hero__nav-room" data-hero-next-name></span>
-        </div>
-        <i data-lucide="arrow-right" class="hero__nav-icon"></i>
-      </button>
+        </span>
+        <i data-lucide="arrow-right" class="hero__nav-icon" aria-hidden="true"></i>
+      </a>
     </div>
 
   </section>
 
   <!-- ═══ NOTRE HISTOIRE ═══ -->
-  <section class="story section" data-section="story">
+  <section class="story section" data-section="story" aria-labelledby="story-kicker">
     <div class="container story__inner">
       <div class="story__left">
-        <span class="kicker" data-story-kicker></span>
+        <h2 class="kicker" id="story-kicker" data-story-kicker></h2>
         <p class="story__stat" data-story-stat></p>
         <a class="btn btn--pill btn--outline story__cta" data-story-cta href="#amazing"></a>
       </div>
@@ -104,11 +217,30 @@
     </div>
   </section>
 
-  <!-- ═══ NOS ESPACES (BENTO) ═══ -->
-  <section class="amazing section" data-section="amazing">
+  <!-- ═══ RÉPUTATION ═══ -->
+  <section class="reputation section" data-section="reputation" aria-labelledby="rep-kicker">
+    <div class="container reputation__inner">
+      <div class="reputation__left">
+        <h2 class="kicker" id="rep-kicker" data-rep-kicker></h2>
+        <div class="reputation__score">
+          <span class="reputation__score-value" data-rep-title></span>
+          <span class="reputation__score-label" data-rep-label></span>
+        </div>
+        <p class="reputation__intro" data-rep-intro></p>
+        <span class="reputation__badge" data-rep-badge></span>
+      </div>
+      <div class="reputation__right">
+        <ul class="reputation__bars" data-rep-scores></ul>
+        <p class="reputation__source" data-rep-source></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ LA MAISON (BENTO) ═══ -->
+  <section class="amazing section" data-section="amazing" aria-labelledby="amazing-kicker">
     <div class="container">
       <div class="section-header">
-        <span class="kicker" data-amazing-kicker></span>
+        <h2 class="kicker" id="amazing-kicker" data-amazing-kicker></h2>
         <a class="btn btn--pill btn--outline" data-amazing-cta href="#ideal"></a>
       </div>
       <div class="amazing__bento" data-amazing-bento></div>
@@ -116,61 +248,82 @@
   </section>
 
   <!-- ═══ NOS CHAMBRES (CAROUSEL) ═══ -->
-  <section class="ideal section" data-section="ideal">
+  <section class="ideal section" data-section="ideal" aria-labelledby="ideal-kicker">
     <div class="container">
       <div class="section-header">
-        <span class="kicker" data-ideal-kicker></span>
+        <div class="section-header__text">
+          <h2 class="kicker" id="ideal-kicker" data-ideal-kicker></h2>
+          <p class="section-header__intro" data-ideal-intro></p>
+        </div>
         <div class="carousel__arrows">
-          <button class="carousel-arrow carousel-arrow--prev" data-prev aria-label="Précédent">
-            <i data-lucide="arrow-left"></i>
+          <button class="carousel-arrow carousel-arrow--prev" data-prev type="button" aria-label="Chambre précédente">
+            <i data-lucide="arrow-left" aria-hidden="true"></i>
           </button>
-          <button class="carousel-arrow carousel-arrow--next is-active" data-next aria-label="Suivant">
-            <i data-lucide="arrow-right"></i>
+          <button class="carousel-arrow carousel-arrow--next is-active" data-next type="button" aria-label="Chambre suivante">
+            <i data-lucide="arrow-right" aria-hidden="true"></i>
           </button>
         </div>
       </div>
       <div class="carousel__viewport" data-carousel-viewport>
-        <div class="carousel__track" data-carousel-track></div>
+        <ul class="carousel__track" data-carousel-track></ul>
+      </div>
+      <div class="ideal__shared" data-ideal-shared></div>
+    </div>
+  </section>
+
+  <!-- ═══ LE RESTAURANT ═══ -->
+  <section class="resto section" data-section="restaurant" aria-labelledby="resto-kicker">
+    <div class="container resto__inner">
+      <div class="resto__media" data-resto-media></div>
+      <div class="resto__body">
+        <h2 class="kicker" id="resto-kicker" data-resto-kicker></h2>
+        <h3 class="resto__title" data-resto-title></h3>
+        <p class="resto__text" data-resto-text></p>
+        <ul class="resto__list" data-resto-list></ul>
+        <p class="resto__note" data-resto-note></p>
       </div>
     </div>
   </section>
 
-  <!-- ═══ NOS ATOUTS ═══ -->
-  <section class="trusted section" data-section="trusted">
+  <!-- ═══ NOS SERVICES ═══ -->
+  <section class="trusted section" data-section="trusted" aria-labelledby="trusted-title">
     <div class="container trusted__container">
-      <h2 class="trusted__title" data-trusted-title></h2>
-      <a class="btn btn--accent btn--pill trusted__btn" data-trusted-cta href="#faq"></a>
+      <h2 class="trusted__title" id="trusted-title" data-trusted-title></h2>
+      <a class="btn btn--accent btn--pill trusted__btn" data-trusted-cta href="#booking"></a>
       <div class="trusted__amenities" data-trusted-amenities></div>
       <div class="trusted__stage">
         <div class="trusted__floats trusted__floats--left" data-float-left></div>
         <div class="trusted__card" data-trusted-card></div>
         <div class="trusted__floats trusted__floats--right" data-float-right></div>
       </div>
+      <ul class="trusted__services" data-trusted-services></ul>
+      <p class="trusted__note" data-trusted-note></p>
     </div>
   </section>
 
-  <!-- ═══ TÉMOIGNAGE ═══ -->
-  <section class="testimonial section" data-section="testimonial">
-    <div class="container testimonial__inner">
-      <div class="testimonial__left">
-        <span class="kicker" data-testi-kicker></span>
-        <p class="testimonial__intro" data-testi-intro></p>
-        <div class="testimonial__quote-icon">"</div>
+  <!-- ═══ LES ACTIVITÉS ═══ -->
+  <section class="activites section" data-section="activites" aria-labelledby="act-kicker">
+    <div class="container">
+      <div class="activites__head">
+        <h2 class="kicker" id="act-kicker" data-act-kicker></h2>
+        <h3 class="activites__title" data-act-title></h3>
+        <p class="activites__text" data-act-text></p>
       </div>
-      <div class="testimonial__right">
-        <h2 class="testimonial__title" data-testi-title></h2>
-        <p class="testimonial__body" data-testi-body></p>
-        <div class="testimonial__author" data-testi-author></div>
+      <ul class="activites__grid" data-act-grid></ul>
+      <p class="activites__note" data-act-note></p>
+      <div class="activites__distances">
+        <h4 class="activites__dist-title">Aux alentours</h4>
+        <dl class="activites__dist-list" data-act-distances></dl>
       </div>
     </div>
   </section>
 
   <!-- ═══ FAQ ═══ -->
-  <section class="faq section" data-section="faq">
+  <section class="faq section" data-section="faq" aria-labelledby="faq-title">
     <div class="container faq__inner">
       <div class="faq__left">
-        <span class="kicker" data-faq-kicker></span>
-        <h2 class="faq__title" data-faq-title></h2>
+        <p class="kicker" data-faq-kicker></p>
+        <h2 class="faq__title" id="faq-title" data-faq-title></h2>
         <p class="faq__intro" data-faq-intro></p>
         <div class="faq__list" data-faq-list></div>
       </div>
@@ -180,13 +333,31 @@
     </div>
   </section>
 
-  <!-- ═══ RÉSERVATION ═══ -->
-  <section class="booking section" data-section="booking">
+  <!-- ═══ ACCÈS & CONTACT ═══ -->
+  <section class="acces section" data-section="acces" aria-labelledby="acces-kicker">
+    <div class="container acces__inner">
+      <div class="acces__body">
+        <h2 class="kicker" id="acces-kicker" data-acces-kicker></h2>
+        <h3 class="acces__title" data-acces-title></h3>
+        <p class="acces__text" data-acces-text></p>
+        <a class="btn btn--pill btn--outline acces__fb" data-acces-fb target="_blank" rel="noopener noreferrer">
+          <i data-lucide="facebook" aria-hidden="true"></i>
+          <span>Notre page Facebook</span>
+        </a>
+      </div>
+      <dl class="acces__rows" data-acces-rows></dl>
+    </div>
+  </section>
+
+  <!-- ═══ DEMANDE DE RÉSERVATION ═══ -->
+  <section class="booking section" data-section="booking" aria-labelledby="booking-title">
     <div class="container booking__inner">
       <div class="booking__left"  data-booking-left></div>
       <div class="booking__right" data-booking-right></div>
     </div>
   </section>
+
+  </main>
 
   <!-- ═══ FOOTER ═══ -->
   <footer class="footer" data-section="footer">
@@ -198,23 +369,24 @@
         <div class="footer__legal" data-footer-legal></div>
       </div>
       <div class="footer__wordmark-wrap">
-        <span class="footer__wordmark" data-footer-wordmark></span>
+        <span class="footer__wordmark" data-footer-wordmark aria-hidden="true"></span>
       </div>
       <p class="footer__copyright" data-footer-copyright></p>
     </div>
   </footer>
 
-  <!-- CDN libs -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
-  <script src="https://unpkg.com/lucide@latest"></script>
-  <!-- App -->
-  <script src="config.js"></script>
-  <script src="js/render.js"></script>
-  <script src="js/carousel.js"></script>
-  <script src="js/faq.js"></script>
-  <script src="js/animations.js"></script>
-  <script src="js/main.js"></script>
+  <!-- Librairies externes — versions figées (pas de "latest" en production) -->
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.454.0/umd/lucide.min.js"></script>
+
+  <!-- Application -->
+  <script defer src="config.js"></script>
+  <script defer src="js/render.js"></script>
+  <script defer src="js/carousel.js"></script>
+  <script defer src="js/faq.js"></script>
+  <script defer src="js/animations.js"></script>
+  <script defer src="js/main.js"></script>
 </body>
 </html>

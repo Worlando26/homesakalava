@@ -46,3 +46,41 @@ h1, h2, h3 {
 }
 
 p { line-height: 1.7; }
+
+/* Lien d'évitement — première cible au clavier, invisible à la souris */
+.skip-link {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  transform: translate(-50%, -120%);
+  z-index: 200;
+  background: var(--c-dark);
+  color: #fff;
+  padding: 12px 22px;
+  border-radius: 0 0 12px 12px;
+  font-size: 14px;
+  font-weight: 600;
+  transition: transform 0.2s ease;
+}
+.skip-link:focus-visible { transform: translate(-50%, 0); }
+
+/* Intro sous un kicker, dans un en-tête de section */
+.section-header__text  { max-width: 560px; }
+.section-header__intro {
+  color: var(--c-muted);
+  font-size: clamp(14px, 1.5vw, 16px);
+  max-width: 52ch;
+}
+
+/* Champ non renseigné — visible pour le gérant, discret pour le visiteur */
+.is-missing {
+  color: var(--c-muted);
+  font-style: italic;
+}
+
+/* Anneau de focus homogène sur tout le site */
+:where(a, button, input, select, textarea, [tabindex]):focus-visible {
+  outline: 2.5px solid var(--c-accent);
+  outline-offset: 3px;
+  border-radius: 4px;
+}

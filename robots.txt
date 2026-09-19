@@ -1,0 +1,13 @@
+User-agent: *
+Allow: /
+
+# Le back-office n'a rien à faire dans un index de moteur de recherche.
+Disallow: /admin/
+Disallow: /data/
+Disallow: /storage/
+Disallow: /lib/
+Disallow: /tools/
+
+# Sitemap : la ligne ci-dessous sera complétée automatiquement dès que le
+# domaine définitif sera renseigné dans l'admin (Réglages → Site).
+# Sitemap: https://VOTRE-DOMAINE/sitemap.xml

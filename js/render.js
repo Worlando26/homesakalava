@@ -1,33 +1,13 @@
 // ═══════════════════════════════════════════════════════════
 //  render.js — Injecte le contenu de CONFIG dans le DOM.
-//  Images : <img class="card__bg"> quand disponible, sinon gradient CSS.
+//
+//  Tout passe par textContent : aucun contenu n'est interprété comme du
+//  HTML, ce qui rend l'injection sûre quel que soit ce que le gérant saisit
+//  dans le back-office.
+//
+//  Images : <picture> WebP + repli JPEG + srcset quand le média existe,
+//  dégradé CSS sinon. Une section sans photo reste donc présentable.
 // ═══════════════════════════════════════════════════════════
-
-/* Applique un dégradé CSS en fond d'un élément */
-function applyGradient(el, gradient) {
-  el.style.background = gradient;
-}
-
-/* Crée un <img> */
-function makeImg(src, alt) {
-  const img = document.createElement('img');
-  img.src    = src;
-  img.alt    = alt || '';
-  img.loading = 'lazy';
-  return img;
-}
-
-/* Injecte l'image d'une carte : <img> si disponible, sinon gradient */
-function applyCardImage(container, item, imgClass) {
-  if (item.image) {
-    applyGradient(container, item.gradient || '#1a1a1a'); // couleur pendant le chargement
-    const img = makeImg(item.image, item.name || '');
-    img.classList.add(imgClass);
-    container.appendChild(img);
-  } else {
-    applyGradient(container, item.gradient);
-  }
-}
 
 /* Crée un élément avec classes optionnelles */
 function el(tag, classes, text) {
@@ -35,6 +15,92 @@ function el(tag, classes, text) {
   if (classes) classes.split(' ').forEach(c => c && e.classList.add(c));
   if (text != null) e.textContent = text;
   return e;
+}
+
+/* Icône Lucide (remplacée par un <svg> au moment de lucide.createIcons) */
+function icon(name) {
+  const i = document.createElement('i');
+  i.setAttribute('data-lucide', name || 'check');
+  i.setAttribute('aria-hidden', 'true');
+  return i;
+}
+
+/* Applique un dégradé CSS en fond d'un élément */
+function applyGradient(elm, gradient) {
+  if (gradient) elm.style.background = gradient;
+}
+
+/**
+ * Construit un <picture> responsive à partir d'un objet image de CONFIG.
+ * Renvoie null si aucune image n'est définie — l'appelant retombe alors
+ * sur le dégradé.
+ */
+function makePicture(image, className, altOverride) {
+  if (!image || !image.src) return null;
+
+  const picture = el('picture', className);
+
+  if (image.webp) {
+    const source = document.createElement('source');
+    source.type = 'image/webp';
+    source.srcset = (image.srcset && image.srcset.webp) || image.webp;
+    if (image.sizes) source.sizes = image.sizes;
+    picture.appendChild(source);
+  }
+
+  const img = el('img', 'media__img');
+  img.src = image.src;
+  if (image.srcset && image.srcset.jpg) img.srcset = image.srcset.jpg;
+  if (image.sizes)  img.sizes  = image.sizes;
+  if (image.width)  img.width  = image.width;
+  if (image.height) img.height = image.height;
+  img.alt = altOverride != null ? altOverride : (image.alt || '');
+  // Le hero est au-dessus de la ligne de flottaison : chargement immédiat.
+  img.loading  = image.eager ? 'eager' : 'lazy';
+  img.decoding = image.eager ? 'sync'  : 'async';
+  if (image.eager) img.setAttribute('fetchpriority', 'high');
+
+  picture.appendChild(img);
+  return picture;
+}
+
+/**
+ * Fond d'une carte : photo si disponible, dégradé sinon.
+ * Le dégradé est appliqué dans tous les cas — il sert de couleur d'attente
+ * pendant le chargement de l'image.
+ */
+function applyCardImage(container, item, imgClass) {
+  applyGradient(container, item.gradient || '#1a1a1a');
+  const picture = makePicture(item.image, imgClass, item.image && item.image.alt
+    ? item.image.alt
+    : (item.name || ''));
+  if (picture) container.appendChild(picture);
+}
+
+/**
+ * Fond d'un bloc décoratif (float-card, image FAQ, bloc CTA du footer).
+ * Ces éléments utilisent background-image en CSS : on garde ce mécanisme,
+ * mais en pointant sur le WebP quand le navigateur le supporte.
+ */
+function applyBackdrop(elm, image, gradient) {
+  applyGradient(elm, gradient);
+  if (!image || !image.src) return;
+  const url = supportsWebp() && image.webp ? image.webp : image.src;
+  elm.style.backgroundImage    = `url("${url}")`;
+  elm.style.backgroundSize     = 'cover';
+  elm.style.backgroundPosition = 'center';
+  if (image.alt) elm.setAttribute('role', 'img');
+  if (image.alt) elm.setAttribute('aria-label', image.alt);
+}
+
+/* Détection WebP, calculée une seule fois. */
+let _webp = null;
+function supportsWebp() {
+  if (_webp === null) {
+    const c = document.createElement('canvas');
+    _webp = c.toDataURL && c.toDataURL('image/webp').indexOf('data:image/webp') === 0;
+  }
+  return _webp;
 }
 
 // ─── Nav ─────────────────────────────────────────────────
@@ -61,44 +127,38 @@ function renderNav() {
   cta.href        = nav.cta.href;
 }
 
-// ─── Hero (glassmorphism) ─────────────────────────────────
+// ─── Hero ─────────────────────────────────────────────────
 function renderHero() {
-  const { hero } = CONFIG;
+  const { hero, brand } = CONFIG;
 
-  // Image plein écran
-  document.querySelector('[data-hero-img]').appendChild(
-    makeImg(hero.image, 'Talinjoo Hotel — Fort Dauphin')
-  );
+  const wrap = document.querySelector('[data-hero-img]');
+  applyGradient(wrap, hero.gradient);
+  const picture = makePicture(hero.image, 'hero__pic');
+  if (picture) wrap.appendChild(picture);
 
-  // Top bar : logo + bouton réserver
   document.querySelector('[data-hero-logo]').textContent     = hero.logoName;
   document.querySelector('[data-hero-logo-sub]').textContent = hero.logoSub;
   document.querySelector('[data-hero-cta]').textContent      = hero.bookLabel;
-
-  // Badge
-  document.querySelector('[data-hero-badge]').textContent = hero.badge;
-
-  // Scroll hint vertical
+  document.querySelector('[data-hero-badge]').textContent    = hero.badge;
   document.querySelector('[data-hero-scroll-hint]').textContent = hero.scrollHint;
 
-  // Headline
   document.querySelector('[data-hero-headline-title]').textContent = hero.headlineTitle;
   document.querySelector('[data-hero-headline-sub]').textContent   = hero.headlineSub;
 
-  // Nav prev / next
   document.querySelector('[data-hero-prev-name]').textContent = hero.prevRoom;
   document.querySelector('[data-hero-next-name]').textContent = hero.nextRoom;
 
-  // Features (icônes Lucide + label)
+  // Repli mobile : le nom de la maison doit rester lisible même quand la
+  // barre du haut est masquée (voir css/sections.css, media query 767px).
+  const fallback = document.querySelector('[data-hero-headline-sub]');
+  if (fallback && brand && brand.name) fallback.setAttribute('data-brand', brand.name);
+
   const featuresEl = document.querySelector('[data-hero-features]');
   hero.features.forEach((feat, i) => {
     if (i > 0) featuresEl.appendChild(el('div', 'hero__feature-sep'));
-    const item  = el('div', 'hero__feature');
-    const icon  = document.createElement('i');
-    icon.setAttribute('data-lucide', feat.icon);
-    const label = el('span', 'hero__feature-label', feat.label);
-    item.appendChild(icon);
-    item.appendChild(label);
+    const item = el('div', 'hero__feature');
+    item.appendChild(icon(feat.icon));
+    item.appendChild(el('span', 'hero__feature-label', feat.label));
     featuresEl.appendChild(item);
   });
 }
@@ -115,7 +175,39 @@ function renderStory() {
   ctaEl.href        = story.cta.href;
 }
 
-// ─── Amazing / Nos Espaces (bento) ────────────────────────
+// ─── Réputation ───────────────────────────────────────────
+function renderReputation() {
+  const r = CONFIG.reputation;
+  if (!r) return;
+
+  document.querySelector('[data-rep-kicker]').textContent = r.kicker;
+  document.querySelector('[data-rep-title]').textContent  = r.title;
+  document.querySelector('[data-rep-label]').textContent  = r.label;
+  document.querySelector('[data-rep-intro]').textContent  = r.intro;
+  document.querySelector('[data-rep-badge]').textContent  = r.badge;
+  document.querySelector('[data-rep-source]').textContent = r.source;
+
+  const list = document.querySelector('[data-rep-scores]');
+  (r.scores || []).forEach(s => {
+    const li    = el('li', 'reputation__bar');
+    const label = el('span', 'reputation__bar-label', s.label);
+    const track = el('span', 'reputation__bar-track');
+    const fill  = el('span', 'reputation__bar-fill');
+    const value = el('span', 'reputation__bar-value', String(s.value).replace('.', ','));
+
+    // La barre est décorative ; la note chiffrée juste à côté porte l'info.
+    fill.style.width = Math.max(0, Math.min(100, (s.value / 10) * 100)) + '%';
+    track.setAttribute('aria-hidden', 'true');
+    track.appendChild(fill);
+
+    li.appendChild(label);
+    li.appendChild(track);
+    li.appendChild(value);
+    list.appendChild(li);
+  });
+}
+
+// ─── La maison (bento) ────────────────────────────────────
 function renderAmazing() {
   const { amazing } = CONFIG;
   document.querySelector('[data-amazing-kicker]').textContent = amazing.kicker;
@@ -127,59 +219,98 @@ function renderAmazing() {
   const bento = document.querySelector('[data-amazing-bento]');
   amazing.items.forEach(item => {
     const card = el('div', 'card' + (item.big ? ' card--big' : ''));
-
-    // Image (réelle via picsum) ou dégradé fallback
     applyCardImage(card, item, 'card__bg');
 
-    const overlay = el('div', 'card__overlay');
-    const body    = el('div', 'card__body');
-    const name    = el('div', 'card__name', item.name);
-    const meta    = el('div', 'card__meta', item.meta);
+    const body = el('div', 'card__body');
+    body.appendChild(el('div', 'card__name', item.name));
+    body.appendChild(el('div', 'card__meta', item.meta));
 
-    body.appendChild(name);
-    body.appendChild(meta);
-    card.appendChild(overlay);
+    card.appendChild(el('div', 'card__overlay'));
     card.appendChild(body);
     bento.appendChild(card);
   });
 }
 
-// ─── Ideal / Nos Chambres (carousel) ─────────────────────
+// ─── Les chambres (carousel) ──────────────────────────────
 function renderIdeal() {
   const { ideal } = CONFIG;
   document.querySelector('[data-ideal-kicker]').textContent = ideal.kicker;
+  document.querySelector('[data-ideal-intro]').textContent  = ideal.intro || '';
 
   const track = document.querySelector('[data-carousel-track]');
   ideal.items.forEach(item => {
-    const card = el('div', 'ideal-card');
-
-    // Image (réelle via picsum) ou dégradé fallback
+    const card = el('li', 'ideal-card');
     applyCardImage(card, item, 'ideal-card__bg');
 
-    const overlay = el('div', 'ideal-card__overlay');
-    const tag     = el('span', 'ideal-card__tag', item.tag);
-    const body    = el('div', 'ideal-card__body');
-    const name    = el('div', 'ideal-card__name', item.name);
-    const loc     = el('div', 'ideal-card__loc');
+    card.appendChild(el('div', 'ideal-card__overlay'));
+    if (item.tag) card.appendChild(el('span', 'ideal-card__tag', item.tag));
 
-    // Icône pin SVG
+    const body = el('div', 'ideal-card__body');
+    body.appendChild(el('h3', 'ideal-card__name', item.name));
+
+    const loc = el('div', 'ideal-card__loc');
     const pin = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
     pin.setAttribute('width', '10'); pin.setAttribute('height', '12');
     pin.setAttribute('viewBox', '0 0 10 12'); pin.setAttribute('fill', 'none');
+    pin.setAttribute('aria-hidden', 'true');
     pin.innerHTML = '<path d="M5 0C2.24 0 0 2.24 0 5c0 3.75 5 7 5 7s5-3.25 5-7c0-2.76-2.24-5-5-5zm0 6.5c-.83 0-1.5-.67-1.5-1.5S4.17 3.5 5 3.5 6.5 4.17 6.5 5 5.83 6.5 5 6.5z" fill="currentColor"/>';
     loc.appendChild(pin);
     loc.appendChild(document.createTextNode(item.loc));
-
-    body.appendChild(name);
     body.appendChild(loc);
-    card.appendChild(overlay);
-    card.appendChild(tag);
+
+    if (item.desc) body.appendChild(el('p', 'ideal-card__desc', item.desc));
+
+    if (item.amenities && item.amenities.length) {
+      const ul = el('ul', 'ideal-card__amenities');
+      item.amenities.forEach(a => ul.appendChild(el('li', '', a)));
+      body.appendChild(ul);
+    }
+
+    // Emplacement du tarif : toujours présent, même quand le prix n'est pas
+    // encore connu (il affiche alors la mention de repli).
+    if (item.price) body.appendChild(el('div', 'ideal-card__price', item.price));
+
     card.appendChild(body);
     track.appendChild(card);
   });
+
+  // Équipements communs à toutes les chambres
+  const sharedEl = document.querySelector('[data-ideal-shared]');
+  if (sharedEl && ideal.shared && ideal.shared.length) {
+    sharedEl.appendChild(el('h3', 'ideal__shared-title', 'Dans toutes les chambres'));
+    const ul = el('ul', 'ideal__shared-list');
+    ideal.shared.forEach(s => {
+      const li = el('li');
+      li.appendChild(icon('check'));
+      li.appendChild(el('span', '', s));
+      ul.appendChild(li);
+    });
+    sharedEl.appendChild(ul);
+  }
 }
 
-// ─── Trusted / Nos Atouts ─────────────────────────────────
+// ─── Le restaurant ────────────────────────────────────────
+function renderRestaurant() {
+  const r = CONFIG.restaurant;
+  if (!r) return;
+
+  applyBackdrop(document.querySelector('[data-resto-media]'), r.image, r.gradient);
+
+  document.querySelector('[data-resto-kicker]').textContent = r.kicker;
+  document.querySelector('[data-resto-title]').textContent  = r.title;
+  document.querySelector('[data-resto-text]').textContent   = r.text;
+  document.querySelector('[data-resto-note]').textContent   = r.note || '';
+
+  const list = document.querySelector('[data-resto-list]');
+  (r.items || []).forEach(i => {
+    const li = el('li');
+    li.appendChild(icon(i.icon));
+    li.appendChild(el('span', '', i.label));
+    list.appendChild(li);
+  });
+}
+
+// ─── Services ─────────────────────────────────────────────
 function renderTrusted() {
   const { trusted } = CONFIG;
 
@@ -188,79 +319,68 @@ function renderTrusted() {
   ctaEl.textContent = trusted.cta.label;
   ctaEl.href        = trusted.cta.href;
 
-  // Amenity pills
   const amenitiesEl = document.querySelector('[data-trusted-amenities]');
   trusted.amenities.forEach(label => {
     amenitiesEl.appendChild(el('span', 'amenity-pill', label));
   });
 
-  // Cartes flottantes gauche (0,1) / droite (2,3)
   const floatLeft  = document.querySelector('[data-float-left]');
   const floatRight = document.querySelector('[data-float-right]');
 
   trusted.floatImages.forEach((imgData, i) => {
     const card = el('div', 'float-card');
-
-    // Image de fond via background-image pour les float cards
-    if (imgData.image) {
-      card.style.backgroundImage    = `url(${imgData.image})`;
-      card.style.backgroundSize     = 'cover';
-      card.style.backgroundPosition = 'center';
-      // fallback couleur pendant le chargement
-      card.style.backgroundColor    = imgData.gradient ? '#1a2a3a' : '#333';
-    } else {
-      applyGradient(card, imgData.gradient);
-    }
-
-    // Label en bas
-    const labelEl = el('span', 'float-card__label', imgData.label);
-    card.appendChild(labelEl);
-
+    applyBackdrop(card, imgData.image, imgData.gradient);
+    card.appendChild(el('span', 'float-card__label', imgData.label));
     (i < 2 ? floatLeft : floatRight).appendChild(card);
   });
 
-  // Carte centrale sombre
+  // Carte centrale sombre : message des hôtes + adresse de contact.
   const cardEl = document.querySelector('[data-trusted-card]');
-  const title  = el('p', 'trusted__card-title', trusted.floatCard.title);
-  const form   = el('div', 'trusted__card-form');
-  const input  = el('input', 'trusted__card-input');
-  input.type        = 'email';
-  input.placeholder = trusted.floatCard.email;
-  input.readOnly    = true;
-  const btn = el('button', 'trusted__card-btn');
-  btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>';
-  form.appendChild(input);
-  form.appendChild(btn);
-  cardEl.appendChild(title);
-  cardEl.appendChild(form);
+  cardEl.appendChild(el('p', 'trusted__card-title', trusted.floatCard.title));
+  const contact = el('div', 'trusted__card-form');
+  contact.appendChild(el('span', 'trusted__card-email', trusted.floatCard.email));
+  const link = el('a', 'trusted__card-btn');
+  link.href = '#booking';
+  link.setAttribute('aria-label', 'Aller au formulaire de contact');
+  link.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>';
+  contact.appendChild(link);
+  cardEl.appendChild(contact);
+
+  // Liste complète des services, avec mention « supplément » le cas échéant.
+  const list = document.querySelector('[data-trusted-services]');
+  (trusted.items || []).forEach(s => {
+    const li = el('li', 'service-item');
+    li.appendChild(icon(s.icon));
+    li.appendChild(el('span', 'service-item__label', s.label));
+    if (s.supplement) li.appendChild(el('span', 'service-item__badge', 'supplément'));
+    list.appendChild(li);
+  });
+  document.querySelector('[data-trusted-note]').textContent = trusted.note || '';
 }
 
-// ─── Testimonial ──────────────────────────────────────────
-function renderTestimonial() {
-  const { testimonial } = CONFIG;
+// ─── Les activités ────────────────────────────────────────
+function renderActivities() {
+  const a = CONFIG.activities;
+  if (!a) return;
 
-  document.querySelector('[data-testi-kicker]').textContent = testimonial.kicker;
-  document.querySelector('[data-testi-intro]').textContent  = testimonial.intro;
-  document.querySelector('[data-testi-title]').textContent  = testimonial.title;
-  document.querySelector('[data-testi-body]').textContent   = testimonial.body;
+  document.querySelector('[data-act-kicker]').textContent = a.kicker;
+  document.querySelector('[data-act-title]').textContent  = a.title;
+  document.querySelector('[data-act-text]').textContent   = a.text;
+  document.querySelector('[data-act-note]').textContent   = a.note || '';
 
-  const authorEl = document.querySelector('[data-testi-author]');
-  const avatar   = el('div', 'testimonial__avatar');
+  const grid = document.querySelector('[data-act-grid]');
+  (a.items || []).forEach(i => {
+    const li = el('li', 'activite-card');
+    li.appendChild(icon(i.icon));
+    li.appendChild(el('span', 'activite-card__label', i.label));
+    grid.appendChild(li);
+  });
 
-  if (testimonial.author.image) {
-    const img = makeImg(testimonial.author.image, testimonial.author.name);
-    img.style.cssText = 'width:100%;height:100%;object-fit:cover;border-radius:50%;display:block;';
-    avatar.appendChild(img);
-  } else {
-    applyGradient(avatar, testimonial.author.gradient);
-  }
-
-  const info = el('div');
-  info.appendChild(el('div', 'testimonial__author-name', testimonial.author.name));
-  info.appendChild(el('div', 'testimonial__author-role', testimonial.author.role));
-
-  authorEl.appendChild(avatar);
-  authorEl.appendChild(info);
+  const dist = document.querySelector('[data-act-distances]');
+  (a.distances || []).forEach(d => {
+    dist.appendChild(el('dt', 'activites__dist-label', d.label));
+    dist.appendChild(el('dd', 'activites__dist-value', d.value));
+  });
 }
 
 // ─── FAQ ──────────────────────────────────────────────────
@@ -271,37 +391,28 @@ function renderFaq() {
   document.querySelector('[data-faq-title]').textContent  = faq.title;
   document.querySelector('[data-faq-intro]').textContent  = faq.intro;
 
-  // Image latérale
-  const imgEl = document.querySelector('[data-faq-image]');
-  if (faq.image) {
-    imgEl.style.backgroundImage    = `url(${faq.image})`;
-    imgEl.style.backgroundSize     = 'cover';
-    imgEl.style.backgroundPosition = 'center';
-  } else {
-    applyGradient(imgEl, faq.imageGradient);
-  }
+  applyBackdrop(document.querySelector('[data-faq-image]'), faq.image, faq.imageGradient);
 
-  // Accordéon
   const list = document.querySelector('[data-faq-list]');
   faq.items.forEach((item, i) => {
-    const wrap    = el('div', 'faq-item');
+    const wrap = el('div', 'faq-item');
     if (i === 0) wrap.classList.add('is-open');
 
+    const bodyId = 'faq-body-' + i;
+
     const trigger = el('button', 'faq-item__trigger');
+    trigger.type = 'button';
     trigger.setAttribute('aria-expanded', i === 0 ? 'true' : 'false');
+    trigger.setAttribute('aria-controls', bodyId);
+    trigger.appendChild(el('span', 'faq-item__q', item.q));
 
-    const q    = el('span', 'faq-item__q', item.q);
-    const icon = document.createElement('i');
-    icon.setAttribute('data-lucide', 'chevron-down');
-    icon.classList.add('faq-item__icon');
-
-    trigger.appendChild(q);
-    trigger.appendChild(icon);
+    const chevron = icon('chevron-down');
+    chevron.classList.add('faq-item__icon');
+    trigger.appendChild(chevron);
 
     const body = el('div', 'faq-item__body');
+    body.id = bodyId;
     body.appendChild(el('p', 'faq-item__a', item.a));
-
-    if (i === 0) body.style.maxHeight = '500px'; // initFaq() recalculera
 
     wrap.appendChild(trigger);
     wrap.appendChild(body);
@@ -309,53 +420,116 @@ function renderFaq() {
   });
 }
 
-// ─── Booking / Réservation ────────────────────────────────
+// ─── Accès & contact ──────────────────────────────────────
+function renderAccess() {
+  const a = CONFIG.access;
+  if (!a) return;
+
+  document.querySelector('[data-acces-kicker]').textContent = a.kicker;
+  document.querySelector('[data-acces-title]').textContent  = a.title;
+  document.querySelector('[data-acces-text]').textContent   = a.text;
+
+  const fb = document.querySelector('[data-acces-fb]');
+  if (a.facebook) {
+    fb.href = a.facebook;
+  } else {
+    fb.remove();
+  }
+
+  const rows = document.querySelector('[data-acces-rows]');
+  (a.rows || []).forEach(r => {
+    const dt = el('dt', 'acces__row-label');
+    dt.appendChild(icon(r.icon));
+    dt.appendChild(el('span', '', r.label));
+
+    const dd = el('dd', 'acces__row-value');
+    // Un champ non renseigné est signalé visuellement plutôt que masqué :
+    // le gérant voit immédiatement ce qu'il lui reste à compléter.
+    const missing = /^\[.*\]$/.test(r.value);
+    if (missing) dd.classList.add('is-missing');
+
+    if (r.href && !missing) {
+      const a2 = el('a', '', r.value);
+      a2.href = r.href;
+      dd.appendChild(a2);
+    } else {
+      dd.textContent = r.value;
+    }
+
+    rows.appendChild(dt);
+    rows.appendChild(dd);
+  });
+}
+
+// ─── Demande de réservation ───────────────────────────────
 function renderBooking() {
   const { booking } = CONFIG;
   const left  = document.querySelector('[data-booking-left]');
   const right = document.querySelector('[data-booking-right]');
   if (!left || !right) return;
 
-  // ── LEFT — texte + info card ──────────────────────────
-  left.appendChild(el('span', 'kicker',            booking.kicker));
+  const L  = booking.labels;
+  const ph = L.ph;
+
+  // ── Colonne gauche : texte + infos pratiques ──────────
+  left.appendChild(el('p', 'kicker', booking.kicker));
   left.appendChild(el('span', 'booking__subtitle', booking.subtitle));
-  left.appendChild(el('h2',   'booking__title',    booking.title));
-  left.appendChild(el('p',    'booking__intro',    booking.intro));
+
+  const h2 = el('h2', 'booking__title', booking.title);
+  h2.id = 'booking-title';
+  left.appendChild(h2);
+  left.appendChild(el('p', 'booking__intro', booking.intro));
 
   const infoCard = el('div', 'booking__info-card');
   booking.infoCard.forEach(({ label, value }) => {
     const row = el('div', 'booking__info-row');
     row.appendChild(el('span', 'booking__info-label', label));
-    row.appendChild(el('span', 'booking__info-value', value));
+    const v = el('span', 'booking__info-value', value);
+    if (/^\[.*\]$/.test(value)) v.classList.add('is-missing');
+    row.appendChild(v);
     infoCard.appendChild(row);
   });
   left.appendChild(infoCard);
 
-  // ── RIGHT — formulaire ────────────────────────────────
+  // ── Colonne droite : formulaire ───────────────────────
   const wrap = el('div', 'booking__form-wrap');
-  const form = el('form', 'booking__form');
-  form.setAttribute('novalidate', '');
-  const L = booking.labels;
-  const ph = L.ph;
 
-  // Helper : champ label + input avec association implicite
-  let fieldIdx = 0;
-  function field(labelText, inputEl, fullWidth) {
-    const id  = 'bk-' + (fieldIdx++);
-    inputEl.id = id;
-    const wrap = el('div', 'booking__field' + (fullWidth ? ' booking__field--full' : ''));
-    const lbl  = el('label', 'booking__label', labelText);
-    lbl.setAttribute('for', id);
-    wrap.appendChild(lbl);
-    wrap.appendChild(inputEl);
-    return wrap;
+  // Tant que l'adresse e-mail n'est pas renseignée en admin, on le dit
+  // franchement et on renvoie vers Facebook, qui est connu.
+  if (!booking.mailto) {
+    const notice = el('div', 'booking__notice');
+    notice.appendChild(el('p', '', L.noEmail));
+    if (booking.facebook) {
+      const a = el('a', 'btn btn--pill btn--outline', L.fbLink);
+      a.href   = booking.facebook;
+      a.target = '_blank';
+      a.rel    = 'noopener noreferrer';
+      notice.appendChild(a);
+    }
+    wrap.appendChild(notice);
   }
 
-  function inp(type, placeholder, required) {
+  const form = el('form', 'booking__form');
+  form.setAttribute('novalidate', '');
+
+  let fieldIdx = 0;
+  function field(labelText, inputEl, fullWidth) {
+    const id = 'bk-' + (fieldIdx++);
+    inputEl.id = id;
+    const w   = el('div', 'booking__field' + (fullWidth ? ' booking__field--full' : ''));
+    const lbl = el('label', 'booking__label', labelText);
+    lbl.setAttribute('for', id);
+    w.appendChild(lbl);
+    w.appendChild(inputEl);
+    return w;
+  }
+
+  function inp(type, placeholder, required, autocomplete) {
     const i = el('input', 'booking__input');
     i.type = type;
-    if (placeholder) i.placeholder = placeholder;
-    if (required)    i.required = true;
+    if (placeholder)  i.placeholder = placeholder;
+    if (required)     i.required = true;
+    if (autocomplete) i.autocomplete = autocomplete;
     return i;
   }
 
@@ -369,45 +543,51 @@ function renderBooking() {
     return s;
   }
 
-  // Date min = aujourd'hui
   const today = new Date().toISOString().split('T')[0];
 
-  const iCheckIn  = inp('date', '', true);  iCheckIn.min = today;
-  const iCheckOut = inp('date', '', true);  iCheckOut.min = today;
+  const iFirst = inp('text',  ph.firstName, true, 'given-name');
+  const iLast  = inp('text',  ph.lastName,  true, 'family-name');
+  const iMail  = inp('email', ph.email,     true, 'email');
+  const iPhone = inp('tel',   ph.phone,     false, 'tel');
+  const iIn    = inp('date', '', true);  iIn.min  = today;
+  const iOut   = inp('date', '', true);  iOut.min = today;
 
-  const sRoom = sel([
-    ['', '— Sélectionner —'],
-    ...booking.rooms.map(r => [r, r]),
-  ]);
+  const sRoom = sel([['', '— Sélectionner —'], ...booking.rooms.map(r => [r, r])]);
   const sGuests = sel(
     ['1','2','3','4','5','6'].map(n => [n, n + (n === '1' ? ' voyageur' : ' voyageurs')])
   );
   const iMsg = el('textarea', 'booking__textarea');
   iMsg.placeholder = ph.message;
+  iMsg.rows = 4;
 
-  form.appendChild(field(L.firstName, inp('text',  ph.firstName, true)));
-  form.appendChild(field(L.lastName,  inp('text',  ph.lastName,  true)));
-  form.appendChild(field(L.email,     inp('email', ph.email,     true)));
-  form.appendChild(field(L.phone,     inp('tel',   ph.phone,     false)));
-  form.appendChild(field(L.checkIn,   iCheckIn));
-  form.appendChild(field(L.checkOut,  iCheckOut));
+  form.appendChild(field(L.firstName, iFirst));
+  form.appendChild(field(L.lastName,  iLast));
+  form.appendChild(field(L.email,     iMail));
+  form.appendChild(field(L.phone,     iPhone));
+  form.appendChild(field(L.checkIn,   iIn));
+  form.appendChild(field(L.checkOut,  iOut));
   form.appendChild(field(L.roomType,  sRoom));
   form.appendChild(field(L.guests,    sGuests));
   form.appendChild(field(L.message,   iMsg, true));
 
-  // Bouton + note
+  const errorEl = el('p', 'booking__error');
+  errorEl.setAttribute('role', 'alert');
+  errorEl.hidden = true;
+  form.appendChild(errorEl);
+
   const submitRow = el('div', 'booking__submit-row');
   const submitBtn = el('button', 'btn btn--accent btn--pill', L.submit);
   submitBtn.type = 'submit';
+  if (!booking.mailto) submitBtn.disabled = true;
   submitRow.appendChild(submitBtn);
   submitRow.appendChild(el('p', 'booking__note', L.note));
   form.appendChild(submitRow);
 
-  // État succès
+  // État « message prêt »
   const success = el('div', 'booking__success');
   const iconWrap = el('div', 'booking__success-icon');
   iconWrap.innerHTML =
-    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">' +
+    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
     '<path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>' +
     '<polyline points="22 4 12 14.01 9 11.01"/></svg>';
   const resetBtn = el('button', 'btn btn--outline btn--pill', L.resetBtn);
@@ -421,36 +601,73 @@ function renderBooking() {
   wrap.appendChild(success);
   right.appendChild(wrap);
 
-  // ── LOGIQUE FORMULAIRE ────────────────────────────────
-  // Dépendance check-in → check-out
-  iCheckIn.addEventListener('change', () => {
-    if (iCheckIn.value) {
-      iCheckOut.min = iCheckIn.value;
-      if (iCheckOut.value && iCheckOut.value <= iCheckIn.value) iCheckOut.value = '';
+  // ── Logique ───────────────────────────────────────────
+  iIn.addEventListener('change', () => {
+    if (iIn.value) {
+      iOut.min = iIn.value;
+      if (iOut.value && iOut.value <= iIn.value) iOut.value = '';
     }
   });
 
-  // Soumission (simulation — pas de backend)
+  /**
+   * Le formulaire ne parle à aucun serveur : il compose un e-mail et ouvre
+   * la messagerie du visiteur. Rien n'est stocké, rien n'est envoyé à notre
+   * insu, et la maison n'a pas de boîte de réception à surveiller ailleurs
+   * que dans sa propre messagerie.
+   */
   form.addEventListener('submit', e => {
     e.preventDefault();
-    submitBtn.textContent = 'Envoi en cours…';
-    submitBtn.disabled    = true;
-    setTimeout(() => {
-      form.style.display = 'none';
-      success.classList.add('is-visible');
-      if (typeof gsap !== 'undefined') {
-        gsap.fromTo(success, { y: 24, opacity: 0 }, { y: 0, opacity: 1, duration: 0.7, ease: 'power2.out' });
-      }
-    }, 1200);
+
+    if (!booking.mailto) return;
+
+    if (!form.checkValidity()) {
+      errorEl.textContent = 'Merci de compléter les champs obligatoires.';
+      errorEl.hidden = false;
+      const firstInvalid = form.querySelector(':invalid');
+      if (firstInvalid) firstInvalid.focus();
+      return;
+    }
+    errorEl.hidden = true;
+
+    const nights = [iIn.value, iOut.value].filter(Boolean).join(' → ');
+    const lines = [
+      'Bonjour Boda et Bakoly,',
+      '',
+      "Je souhaite réserver une chambre à Home Sakalava.",
+      '',
+      'Nom : '        + iFirst.value + ' ' + iLast.value,
+      'E-mail : '     + iMail.value,
+      'Téléphone : '  + (iPhone.value || '—'),
+      'Dates : '      + (nights || '—'),
+      'Chambre : '    + (sRoom.value || 'à conseiller'),
+      'Voyageurs : '  + sGuests.value,
+      '',
+      'Message :',
+      iMsg.value || '—',
+      '',
+      'Merci d\'avance,',
+      iFirst.value + ' ' + iLast.value,
+    ];
+
+    const subject = 'Demande de réservation — ' + (nights || 'dates à définir');
+    const href = 'mailto:' + booking.mailto
+      + '?subject=' + encodeURIComponent(subject)
+      + '&body='    + encodeURIComponent(lines.join('\n'));
+
+    window.location.href = href;
+
+    form.style.display = 'none';
+    success.classList.add('is-visible');
+    if (typeof gsap !== 'undefined') {
+      gsap.fromTo(success, { y: 24, opacity: 0 }, { y: 0, opacity: 1, duration: 0.7, ease: 'power2.out' });
+    }
   });
 
-  // Réinitialisation
   resetBtn.addEventListener('click', () => {
     form.reset();
     form.style.display = '';
     success.classList.remove('is-visible');
-    submitBtn.textContent = L.submit;
-    submitBtn.disabled    = false;
+    iFirst.focus();
   });
 }
 
@@ -458,69 +675,63 @@ function renderBooking() {
 function renderFooter() {
   const { footer, brand } = CONFIG;
 
-  // Bloc CTA avec image de fond
   const ctaBlock = document.querySelector('[data-footer-cta-block]');
-  if (footer.cta.image) {
-    ctaBlock.style.backgroundImage    = `url(${footer.cta.image})`;
-    ctaBlock.style.backgroundSize     = 'cover';
-    ctaBlock.style.backgroundPosition = 'center';
-  } else {
-    applyGradient(ctaBlock, footer.cta.gradient);
-  }
+  applyBackdrop(ctaBlock, footer.cta.image, footer.cta.gradient);
 
-  const ctaTitle = el('h2', 'footer__cta-title', footer.cta.title);
-  const ctaBtn   = el('a', 'btn btn--accent btn--pill footer__cta-btn', footer.cta.button);
-  ctaBtn.href    = footer.cta.href;
-  ctaBlock.appendChild(ctaTitle);
+  ctaBlock.appendChild(el('h2', 'footer__cta-title', footer.cta.title));
+  const ctaBtn = el('a', 'btn btn--accent btn--pill footer__cta-btn', footer.cta.button);
+  ctaBtn.href  = footer.cta.href;
   ctaBlock.appendChild(ctaBtn);
 
-  // Adresse
   const addrEl = document.querySelector('[data-footer-address]');
   addrEl.appendChild(el('div', 'footer__brand-name', brand.name));
   footer.address.forEach(line => {
-    const p = line.includes('@') ? el('a', '', line) : el('p', '', line);
-    if (line.includes('@')) p.href = 'mailto:' + line;
-    addrEl.appendChild(p);
+    if (line.includes('@')) {
+      const a = el('a', '', line);
+      a.href = 'mailto:' + line;
+      addrEl.appendChild(a);
+    } else {
+      addrEl.appendChild(el('p', '', line));
+    }
   });
 
-  // Social
   const socialEl = document.querySelector('[data-footer-social]');
-  socialEl.appendChild(el('h4', '', 'Suivez-nous'));
+  socialEl.appendChild(el('h3', '', 'Suivez-nous'));
   const socialUl = el('ul');
   footer.social.forEach(s => {
     const li = el('li');
     const a  = el('a', '', s.label);
     a.href   = s.href;
+    a.target = '_blank';
+    a.rel    = 'noopener noreferrer';
     li.appendChild(a);
     socialUl.appendChild(li);
   });
   socialEl.appendChild(socialUl);
 
-  // Legal
   const legalEl = document.querySelector('[data-footer-legal]');
-  legalEl.appendChild(el('h4', '', 'Informations'));
+  legalEl.appendChild(el('h3', '', 'Informations'));
   const legalUl = el('ul');
   footer.legal.forEach(l => {
     const li = el('li');
-    const a  = el('a', '', l);
-    a.href   = '#';
-    li.appendChild(a);
+    // Pages non rédigées à ce stade : texte simple plutôt qu'un lien mort.
+    li.appendChild(el('span', '', l));
     legalUl.appendChild(li);
   });
   legalEl.appendChild(legalUl);
 
-  // Wordmark & copyright
   document.querySelector('[data-footer-wordmark]').textContent  = footer.wordmark;
   document.querySelector('[data-footer-copyright]').textContent = footer.copyright;
 }
 
-// ─── Init couleurs thème ──────────────────────────────────
+// ─── Thème ────────────────────────────────────────────────
 function applyTheme() {
   const { theme } = CONFIG;
+  if (!theme) return;
   const r = document.documentElement.style;
   if (theme.accent) r.setProperty('--c-accent', theme.accent);
   if (theme.dark)   r.setProperty('--c-dark',   theme.dark);
-  if (theme.bg)     r.setProperty('--c-bg',      theme.bg);
+  if (theme.bg)     r.setProperty('--c-bg',     theme.bg);
 }
 
 // ─── Export principal ─────────────────────────────────────
@@ -529,11 +740,14 @@ function renderAll() {
   renderNav();
   renderHero();
   renderStory();
+  renderReputation();
   renderAmazing();
   renderIdeal();
+  renderRestaurant();
   renderTrusted();
-  renderTestimonial();
+  renderActivities();
   renderFaq();
+  renderAccess();
   renderBooking();
   renderFooter();
 }

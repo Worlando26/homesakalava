@@ -1,0 +1,14 @@
+{
+  "name": "Home Sakalava — Nosy Be",
+  "short_name": "Home Sakalava",
+  "description": "Maison d'hôtes au bord de la plage à Ampasikely, Nosy Be, Madagascar.",
+  "lang": "fr",
+  "start_url": "/",
+  "display": "browser",
+  "background_color": "#f0ece5",
+  "theme_color": "#0a1a1a",
+  "icons": [
+    { "src": "assets/favicon.svg", "sizes": "any", "type": "image/svg+xml" },
+    { "src": "assets/apple-touch-icon.png", "sizes": "180x180", "type": "image/png" }
+  ]
+}

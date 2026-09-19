@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Home Sakalava">
+  <rect width="64" height="64" rx="14" fill="#0a1a1a"/>
+  <!-- Vague : la maison est en bord de plage -->
+  <path d="M6 44c6-5 12-5 18 0s12 5 18 0 12-5 16 0" fill="none" stroke="#1d8f8a" stroke-width="4" stroke-linecap="round"/>
+  <path d="M6 53c6-5 12-5 18 0s12 5 18 0 12-5 16 0" fill="none" stroke="#1d8f8a" stroke-width="3" stroke-linecap="round" opacity=".55"/>
+  <!-- Soleil bas sur l'horizon -->
+  <circle cx="32" cy="26" r="11" fill="#f2a03d"/>
+</svg>

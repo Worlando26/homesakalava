@@ -162,7 +162,8 @@ function animateSectionReveals() {
   // Kickers & titres de section
   const revealEls = document.querySelectorAll(
     '.kicker, .amazing__bento, .faq__title, .faq__intro, ' +
-    '.testimonial__title, .testimonial__body, .trusted__title'
+    '.reputation__score, .reputation__intro, .trusted__title, ' +
+    '.resto__title, .activites__title, .acces__title'
   );
   revealEls.forEach(el => {
     gsap.fromTo(el,
@@ -199,7 +200,7 @@ function animateSectionReveals() {
   }
 
   // Auteur témoignage
-  const authorEl = document.querySelector('.testimonial__author');
+  const authorEl = document.querySelector('.reputation__bars');
   if (authorEl) {
     gsap.fromTo(authorEl,
       { y: 20, opacity: 0 },

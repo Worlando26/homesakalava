@@ -1,19 +1,14 @@
-// ═══════════════════════════════════════════════════════════════
-//  config.js — Home SAKALAVA · Nosy Be, Madagascar
-//
-//  ⚠ FICHIER GÉNÉRÉ AUTOMATIQUEMENT — NE PAS MODIFIER À LA MAIN.
-//  Toute modification ici sera écrasée au prochain enregistrement
-//  depuis le back-office.
-//
-//  Source des données : data/content.json
-//  Régénérer          : php tools/build.php
-//  Généré le          : 19/09/2026 à 03:17
-// ═══════════════════════════════════════════════════════════════
-
-const CONFIG = {
+{
+    "version": 1,
+    "updated_at": "2026-09-19T03:09:21+02:00",
+    "settings": {
+        "showPrices": false,
+        "priceFallback": "Tarif sur demande"
+    },
     "brand": {
         "name": "Home Sakalava",
         "logoText": "Sakalava",
+        "wordmark": "Sakalava",
         "tagline": "Maison d'hôtes les pieds dans le sable, à Nosy Be"
     },
     "theme": {
@@ -21,9 +16,87 @@ const CONFIG = {
         "dark": "#0a1a1a",
         "bg": "#f0ece5"
     },
-    "settings": {
-        "showPrices": false,
-        "priceFallback": "Tarif sur demande"
+    "contact": {
+        "phone": "",
+        "email": "",
+        "gps": "",
+        "addressLines": [
+            "Home Sakalava",
+            "Ampasikely",
+            "207 Dzamandzar",
+            "Nosy Be, région Diana",
+            "Madagascar"
+        ],
+        "facebook": "https://www.facebook.com/home.sakalava.nosybe",
+        "checkinFrom": "12h00",
+        "checkinTo": "23h00",
+        "checkoutFrom": "11h00",
+        "checkoutTo": "12h00",
+        "languages": "Français et anglais",
+        "payment": "Paiement sur place, en espèces",
+        "minAge": "18 ans"
+    },
+    "media": {
+        "plage-coucher-soleil-59c20778": {
+            "id": "plage-coucher-soleil-59c20778",
+            "alt": "Coucher de soleil sur la plage à marée basse, un arbre isolé se reflétant dans l'eau, à quelques pas de Home Sakalava",
+            "src": "uploads/plage-coucher-soleil-59c20778-med.jpg",
+            "webp": "uploads/plage-coucher-soleil-59c20778-med.webp",
+            "width": 1200,
+            "height": 900,
+            "variants": {
+                "thumb": {
+                    "webp": "uploads/plage-coucher-soleil-59c20778-thumb.webp",
+                    "fallback": "uploads/plage-coucher-soleil-59c20778-thumb.jpg",
+                    "w": 320,
+                    "h": 240
+                },
+                "small": {
+                    "webp": "uploads/plage-coucher-soleil-59c20778-small.webp",
+                    "fallback": "uploads/plage-coucher-soleil-59c20778-small.jpg",
+                    "w": 640,
+                    "h": 480
+                },
+                "med": {
+                    "webp": "uploads/plage-coucher-soleil-59c20778-med.webp",
+                    "fallback": "uploads/plage-coucher-soleil-59c20778-med.jpg",
+                    "w": 1200,
+                    "h": 900
+                }
+            },
+            "original": "storage/originals/plage-coucher-soleil-59c20778.jpg",
+            "added_at": "2026-09-19T03:07:14+02:00"
+        },
+        "chambre-lit-baldaquin-52286be5": {
+            "id": "chambre-lit-baldaquin-52286be5",
+            "alt": "Chambre avec lit à baldaquin et moustiquaire, mobilier en bois local, suspensions en vannerie et ouverture sur le jardin",
+            "src": "uploads/chambre-lit-baldaquin-52286be5-med.jpg",
+            "webp": "uploads/chambre-lit-baldaquin-52286be5-med.webp",
+            "width": 1280,
+            "height": 720,
+            "variants": {
+                "thumb": {
+                    "webp": "uploads/chambre-lit-baldaquin-52286be5-thumb.webp",
+                    "fallback": "uploads/chambre-lit-baldaquin-52286be5-thumb.jpg",
+                    "w": 320,
+                    "h": 180
+                },
+                "small": {
+                    "webp": "uploads/chambre-lit-baldaquin-52286be5-small.webp",
+                    "fallback": "uploads/chambre-lit-baldaquin-52286be5-small.jpg",
+                    "w": 640,
+                    "h": 360
+                },
+                "med": {
+                    "webp": "uploads/chambre-lit-baldaquin-52286be5-med.webp",
+                    "fallback": "uploads/chambre-lit-baldaquin-52286be5-med.jpg",
+                    "w": 1280,
+                    "h": 720
+                }
+            },
+            "original": "storage/originals/chambre-lit-baldaquin-52286be5.jpg",
+            "added_at": "2026-09-19T03:07:14+02:00"
+        }
     },
     "nav": {
         "links": [
@@ -50,27 +123,14 @@ const CONFIG = {
         }
     },
     "hero": {
-        "image": {
-            "src": "uploads/plage-coucher-soleil-59c20778-med.jpg",
-            "webp": "uploads/plage-coucher-soleil-59c20778-med.webp",
-            "srcset": {
-                "webp": "uploads/plage-coucher-soleil-59c20778-thumb.webp 320w, uploads/plage-coucher-soleil-59c20778-small.webp 640w, uploads/plage-coucher-soleil-59c20778-med.webp 1200w",
-                "jpg": "uploads/plage-coucher-soleil-59c20778-thumb.jpg 320w, uploads/plage-coucher-soleil-59c20778-small.jpg 640w, uploads/plage-coucher-soleil-59c20778-med.jpg 1200w"
-            },
-            "sizes": "100vw",
-            "alt": "Coucher de soleil sur la plage à marée basse, un arbre isolé se reflétant dans l'eau, à quelques pas de Home Sakalava",
-            "width": 1200,
-            "height": 900,
-            "eager": true
-        },
-        "gradient": "linear-gradient(145deg, #0a1a1a 0%, #1d3f3d 100%)",
+        "mediaId": "plage-coucher-soleil-59c20778",
         "logoName": "HOME SAKALAVA",
         "logoSub": "NOSY BE · MADAGASCAR",
         "bookLabel": "NOUS ÉCRIRE",
         "badge": "BORD DE PLAGE",
         "scrollHint": "FAITES DÉFILER",
-        "headlineTitle": "LA PLAGE\nEST À DEUX PAS",
         "headlineSub": "AMPASIKELY · DZAMANDZAR",
+        "headlineTitle": "LA PLAGE\nEST À DEUX PAS",
         "features": [
             {
                 "icon": "waves",
@@ -88,9 +148,7 @@ const CONFIG = {
                 "icon": "square-parking",
                 "label": "Parking\ngratuit"
             }
-        ],
-        "prevRoom": "Standard Double",
-        "nextRoom": "Comfort Triple"
+        ]
     },
     "story": {
         "kicker": "Chez Boda et Bakoly",
@@ -101,7 +159,7 @@ const CONFIG = {
             "href": "#amazing"
         }
     },
-    "amazing": {
+    "spaces": {
         "kicker": "La maison",
         "cta": {
             "label": "Voir les chambres",
@@ -111,39 +169,27 @@ const CONFIG = {
             {
                 "name": "Les chambres",
                 "meta": "Lits à baldaquin · artisanat malgache",
-                "image": {
-                    "src": "uploads/chambre-lit-baldaquin-52286be5-med.jpg",
-                    "webp": "uploads/chambre-lit-baldaquin-52286be5-med.webp",
-                    "srcset": {
-                        "webp": "uploads/chambre-lit-baldaquin-52286be5-thumb.webp 320w, uploads/chambre-lit-baldaquin-52286be5-small.webp 640w, uploads/chambre-lit-baldaquin-52286be5-med.webp 1280w",
-                        "jpg": "uploads/chambre-lit-baldaquin-52286be5-thumb.jpg 320w, uploads/chambre-lit-baldaquin-52286be5-small.jpg 640w, uploads/chambre-lit-baldaquin-52286be5-med.jpg 1280w"
-                    },
-                    "sizes": "(max-width: 639px) 92vw, (max-width: 1023px) 48vw, 600px",
-                    "alt": "Chambre avec lit à baldaquin et moustiquaire, mobilier en bois local, suspensions en vannerie et ouverture sur le jardin",
-                    "width": 1280,
-                    "height": 720,
-                    "eager": false
-                },
+                "mediaId": "chambre-lit-baldaquin-52286be5",
                 "gradient": "linear-gradient(145deg, #1e3a5a 0%, #4a7aaa 100%)",
                 "big": true
             },
             {
                 "name": "Le jardin et la terrasse",
                 "meta": "Solarium, parasols, salon commun",
-                "image": null,
+                "mediaId": "",
                 "gradient": "linear-gradient(145deg, #2d5a3d 0%, #4a8a5e 100%)",
                 "big": false
             },
             {
                 "name": "Le restaurant",
                 "meta": "Fruits de mer, midi et soir",
-                "image": null,
+                "mediaId": "",
                 "gradient": "linear-gradient(145deg, #5a1e1e 0%, #aa5050 100%)",
                 "big": false
             }
         ]
     },
-    "ideal": {
+    "rooms": {
         "kicker": "Cinq chambres, pas une de plus",
         "intro": "Toutes avec salle de bain privée, douche à l'italienne, entrée indépendante, armoire, linge de lit et serviettes fournis.",
         "shared": [
@@ -163,28 +209,20 @@ const CONFIG = {
                 "loc": "Vue mer · 30 m²",
                 "tag": "La plus grande",
                 "area": "30 m²",
+                "price": "",
                 "desc": "La plus spacieuse de la maison, avec sa terrasse privée face à la mer. Climatisée, elle accueille confortablement trois personnes.",
-                "price": "Tarif sur demande",
                 "amenities": [
                     "Climatisation",
                     "Terrasse privée",
                     "Vue mer",
                     "Jusqu'à 3 personnes"
                 ],
-                "image": {
-                    "src": "uploads/chambre-lit-baldaquin-52286be5-med.jpg",
-                    "webp": "uploads/chambre-lit-baldaquin-52286be5-med.webp",
-                    "srcset": {
-                        "webp": "uploads/chambre-lit-baldaquin-52286be5-thumb.webp 320w, uploads/chambre-lit-baldaquin-52286be5-small.webp 640w, uploads/chambre-lit-baldaquin-52286be5-med.webp 1280w",
-                        "jpg": "uploads/chambre-lit-baldaquin-52286be5-thumb.jpg 320w, uploads/chambre-lit-baldaquin-52286be5-small.jpg 640w, uploads/chambre-lit-baldaquin-52286be5-med.jpg 1280w"
-                    },
-                    "sizes": "(max-width: 639px) 92vw, (max-width: 1023px) 48vw, 600px",
-                    "alt": "Chambre avec lit à baldaquin et moustiquaire, mobilier en bois local, suspensions en vannerie et ouverture sur le jardin",
-                    "width": 1280,
-                    "height": 720,
-                    "eager": false
-                },
-                "gradient": "linear-gradient(145deg, #1a2a3a 0%, #3a6a90 100%)"
+                "mediaIds": [
+                    "chambre-lit-baldaquin-52286be5"
+                ],
+                "coverId": "chambre-lit-baldaquin-52286be5",
+                "gradient": "linear-gradient(145deg, #1a2a3a 0%, #3a6a90 100%)",
+                "active": true
             },
             {
                 "id": "standard-triple",
@@ -192,15 +230,17 @@ const CONFIG = {
                 "loc": "Terrasse privée · 18 m²",
                 "tag": "Pour trois",
                 "area": "18 m²",
+                "price": "",
                 "desc": "Une chambre pour trois avec sa terrasse et son balcon, pour prendre le petit-déjeuner dehors sans croiser personne.",
-                "price": "Tarif sur demande",
                 "amenities": [
                     "Terrasse privée",
                     "Balcon",
                     "Jusqu'à 3 personnes"
                 ],
-                "image": null,
-                "gradient": "linear-gradient(145deg, #4a6a7a 0%, #6a8a9a 100%)"
+                "mediaIds": [],
+                "coverId": "",
+                "gradient": "linear-gradient(145deg, #4a6a7a 0%, #6a8a9a 100%)",
+                "active": true
             },
             {
                 "id": "double-jardin",
@@ -208,15 +248,17 @@ const CONFIG = {
                 "loc": "Cour intérieure · 16 m²",
                 "tag": "Avec baignoire",
                 "area": "16 m²",
+                "price": "",
                 "desc": "Ouverte sur le jardin et la cour intérieure, la seule chambre équipée d'une baignoire. Calme toute la journée.",
-                "price": "Tarif sur demande",
                 "amenities": [
                     "Baignoire",
                     "Vue jardin",
                     "Cour intérieure"
                 ],
-                "image": null,
-                "gradient": "linear-gradient(145deg, #2a4a2f 0%, #5a8a60 100%)"
+                "mediaIds": [],
+                "coverId": "",
+                "gradient": "linear-gradient(145deg, #2a4a2f 0%, #5a8a60 100%)",
+                "active": true
             },
             {
                 "id": "double-terrasse",
@@ -224,15 +266,17 @@ const CONFIG = {
                 "loc": "Climatisée · 14 m²",
                 "tag": "Climatisée",
                 "area": "14 m²",
+                "price": "",
                 "desc": "Compacte et climatisée, avec terrasse privée et balcon. Le bon compromis pour deux.",
-                "price": "Tarif sur demande",
                 "amenities": [
                     "Climatisation",
                     "Terrasse privée",
                     "Balcon"
                 ],
-                "image": null,
-                "gradient": "linear-gradient(145deg, #6a5840 0%, #9a8060 100%)"
+                "mediaIds": [],
+                "coverId": "",
+                "gradient": "linear-gradient(145deg, #6a5840 0%, #9a8060 100%)",
+                "active": true
             },
             {
                 "id": "standard-double",
@@ -240,24 +284,26 @@ const CONFIG = {
                 "loc": "Pour deux · 13 m²",
                 "tag": "L'essentiel",
                 "area": "13 m²",
+                "price": "",
                 "desc": "La plus simple : un lit, une salle de bain à soi, et la plage à deux pas. C'est souvent tout ce qu'il faut.",
-                "price": "Tarif sur demande",
                 "amenities": [
                     "Salle de bain privée",
                     "Entrée indépendante"
                 ],
-                "image": null,
-                "gradient": "linear-gradient(145deg, #3a4a55 0%, #5a6a75 100%)"
+                "mediaIds": [],
+                "coverId": "",
+                "gradient": "linear-gradient(145deg, #3a4a55 0%, #5a6a75 100%)",
+                "active": true
             }
         ]
     },
-    "trusted": {
+    "services": {
         "title": "Une maison au bord de l'eau,\ntenue par ceux qui y vivent",
         "cta": {
             "label": "Nous écrire",
             "href": "#booking"
         },
-        "amenities": [
+        "pills": [
             "Accès direct à la plage",
             "Wifi gratuit",
             "Parking privé gratuit",
@@ -343,52 +389,27 @@ const CONFIG = {
             }
         ],
         "note": "Les services marqués « supplément » sont facturés en plus du séjour.",
-        "floatCard": {
-            "title": "Une question avant de venir ? Boda et Bakoly répondent eux-mêmes, en français comme en anglais.",
-            "email": "Adresse e-mail à renseigner"
+        "card": {
+            "title": "Une question avant de venir ? Boda et Bakoly répondent eux-mêmes, en français comme en anglais."
         },
         "floatImages": [
             {
-                "image": {
-                    "src": "uploads/chambre-lit-baldaquin-52286be5-med.jpg",
-                    "webp": "uploads/chambre-lit-baldaquin-52286be5-med.webp",
-                    "srcset": {
-                        "webp": "uploads/chambre-lit-baldaquin-52286be5-thumb.webp 320w, uploads/chambre-lit-baldaquin-52286be5-small.webp 640w, uploads/chambre-lit-baldaquin-52286be5-med.webp 1280w",
-                        "jpg": "uploads/chambre-lit-baldaquin-52286be5-thumb.jpg 320w, uploads/chambre-lit-baldaquin-52286be5-small.jpg 640w, uploads/chambre-lit-baldaquin-52286be5-med.jpg 1280w"
-                    },
-                    "sizes": "(max-width: 639px) 45vw, 220px",
-                    "alt": "Chambre avec lit à baldaquin et moustiquaire, mobilier en bois local, suspensions en vannerie et ouverture sur le jardin",
-                    "width": 1280,
-                    "height": 720,
-                    "eager": false
-                },
+                "mediaId": "chambre-lit-baldaquin-52286be5",
                 "gradient": "linear-gradient(145deg, #0e2a44 0%, #1a4a7a 100%)",
                 "label": "Les chambres"
             },
             {
-                "image": null,
+                "mediaId": "",
                 "gradient": "linear-gradient(145deg, #0e3020 0%, #1a5a35 100%)",
                 "label": "Le jardin"
             },
             {
-                "image": {
-                    "src": "uploads/plage-coucher-soleil-59c20778-med.jpg",
-                    "webp": "uploads/plage-coucher-soleil-59c20778-med.webp",
-                    "srcset": {
-                        "webp": "uploads/plage-coucher-soleil-59c20778-thumb.webp 320w, uploads/plage-coucher-soleil-59c20778-small.webp 640w, uploads/plage-coucher-soleil-59c20778-med.webp 1200w",
-                        "jpg": "uploads/plage-coucher-soleil-59c20778-thumb.jpg 320w, uploads/plage-coucher-soleil-59c20778-small.jpg 640w, uploads/plage-coucher-soleil-59c20778-med.jpg 1200w"
-                    },
-                    "sizes": "(max-width: 639px) 45vw, 220px",
-                    "alt": "Coucher de soleil sur la plage à marée basse, un arbre isolé se reflétant dans l'eau, à quelques pas de Home Sakalava",
-                    "width": 1200,
-                    "height": 900,
-                    "eager": false
-                },
+                "mediaId": "plage-coucher-soleil-59c20778",
                 "gradient": "linear-gradient(145deg, #2a3a1a 0%, #4a6030 100%)",
                 "label": "La plage"
             },
             {
-                "image": null,
+                "mediaId": "",
                 "gradient": "linear-gradient(145deg, #3a1a0e 0%, #6a3520 100%)",
                 "label": "Le restaurant"
             }
@@ -398,7 +419,7 @@ const CONFIG = {
         "kicker": "À table",
         "title": "Le restaurant de la maison",
         "text": "On mange ici midi et soir, dans une salle qui tient autant de la cuisine familiale que du restaurant. Fruits de mer surtout, et quelques plats européens. Les cocktails se prennent dehors.",
-        "image": null,
+        "mediaId": "",
         "gradient": "linear-gradient(145deg, #5a1e1e 0%, #aa5050 100%)",
         "items": [
             {
@@ -539,76 +560,13 @@ const CONFIG = {
     "access": {
         "kicker": "Venir chez nous",
         "title": "Accès et contact",
-        "text": "Nous sommes à Ampasikely, sur la commune de Dzamandzar, à 25 km de l'aéroport de Fascene. Dites-nous votre heure d'arrivée : nous pouvons organiser la navette.",
-        "rows": [
-            {
-                "icon": "map-pin",
-                "label": "Adresse",
-                "value": "Ampasikely, 207 Dzamandzar, Nosy Be, région Diana, Madagascar",
-                "href": ""
-            },
-            {
-                "icon": "phone",
-                "label": "Téléphone",
-                "value": "[À renseigner]",
-                "href": ""
-            },
-            {
-                "icon": "mail",
-                "label": "E-mail",
-                "value": "[À renseigner]",
-                "href": ""
-            },
-            {
-                "icon": "navigation",
-                "label": "Coordonnées GPS",
-                "value": "[À renseigner]",
-                "href": ""
-            },
-            {
-                "icon": "log-in",
-                "label": "Arrivée",
-                "value": "12h00 – 23h00",
-                "href": ""
-            },
-            {
-                "icon": "log-out",
-                "label": "Départ",
-                "value": "11h00 – 12h00",
-                "href": ""
-            },
-            {
-                "icon": "languages",
-                "label": "Langues parlées",
-                "value": "Français et anglais",
-                "href": ""
-            },
-            {
-                "icon": "wallet",
-                "label": "Paiement",
-                "value": "Paiement sur place, en espèces",
-                "href": ""
-            }
-        ],
-        "facebook": "https://www.facebook.com/home.sakalava.nosybe"
+        "text": "Nous sommes à Ampasikely, sur la commune de Dzamandzar, à 25 km de l'aéroport de Fascene. Dites-nous votre heure d'arrivée : nous pouvons organiser la navette."
     },
     "faq": {
         "kicker": "Questions fréquentes",
         "title": "Les questions\nqu'on nous pose",
         "intro": "Et si la vôtre n'y est pas, écrivez-nous.",
-        "image": {
-            "src": "uploads/plage-coucher-soleil-59c20778-med.jpg",
-            "webp": "uploads/plage-coucher-soleil-59c20778-med.webp",
-            "srcset": {
-                "webp": "uploads/plage-coucher-soleil-59c20778-thumb.webp 320w, uploads/plage-coucher-soleil-59c20778-small.webp 640w, uploads/plage-coucher-soleil-59c20778-med.webp 1200w",
-                "jpg": "uploads/plage-coucher-soleil-59c20778-thumb.jpg 320w, uploads/plage-coucher-soleil-59c20778-small.jpg 640w, uploads/plage-coucher-soleil-59c20778-med.jpg 1200w"
-            },
-            "sizes": "(max-width: 639px) 92vw, (max-width: 1023px) 48vw, 600px",
-            "alt": "Coucher de soleil sur la plage à marée basse, un arbre isolé se reflétant dans l'eau, à quelques pas de Home Sakalava",
-            "width": 1200,
-            "height": 900,
-            "eager": false
-        },
+        "mediaId": "plage-coucher-soleil-59c20778",
         "items": [
             {
                 "q": "Comment réserver une chambre ?",
@@ -648,106 +606,25 @@ const CONFIG = {
         "kicker": "Demande de réservation",
         "title": "Écrivez-nous",
         "subtitle": "Nosy Be · Madagascar",
-        "intro": "Remplissez ce formulaire, il prépare un message pour Boda et Bakoly. Aucun paiement n'est demandé ici : nous vous répondons d'abord avec les disponibilités et le tarif.",
-        "infoCard": [
-            {
-                "label": "Arrivée",
-                "value": "12h00 – 23h00"
-            },
-            {
-                "label": "Départ",
-                "value": "11h00 – 12h00"
-            },
-            {
-                "label": "Langues",
-                "value": "Français et anglais"
-            },
-            {
-                "label": "Paiement",
-                "value": "Paiement sur place, en espèces"
-            },
-            {
-                "label": "Téléphone",
-                "value": "[À renseigner]"
-            },
-            {
-                "label": "E-mail",
-                "value": "[À renseigner]"
-            }
-        ],
-        "rooms": [
-            "Comfort Triple",
-            "Standard Triple",
-            "Double vue jardin",
-            "Double avec terrasse",
-            "Standard Double"
-        ],
-        "mailto": "",
-        "facebook": "https://www.facebook.com/home.sakalava.nosybe",
-        "labels": {
-            "firstName": "Prénom",
-            "lastName": "Nom",
-            "email": "E-mail",
-            "phone": "Téléphone",
-            "checkIn": "Date d'arrivée",
-            "checkOut": "Date de départ",
-            "roomType": "Chambre souhaitée",
-            "guests": "Voyageurs",
-            "message": "Votre message",
-            "submit": "Préparer ma demande",
-            "note": "Ce bouton ouvre votre messagerie avec le message déjà rédigé. Rien n'est envoyé automatiquement, vous relisez avant.",
-            "noEmail": "L'adresse e-mail de la maison n'est pas encore en ligne. En attendant, écrivez-nous sur Facebook :",
-            "fbLink": "Ouvrir la page Facebook",
-            "successTitle": "Votre message est prêt",
-            "successText": "Votre messagerie vient de s'ouvrir avec la demande pré-remplie. Relisez-la et envoyez-la — nous répondons sous quelques jours.",
-            "resetBtn": "Recommencer",
-            "ph": {
-                "firstName": "Prénom",
-                "lastName": "Nom",
-                "email": "vous@exemple.com",
-                "phone": "Indicatif compris",
-                "message": "Nombre de nuits, heure d'arrivée, navette aéroport, régime alimentaire…"
-            }
-        }
+        "intro": "Remplissez ce formulaire, il prépare un message pour Boda et Bakoly. Aucun paiement n'est demandé ici : nous vous répondons d'abord avec les disponibilités et le tarif."
     },
     "footer": {
-        "cta": {
-            "title": "La plage vous attend\nà deux pas",
-            "button": "Nous écrire",
-            "href": "#booking",
-            "image": {
-                "src": "uploads/plage-coucher-soleil-59c20778-med.jpg",
-                "webp": "uploads/plage-coucher-soleil-59c20778-med.webp",
-                "srcset": {
-                    "webp": "uploads/plage-coucher-soleil-59c20778-thumb.webp 320w, uploads/plage-coucher-soleil-59c20778-small.webp 640w, uploads/plage-coucher-soleil-59c20778-med.webp 1200w",
-                    "jpg": "uploads/plage-coucher-soleil-59c20778-thumb.jpg 320w, uploads/plage-coucher-soleil-59c20778-small.jpg 640w, uploads/plage-coucher-soleil-59c20778-med.jpg 1200w"
-                },
-                "sizes": "(max-width: 639px) 92vw, (max-width: 1023px) 48vw, 600px",
-                "alt": "Coucher de soleil sur la plage à marée basse, un arbre isolé se reflétant dans l'eau, à quelques pas de Home Sakalava",
-                "width": 1200,
-                "height": 900,
-                "eager": false
-            },
-            "gradient": "linear-gradient(145deg, #0c1015 0%, #152030 100%)"
-        },
-        "wordmark": "Sakalava",
-        "address": [
-            "Home Sakalava",
-            "Ampasikely",
-            "207 Dzamandzar",
-            "Nosy Be, région Diana",
-            "Madagascar"
-        ],
-        "social": [
-            {
-                "label": "Facebook",
-                "href": "https://www.facebook.com/home.sakalava.nosybe"
-            }
-        ],
+        "ctaTitle": "La plage vous attend\nà deux pas",
+        "ctaButton": "Nous écrire",
+        "ctaHref": "#booking",
+        "ctaMediaId": "plage-coucher-soleil-59c20778",
+        "ctaGradient": "linear-gradient(145deg, #0c1015 0%, #152030 100%)",
         "legal": [
             "Mentions légales",
             "Politique de confidentialité"
         ],
         "copyright": "© 2026 Home Sakalava. Tous droits réservés."
+    },
+    "seo": {
+        "title": "Home Sakalava — Maison d'hôtes au bord de la plage, Nosy Be",
+        "description": "Cinq chambres tenues par Boda et Bakoly à Ampasikely, Nosy Be, à quelques pas de la plage de Djamanjary. Restaurant de fruits de mer, wifi et parking gratuits, navette aéroport. Noté 9,6/10 sur Booking.",
+        "ogImageId": "plage-coucher-soleil-59c20778",
+        "siteUrl": "",
+        "locale": "fr_FR"
     }
-};
+}
