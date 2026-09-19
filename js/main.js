@@ -51,6 +51,10 @@
     });
 
     // Piloter Lenis via GSAP ticker (pas de RAF séparé)
+    // Expose pour les modules qui doivent suspendre le defilement
+    // (la visionneuse de photos, par exemple).
+    window.__lenis = lenis;
+
     gsap.ticker.add(time => lenis.raf(time * 1000));
     gsap.ticker.lagSmoothing(0);
 
@@ -78,6 +82,9 @@
 
   // ─── 7. FAQ accordéon ────────────────────────────────────
   initFaq();
+
+  // ─── 7 bis. Visionneuse de photos des chambres ───────────
+  if (typeof initLightbox === 'function') initLightbox();
 
   // ─── 8. Burger menu mobile ───────────────────────────────
   (function initBurger() {

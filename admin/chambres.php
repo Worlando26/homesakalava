@@ -66,9 +66,18 @@ if (is_post()) {
                     throw new RuntimeException('Le nom de la chambre est obligatoire.');
                 }
 
-                $coverId = post_str('coverId');
-                if ($coverId !== '' && !isset($content['media'][$coverId])) {
-                    throw new RuntimeException("La photo choisie n'existe plus.");
+                /**
+                 * Photos de la chambre : les champs arrivent dans l'ordre
+                 * d'affichage. On ne garde que les identifiants qui désignent
+                 * une photo réellement présente, et on retire les doublons.
+                 * La première photo de la liste est la photo principale :
+                 * un seul réglage plutôt que deux à tenir cohérents.
+                 */
+                $mediaIds = [];
+                foreach (post_list('mediaIds') as $id) {
+                    if (isset($content['media'][$id]) && !in_array($id, $mediaIds, true)) {
+                        $mediaIds[] = $id;
+                    }
                 }
 
                 $rooms[$i]['name']      = $name;
@@ -78,13 +87,71 @@ if (is_post()) {
                 $rooms[$i]['desc']      = post_str('desc');
                 $rooms[$i]['price']     = post_str('price');
                 $rooms[$i]['amenities'] = post_list('amenities');
-                $rooms[$i]['coverId']   = $coverId;
-                $rooms[$i]['mediaIds']  = $coverId !== '' ? [$coverId] : [];
+                $rooms[$i]['mediaIds']  = $mediaIds;
+                $rooms[$i]['coverId']   = $mediaIds[0] ?? '';
                 $rooms[$i]['active']    = post_bool('active');
 
                 $content['rooms']['items'] = array_values($rooms);
                 $store->write($content);
                 Flash::ok('Chambre « ' . $name . ' » enregistrée.');
+                redirect('chambres.php');
+
+            // ── Ajout d'une chambre ──────────────────────────────────────
+            case 'add':
+                $name = post_str('new_name');
+                if ($name === '') {
+                    throw new RuntimeException('Donnez un nom à la nouvelle chambre.');
+                }
+
+                // Identifiant technique dérivé du nom, rendu unique.
+                $base = ImageService::slugify($name);
+                $id   = $base;
+                $n    = 2;
+                while (room_index($rooms, $id) !== null) {
+                    $id = $base . '-' . $n++;
+                }
+
+                $rooms[] = [
+                    'id'        => $id,
+                    'name'      => $name,
+                    'loc'       => '',
+                    'tag'       => '',
+                    'area'      => '',
+                    'price'     => '',
+                    'desc'      => '',
+                    'amenities' => [],
+                    'mediaIds'  => [],
+                    'coverId'   => '',
+                    // Dégradé de repli repris de la première chambre, pour
+                    // rester dans la palette du site.
+                    'gradient'  => $rooms[0]['gradient']
+                                 ?? 'linear-gradient(145deg, #1a2a3a 0%, #3a6a90 100%)',
+                    // Une nouvelle chambre n'est pas publiée tant qu'elle n'est
+                    // pas décrite : on évite une carte vide en ligne.
+                    'active'    => false,
+                ];
+
+                $content['rooms']['items'] = array_values($rooms);
+                $store->write($content);
+                Flash::ok(
+                    'Chambre « ' . $name . ' » créée. Complétez-la, puis cochez '
+                    . '« Afficher cette chambre » pour la publier.'
+                );
+                redirect('chambres.php?id=' . urlencode($id));
+
+            // ── Suppression d'une chambre ────────────────────────────────
+            case 'delete':
+                $id = post_str('id');
+                $i  = room_index($rooms, $id);
+                if ($i === null) {
+                    throw new RuntimeException("Cette chambre n'existe plus.");
+                }
+                $name = $rooms[$i]['name'] ?? '';
+                array_splice($rooms, $i, 1);
+
+                $content['rooms']['items'] = array_values($rooms);
+                $store->write($content);
+                Flash::ok('Chambre « ' . $name . ' » supprimée.');
                 redirect('chambres.php');
 
             // ── Textes communs à toutes les chambres ─────────────────────
@@ -205,12 +272,34 @@ if ($editId !== '') {
       </div>
 
       <div class="card">
-        <div class="card__head"><h2 class="card__title">Photo</h2></div>
-        <?= MediaAdmin::picker($content, 'coverId', $room['coverId'] ?? '',
-            'Photo principale de la chambre') ?>
+        <div class="card__head"><h2 class="card__title">Photos</h2></div>
+        <p class="card__hint">
+          <strong>La première photo est la photo principale</strong> : c'est elle
+          qui s'affiche sur la carte de la chambre. Les suivantes apparaissent
+          quand le visiteur ouvre la chambre. Pour changer l'ordre, changez les
+          photos choisies dans les listes. Pour en retirer une, remettez-la sur
+          « aucune photo ».
+        </p>
+
+        <?php
+        // Les photos déjà choisies, plus deux emplacements libres pour en
+        // ajouter sans manipulation préalable.
+        $chosen = array_values(array_filter(
+            $room['mediaIds'] ?? [],
+            fn($id) => isset($content['media'][$id])
+        ));
+        $slots = array_merge($chosen, ['', '']);
+        foreach ($slots as $slot => $mediaId):
+            $label = $slot === 0
+                ? 'Photo principale'
+                : 'Photo ' . ($slot + 1);
+        ?>
+          <?= MediaAdmin::picker($content, 'mediaIds[]', $mediaId, $label) ?>
+        <?php endforeach; ?>
+
         <p class="field__hint">
-          Pour ajouter une nouvelle photo à la bibliothèque, passez par
-          <a href="photos.php">Photos</a>.
+          Pour envoyer une nouvelle photo, passez par <a href="photos.php">Photos</a> :
+          elle apparaîtra ensuite dans ces listes.
         </p>
       </div>
 
@@ -231,6 +320,25 @@ if ($editId !== '') {
       </div>
     </form>
 
+    <div class="card" style="margin-top:26px;border-color:#e9b0ab">
+      <div class="card__head"><h2 class="card__title">Supprimer cette chambre</h2></div>
+      <p class="card__hint">
+        Pour la retirer temporairement du site, décochez plutôt
+        « Afficher cette chambre » ci-dessus : elle restera enregistrée.
+        La suppression, elle, est définitive.
+      </p>
+      <form method="post">
+        <?= Csrf::field() ?>
+        <input type="hidden" name="action" value="delete">
+        <input type="hidden" name="id" value="<?= e($room['id']) ?>">
+        <?= delete_button(
+              'Supprimer définitivement',
+              'Supprimer définitivement la chambre « ' . ($room['name'] ?? '')
+              . ' » ? Cette action est irréversible.'
+            ) ?>
+      </form>
+    </div>
+
     <?php
     layout_foot();
     exit;
@@ -241,8 +349,9 @@ layout_head('Chambres');
 ?>
 
 <p class="section-intro">
-  Cinq chambres. Vous pouvez changer leur ordre d'apparition, les masquer
-  temporairement, et modifier chacune en détail.
+  <?= count($rooms) ?> chambre<?= count($rooms) > 1 ? 's' : '' ?>. Vous pouvez
+  changer leur ordre d'apparition, les masquer temporairement, et modifier
+  chacune en détail.
 </p>
 
 <form method="post" data-guard>
@@ -291,6 +400,25 @@ layout_head('Chambres');
 
   <div class="savebar">
     <button type="submit" class="btn">Enregistrer l'ordre</button>
+  </div>
+</form>
+
+<form method="post" style="margin-top:26px">
+  <?= Csrf::field() ?>
+  <input type="hidden" name="action" value="add">
+
+  <div class="card">
+    <div class="card__head"><h2 class="card__title">Ajouter une chambre</h2></div>
+    <p class="card__hint">
+      La nouvelle chambre est créée masquée. Vous la complétez tranquillement,
+      puis vous la publiez quand elle est prête.
+    </p>
+    <div class="field">
+      <label for="new_name">Nom de la chambre</label>
+      <input id="new_name" name="new_name" type="text" maxlength="80"
+             placeholder="Ex. : Double vue mer" required>
+    </div>
+    <button type="submit" class="btn btn--outline">Créer la chambre</button>
   </div>
 </form>
 

@@ -238,7 +238,7 @@ function renderIdeal() {
   document.querySelector('[data-ideal-intro]').textContent  = ideal.intro || '';
 
   const track = document.querySelector('[data-carousel-track]');
-  ideal.items.forEach(item => {
+  ideal.items.forEach((item, roomIndex) => {
     const card = el('li', 'ideal-card');
     applyCardImage(card, item, 'ideal-card__bg');
 
@@ -269,6 +269,26 @@ function renderIdeal() {
     // Emplacement du tarif : toujours présent, même quand le prix n'est pas
     // encore connu (il affiche alors la mention de repli).
     if (item.price) body.appendChild(el('div', 'ideal-card__price', item.price));
+
+    // Bouton d'ouverture de la visionneuse. Un bouton explicite plutôt qu'une
+    // carte cliquable : le carrousel se manipule au glissé, et un glissé ne
+    // doit jamais ouvrir une fenêtre par accident.
+    if (item.gallery && item.gallery.length) {
+      const open = el('button', 'ideal-card__open');
+      open.type = 'button';
+      open.setAttribute('data-gallery-index', String(roomIndex));
+      open.setAttribute(
+        'aria-label',
+        'Voir les photos de la chambre ' + (item.name || '')
+      );
+      open.appendChild(icon('image'));
+      open.appendChild(el('span', '',
+        item.gallery.length > 1
+          ? 'Voir les ' + item.gallery.length + ' photos'
+          : 'Voir la photo'
+      ));
+      body.appendChild(open);
+    }
 
     card.appendChild(body);
     track.appendChild(card);

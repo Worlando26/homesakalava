@@ -7,7 +7,7 @@
 //
 //  Source des données : data/content.json
 //  Régénérer          : php tools/build.php
-//  Généré le          : 19/09/2026 à 03:58
+//  Généré le          : 19/09/2026 à 04:08
 // ═══════════════════════════════════════════════════════════════
 
 const CONFIG = {
@@ -184,6 +184,21 @@ const CONFIG = {
                     "height": 720,
                     "eager": false
                 },
+                "gallery": [
+                    {
+                        "src": "uploads/chambre-lit-baldaquin-52286be5-med.jpg",
+                        "webp": "uploads/chambre-lit-baldaquin-52286be5-med.webp",
+                        "srcset": {
+                            "webp": "uploads/chambre-lit-baldaquin-52286be5-thumb.webp 320w, uploads/chambre-lit-baldaquin-52286be5-small.webp 640w, uploads/chambre-lit-baldaquin-52286be5-med.webp 1280w",
+                            "jpg": "uploads/chambre-lit-baldaquin-52286be5-thumb.jpg 320w, uploads/chambre-lit-baldaquin-52286be5-small.jpg 640w, uploads/chambre-lit-baldaquin-52286be5-med.jpg 1280w"
+                        },
+                        "sizes": "(max-width: 900px) 94vw, 880px",
+                        "alt": "Chambre avec lit à baldaquin et moustiquaire, mobilier en bois local, suspensions en vannerie et ouverture sur le jardin",
+                        "width": 1280,
+                        "height": 720,
+                        "eager": false
+                    }
+                ],
                 "gradient": "linear-gradient(145deg, #1a2a3a 0%, #3a6a90 100%)"
             },
             {
@@ -200,6 +215,7 @@ const CONFIG = {
                     "Jusqu'à 3 personnes"
                 ],
                 "image": null,
+                "gallery": [],
                 "gradient": "linear-gradient(145deg, #4a6a7a 0%, #6a8a9a 100%)"
             },
             {
@@ -216,6 +232,7 @@ const CONFIG = {
                     "Cour intérieure"
                 ],
                 "image": null,
+                "gallery": [],
                 "gradient": "linear-gradient(145deg, #2a4a2f 0%, #5a8a60 100%)"
             },
             {
@@ -232,6 +249,7 @@ const CONFIG = {
                     "Balcon"
                 ],
                 "image": null,
+                "gallery": [],
                 "gradient": "linear-gradient(145deg, #6a5840 0%, #9a8060 100%)"
             },
             {
@@ -247,6 +265,7 @@ const CONFIG = {
                     "Entrée indépendante"
                 ],
                 "image": null,
+                "gallery": [],
                 "gradient": "linear-gradient(145deg, #3a4a55 0%, #5a6a75 100%)"
             }
         ]

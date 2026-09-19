@@ -79,11 +79,12 @@ Ou en ligne de commande, en relançant `php tools/create-admin.php`.
 | Onglet | Ce que vous y faites |
 |---|---|
 | **Accueil** | La liste de ce qu'il reste à compléter, et les raccourcis. |
-| **Chambres** | Tarif, nom, description, superficie, équipements, photo, ordre d'apparition, et afficher/masquer une chambre. |
+| **Chambres** | Tarif, nom, description, superficie, équipements, photos, ordre d'apparition, afficher/masquer une chambre. Vous pouvez aussi en créer et en supprimer. |
 | **Photos** | Ajouter des photos, écrire leur description, les supprimer, et choisir quelle photo va dans quelle section. |
 | **Services** | La liste des services (wifi, parking, navette…), le restaurant et les activités. La mention « supplément » se coche par ligne. |
 | **Textes** | Les textes de chaque section, les coordonnées (téléphone, e-mail, adresse, GPS, Facebook), les horaires et les questions fréquentes. |
 | **Réglages** | Afficher ou masquer les tarifs, le référencement Google, les couleurs, le mot de passe. |
+| **Diagnostic** | Vérifie que le serveur est bien configuré. À ouvrir après chaque mise en ligne. |
 
 Chaque enregistrement met le site public à jour **immédiatement**. Vous pouvez
 vérifier en cliquant sur « Voir le site » en haut à droite.
@@ -97,7 +98,22 @@ Les listes (équipements, services, questions…) fonctionnent toutes pareil :
 - **Modifier** : changez le texte, puis enregistrez.
 - **Supprimer** : **videz complètement** la ligne, puis enregistrez.
 
-### Les photos
+### Les photos d'une chambre
+
+Une chambre peut avoir **plusieurs photos**. Dans l'écran d'une chambre, vous
+trouvez une série de listes déroulantes :
+
+- **La première photo est la photo principale.** C'est elle qui s'affiche sur
+  la carte de la chambre.
+- Les suivantes apparaissent quand le visiteur clique sur
+  « Voir les photos » : elles s'ouvrent en grand, l'une après l'autre.
+- Pour **changer l'ordre**, changez les photos choisies dans les listes.
+- Pour **retirer** une photo de la chambre, remettez sa liste sur
+  « aucune photo ». La photo reste dans la bibliothèque.
+
+Deux emplacements vides sont toujours proposés en bas, pour en ajouter.
+
+### Les photos, en général
 
 - Formats acceptés : **JPEG, PNG, WebP**, jusqu'à **8 Mo**.
 - Chaque photo envoyée est automatiquement réduite et compressée en plusieurs
@@ -150,6 +166,11 @@ talinjo/
 ├── admin/                  L'espace de gestion (PHP)
 ├── lib/                    Code partagé : données, images
 ├── tools/                  Outils en ligne de commande
+│   ├── build.php           régénère le site
+│   ├── create-admin.php    crée ou change le compte admin
+│   ├── package.php         prépare le dossier à mettre en ligne
+│   ├── test-admin.php      banc de test du back-office
+│   └── smoke-test.js       vérifie l'affichage du site
 │
 ├── data/
 │   ├── content.json        ★ TOUT le contenu du site
@@ -209,12 +230,92 @@ node tools/smoke-test.js .
 
 ---
 
-## 9. Avant la mise en ligne
+## 9. Mettre le site en ligne
 
-Trois choses à faire quand le site partira sur un vrai hébergement :
+### Étape 1 — Préparer le dossier à téléverser
 
-1. Renseigner l'**adresse du site** dans **Réglages → Référencement**. Sans
-   elle, le plan du site et l'aperçu de partage restent incomplets.
-2. Vérifier que le site est servi en **HTTPS**. Les cookies de session
-   passeront alors automatiquement en mode sécurisé.
-3. Décommenter la ligne `Sitemap:` dans `robots.txt` avec la bonne adresse.
+Depuis un terminal ouvert dans ce dossier :
+
+```
+php tools/package.php
+```
+
+Le script crée un dossier **`livraison/`** contenant le site prêt à partir.
+Il laisse volontairement de côté :
+
+- `data/admin.json` — votre mot de passe,
+- `about.txt`, `gestionnaire.txt`, `RAPPORT.md` — documents de travail,
+- `photos_sakalava/`, `_archive_ancien_site/` — sources et archives,
+- les outils de développement et l'historique git.
+
+Il affiche aussi, avant de finir, ce qui reste à compléter (adresse du site,
+e-mail, chambres sans photo). Ces points ne bloquent pas la mise en ligne.
+
+### Étape 2 — Téléverser
+
+Copiez **tout le contenu** de `livraison/` à la racine de votre hébergement,
+c'est-à-dire le dossier que votre hébergeur appelle `www/`, `public_html/`
+ou `htdocs/`.
+
+Le site fonctionne aussi bien à la racine d'un domaine que dans un
+sous-dossier : tous les chemins sont relatifs.
+
+### Étape 3 — Créer le compte administrateur sur le serveur
+
+Si votre hébergeur vous donne un accès SSH :
+
+```
+php tools/create-admin.php
+```
+
+Sinon, créez le compte sur votre ordinateur avec la même commande, puis
+téléversez le seul fichier `data/admin.json` qui vient d'être créé.
+
+### Étape 4 — Vérifier les droits d'écriture
+
+Ces dossiers doivent être accessibles en écriture (permissions `755`, ou
+`775` si votre hébergeur l'exige) :
+
+```
+data/    uploads/    storage/originals/    et la racine du site
+```
+
+### Étape 5 — Activer HTTPS
+
+Activez le certificat gratuit proposé par votre hébergeur. Puis, **une fois
+qu'il fonctionne**, ouvrez `.htaccess` et retirez les `#` du bloc
+« Forcer HTTPS » à la fin du fichier.
+
+> Ne l'activez pas avant que le certificat existe : le site deviendrait
+> inaccessible.
+
+### Étape 6 — Passer le diagnostic
+
+Ouvrez **`/admin/diagnostic.php`**. Cette page contrôle la version de PHP,
+les extensions, les droits d'écriture, la protection des dossiers sensibles
+et le HTTPS. Chaque ligne en rouge ou en orange explique quoi faire.
+
+C'est le contrôle le plus utile après un déménagement : il détecte notamment
+le cas où l'hébergeur ignore les fichiers `.htaccess`, qui laisserait vos
+données accessibles publiquement.
+
+### Étape 7 — Finaliser le référencement
+
+1. Renseignez l'**adresse du site** dans **Réglages → Référencement**.
+2. Décommentez la ligne `Sitemap:` dans `robots.txt` avec cette adresse.
+
+---
+
+## 10. Vérifier que tout fonctionne
+
+Deux outils, à lancer depuis un terminal dans le dossier du projet :
+
+```
+node tools/smoke-test.js .     # le site s'affiche-t-il sans erreur ?
+php tools/test-admin.php       # 67 contrôles sur l'administration
+```
+
+Le second demande vos identifiants, exerce réellement l'administration
+(connexion, enregistrements, tentatives d'injection, cas limites), puis
+**restaure le contenu tel qu'il était avant**. Vous pouvez le lancer sans
+crainte sur un site en production.

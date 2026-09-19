@@ -66,7 +66,7 @@ function section(string $title): void
 }
 
 /** Requête HTTP conservant les cookies de session. */
-function http(string $url, array $post = null, bool $follow = false): array
+function http(string $url, ?array $post = null, bool $follow = false): array
 {
     global $jar;
     $ch = curl_init($url);
@@ -354,6 +354,92 @@ check('Chambre inexistante refusée', str_contains(flash("$base/admin/chambres.p
 $tok = token("$base/admin/chambres.php");
 http("$base/admin/chambres.php", ['_csrf' => $tok, 'action' => 'save', 'id' => $target, 'name' => '']);
 check('Nom de chambre vide refusé', str_contains(flash("$base/admin/chambres.php"), 'obligatoire'));
+
+section('Galerie photos des chambres');
+
+$c       = content();
+$mediaId = array_key_first($c['media'] ?? []);
+$second  = array_keys($c['media'] ?? [])[1] ?? $mediaId;
+$target  = $c['rooms']['items'][0]['id'] ?? '';
+
+if ($mediaId === null) {
+    check('Médiathèque non vide', false, 'aucune photo pour tester la galerie');
+} else {
+    $tok = token("$base/admin/chambres.php?id=" . urlencode($target));
+    http("$base/admin/chambres.php", [
+        '_csrf' => $tok, 'action' => 'save', 'id' => $target, 'name' => 'Chambre galerie',
+        'mediaIds' => [$mediaId, $second, ''], 'active' => '1',
+    ]);
+    $room = null;
+    foreach (content()['rooms']['items'] as $r2) { if ($r2['id'] === $target) { $room = $r2; } }
+
+    $attendu = ($mediaId === $second) ? 1 : 2;
+    check('Plusieurs photos enregistrées sur une chambre',
+        count($room['mediaIds'] ?? []) === $attendu,
+        'obtenu : ' . count($room['mediaIds'] ?? []));
+    check('La première photo devient la photo principale',
+        ($room['coverId'] ?? '') === $mediaId);
+
+    // Doublons et identifiants fantômes
+    $tok = token("$base/admin/chambres.php?id=" . urlencode($target));
+    http("$base/admin/chambres.php", [
+        '_csrf' => $tok, 'action' => 'save', 'id' => $target, 'name' => 'Chambre galerie',
+        'mediaIds' => [$mediaId, $mediaId, 'photo-fantome'], 'active' => '1',
+    ]);
+    $room = null;
+    foreach (content()['rooms']['items'] as $r2) { if ($r2['id'] === $target) { $room = $r2; } }
+    check('Doublon et photo inexistante écartés de la galerie',
+        ($room['mediaIds'] ?? []) === [$mediaId],
+        json_encode($room['mediaIds'] ?? []));
+
+    check('La galerie est exportée vers le site public',
+        str_contains(generated(), '"gallery"'));
+}
+
+section('Ajout et suppression de chambres');
+
+$avant = count(content()['rooms']['items'] ?? []);
+
+$tok = token("$base/admin/chambres.php");
+http("$base/admin/chambres.php", ['_csrf' => $tok, 'action' => 'add', 'new_name' => '']);
+check('Nom vide refusé à la création', str_contains(flash("$base/admin/chambres.php"), 'Donnez un nom'));
+
+$tok = token("$base/admin/chambres.php");
+http("$base/admin/chambres.php", ['_csrf' => $tok, 'action' => 'add', 'new_name' => 'Chambre dessai']);
+$rooms = content()['rooms']['items'] ?? [];
+check('Chambre créée', count($rooms) === $avant + 1);
+$nouvelle = end($rooms);
+check('Chambre créée masquée par défaut', ($nouvelle['active'] ?? true) === false);
+check('Chambre masquée absente du site public',
+    !str_contains(generated(), 'Chambre dessai'));
+
+$tok = token("$base/admin/chambres.php");
+http("$base/admin/chambres.php", ['_csrf' => $tok, 'action' => 'add', 'new_name' => 'Chambre dessai']);
+$rooms = content()['rooms']['items'] ?? [];
+$ids   = array_column($rooms, 'id');
+check('Deux chambres de même nom reçoivent des identifiants distincts',
+    count($ids) === count(array_unique($ids)), implode(', ', array_slice($ids, -2)));
+
+foreach (array_slice($ids, -2) as $doomed) {
+    $tok = token("$base/admin/chambres.php");
+    http("$base/admin/chambres.php", ['_csrf' => $tok, 'action' => 'delete', 'id' => $doomed]);
+}
+check('Chambres supprimées', count(content()['rooms']['items'] ?? []) === $avant);
+
+$tok = token("$base/admin/chambres.php");
+http("$base/admin/chambres.php", ['_csrf' => $tok, 'action' => 'delete', 'id' => 'chambre-fantome']);
+check('Suppression d\'une chambre inexistante refusée',
+    str_contains(flash("$base/admin/chambres.php"), "n'existe plus"));
+
+section('Diagnostic');
+
+$r = http("$base/admin/diagnostic.php");
+check('La page de diagnostic répond', $r['code'] === 200);
+check('Aucune erreur PHP sur la page de diagnostic',
+    !preg_match('/(Fatal error|Warning:|Notice:|Undefined)/i', $r['body']));
+check('Le diagnostic confirme les dossiers protégés',
+    substr_count($r['body'], 'probe--error') === 0,
+    substr_count($r['body'], 'probe--error') . ' problème(s) signalé(s)');
 
 section('Photos');
 

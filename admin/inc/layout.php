@@ -20,6 +20,7 @@ function admin_nav(): array
         'services.php' => 'Services',
         'textes.php'   => 'Textes',
         'reglages.php' => 'Réglages',
+        'diagnostic.php' => 'Diagnostic',
     ];
 }
 

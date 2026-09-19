@@ -453,3 +453,48 @@ input[type="file"] {
   .row__actions .btn { width: 100%; }
   .media-grid { grid-template-columns: repeat(auto-fill, minmax(125px, 1fr)); }
 }
+
+/* ── Points de controle du diagnostic ───────────────────── */
+.probe {
+  display: grid;
+  grid-template-columns: 26px 1fr;
+  gap: 11px;
+  align-items: start;
+  padding: 11px 0;
+  border-bottom: 1px solid var(--c-line);
+}
+.probe:last-child { border-bottom: none; }
+.probe__mark {
+  width: 24px; height: 24px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 50%;
+  font-size: 13px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+.probe--ok    .probe__mark { background: var(--c-ok-bg);   color: var(--c-ok-ink); }
+.probe--warn  .probe__mark { background: var(--c-warn-bg); color: var(--c-warn-ink); }
+.probe--error .probe__mark { background: var(--c-err-bg);  color: var(--c-err-ink); }
+.probe__body   { min-width: 0; display: flex; flex-direction: column; gap: 3px; }
+.probe__detail { font-size: 13.5px; color: var(--c-muted); }
+.probe__fix {
+  font-size: 13px;
+  line-height: 1.55;
+  background: var(--c-warn-bg);
+  color: var(--c-warn-ink);
+  border-radius: 8px;
+  padding: 9px 12px;
+  margin-top: 4px;
+}
+.probe--error .probe__fix { background: var(--c-err-bg); color: var(--c-err-ink); }
+
+/* Texte reserve aux lecteurs d ecran */
+.sr-only {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}

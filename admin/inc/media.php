@@ -144,22 +144,31 @@ final class MediaAdmin
         return $rel !== '' ? '../' . $rel : '';
     }
 
+    /** Compteur garantissant un identifiant HTML unique par sélecteur. */
+    private static int $pickerSeq = 0;
+
     /**
      * Menu déroulant de choix d'une photo, avec aperçu piloté par admin.js.
      *
-     * @param string $name     nom du champ
+     * Le nom du champ peut se répéter (« mediaIds[] » pour une galerie) : les
+     * identifiants HTML, eux, sont toujours uniques, sinon les étiquettes
+     * pointeraient toutes sur le même menu.
+     *
+     * @param string $name     nom du champ, éventuellement en tableau
      * @param string $selected identifiant actuellement retenu
      */
     public static function picker(array $content, string $name, string $selected, string $label): string
     {
-        $pickerId = 'pk-' . preg_replace('/[^a-z0-9]+/i', '-', $name);
+        $seq      = ++self::$pickerSeq;
+        $fieldId  = 'pick-' . $seq;
+        $pickerId = 'prev-' . $seq;
 
-        $out  = '<div class="field"><label class="label" for="' . e($name) . '">'
+        $out  = '<div class="field"><label class="label" for="' . e($fieldId) . '">'
               . e($label) . '</label><div class="picker">';
         $out .= '<img class="picker__preview" id="' . e($pickerId) . '" alt=""'
               . ($selected === '' ? ' hidden' : ' src="' . e(self::thumb($content, $selected)) . '"')
               . '>';
-        $out .= '<select id="' . e($name) . '" name="' . e($name) . '" data-picker="' . e($pickerId) . '">';
+        $out .= '<select id="' . e($fieldId) . '" name="' . e($name) . '" data-picker="' . e($pickerId) . '">';
         $out .= '<option value="">— Aucune photo (dégradé de couleur) —</option>';
 
         foreach (($content['media'] ?? []) as $id => $m) {

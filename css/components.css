@@ -365,3 +365,131 @@ picture.hero__pic {
    La classe .no-gsap est posee par js/main.js. */
 .no-gsap .faq-item__body { transition: max-height .35s ease; }
 .no-gsap .faq-item__icon { transition: transform .25s ease; }
+
+/* ══════════════════════════════════════════════════
+   VISIONNEUSE DE PHOTOS (chambres)
+   ══════════════════════════════════════════════════ */
+
+/* Bouton d ouverture, dans le corps de la carte */
+.ideal-card__open {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 12px;
+  padding: 8px 14px;
+  border-radius: var(--r-pill);
+  background: rgba(255,255,255,.18);
+  border: 1px solid rgba(255,255,255,.3);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: #fff;
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1;
+  min-height: 36px;
+  transition: background .2s, border-color .2s;
+}
+.ideal-card__open:hover { background: rgba(255,255,255,.3); }
+.ideal-card__open svg   { width: 14px; height: 14px; }
+
+/* Fenetre */
+.lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(12px, 3vw, 40px);
+  background: rgba(6, 14, 14, .92);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+.lightbox__frame {
+  position: relative;
+  width: 100%;
+  max-width: 920px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.lightbox__title {
+  font-family: var(--font-display);
+  font-size: clamp(17px, 3vw, 24px);
+  font-weight: 700;
+  color: #fff;
+  padding-right: 52px;   /* place pour le bouton de fermeture */
+  margin: 0;
+}
+.lightbox__close {
+  position: absolute;
+  top: -4px;
+  right: 0;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: rgba(255,255,255,.12);
+  border: 1px solid rgba(255,255,255,.22);
+  color: #fff;
+  transition: background .2s;
+}
+.lightbox__close:hover { background: rgba(255,255,255,.26); }
+.lightbox__close svg   { width: 19px; height: 19px; }
+
+.lightbox__stage {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.lightbox__holder {
+  flex: 1;
+  min-width: 0;
+  border-radius: var(--r-card);
+  overflow: hidden;
+  background: rgba(255,255,255,.06);
+}
+.lightbox__pic,
+.lightbox__pic img {
+  display: block;
+  width: 100%;
+  max-height: 72vh;
+  object-fit: contain;
+}
+.lightbox__nav {
+  width: 46px;
+  height: 46px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: rgba(255,255,255,.12);
+  border: 1px solid rgba(255,255,255,.22);
+  color: #fff;
+  transition: background .2s;
+}
+.lightbox__nav:hover { background: rgba(255,255,255,.26); }
+.lightbox__nav svg   { width: 22px; height: 22px; }
+
+.lightbox__count {
+  text-align: center;
+  color: rgba(255,255,255,.7);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: .04em;
+  margin: 0;
+}
+
+/* Sur telephone, les fleches passent sous la photo : elles ne mangent plus
+   la largeur utile, et restent atteignables au pouce. */
+@media (max-width: 639px) {
+  .lightbox__stage  { flex-wrap: wrap; justify-content: center; }
+  .lightbox__holder { flex: 0 0 100%; order: -1; }
+  .lightbox__nav    { width: 52px; height: 52px; }
+  .lightbox__pic,
+  .lightbox__pic img { max-height: 58vh; }
+}

@@ -202,6 +202,16 @@ final class SiteBuilder
 
         $items = array_map(function (array $i) use ($show, $fallback) {
             $price = trim((string) ($i['price'] ?? ''));
+
+            // Galerie : les photos de la chambre, dans l'ordre défini en
+            // admin, débarrassées de celles qui auraient été supprimées.
+            $gallery = [];
+            foreach ($i['mediaIds'] ?? [] as $id) {
+                if ($img = $this->img((string) $id, 'gallery')) {
+                    $gallery[] = $img;
+                }
+            }
+
             return [
                 'id'        => $i['id']   ?? '',
                 'name'      => $i['name'] ?? '',
@@ -214,6 +224,7 @@ final class SiteBuilder
                 'price'     => ($show && $price !== '') ? $price : $fallback,
                 'amenities' => array_values($i['amenities'] ?? []),
                 'image'     => $this->img($i['coverId'] ?? '', 'card'),
+                'gallery'   => $gallery,
                 'gradient'  => $i['gradient'] ?? '',
             ];
         }, $this->activeRooms());
@@ -466,9 +477,11 @@ final class SiteBuilder
         }
 
         $sizes = match ($usage) {
-            'hero'  => '100vw',
-            'thumb' => '(max-width: 639px) 45vw, 220px',
-            default => '(max-width: 639px) 92vw, (max-width: 1023px) 48vw, 600px',
+            'hero'    => '100vw',
+            'thumb'   => '(max-width: 639px) 45vw, 220px',
+            // La visionneuse affiche la photo au plus grand format utile.
+            'gallery' => '(max-width: 900px) 94vw, 880px',
+            default   => '(max-width: 639px) 92vw, (max-width: 1023px) 48vw, 600px',
         };
 
         return [

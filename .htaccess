@@ -57,3 +57,15 @@ DirectoryIndex index.html index.php
   AddType image/webp .webp
   AddType application/manifest+json .webmanifest
 </IfModule>
+
+# ── Forcer HTTPS ─────────────────────────────────────────────────
+# A ACTIVER une fois le certificat en place chez votre hebergeur, en
+# retirant les # des quatre lignes ci-dessous.
+# Laisse desactive par defaut : active avant que le certificat existe,
+# il rendrait le site inaccessible.
+#<IfModule mod_rewrite.c>
+#  RewriteEngine On
+#  RewriteCond %{HTTPS} !=on
+#  RewriteCond %{HTTP:X-Forwarded-Proto} !=https
+#  RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+#</IfModule>

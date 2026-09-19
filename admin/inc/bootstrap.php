@@ -20,9 +20,38 @@ require_once APP_ROOT . '/lib/content.php';
 require_once __DIR__ . '/auth.php';
 require_once __DIR__ . '/flash.php';
 
+/**
+ * La connexion est-elle chiffrée ?
+ *
+ * Sur la plupart des hébergements mutualisés, le certificat est géré par un
+ * répartiteur placé devant PHP : $_SERVER['HTTPS'] n'est alors pas renseigné
+ * alors que le visiteur est bien en HTTPS. Sans ce contrôle élargi, le cookie
+ * de session ne serait jamais marqué « secure » en production.
+ */
+function is_https(): bool
+{
+    if (!empty($_SERVER['HTTPS']) && strtolower((string) $_SERVER['HTTPS']) !== 'off') {
+        return true;
+    }
+    if (($_SERVER['SERVER_PORT'] ?? '') === '443') {
+        return true;
+    }
+    // En-têtes posés par les répartiteurs de charge et les CDN.
+    $forwarded = strtolower((string) ($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? ''));
+    if ($forwarded !== '') {
+        // La valeur peut être une liste : « https, http ». Le premier segment
+        // est celui vu par le client.
+        return str_starts_with(trim(explode(',', $forwarded)[0]), 'https');
+    }
+    if (strtolower((string) ($_SERVER['HTTP_X_FORWARDED_SSL'] ?? '')) === 'on') {
+        return true;
+    }
+    return false;
+}
+
 // ─── Session durcie ───────────────────────────────────────────────────────
 if (session_status() !== PHP_SESSION_ACTIVE) {
-    $https = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off');
+    $https = is_https();
 
     session_set_cookie_params([
         'lifetime' => 0,          // cookie de session
@@ -39,6 +68,16 @@ if (session_status() !== PHP_SESSION_ACTIVE) {
 header('X-Content-Type-Options: nosniff');
 header('X-Frame-Options: DENY');
 header('Referrer-Policy: same-origin');
+
+// L'administration ne doit jamais être mise en cache : un navigateur partagé
+// pourrait sinon réafficher une page depuis l'historique après déconnexion.
+header('Cache-Control: no-store, no-cache, must-revalidate, private');
+header('Pragma: no-cache');
+
+// En HTTPS, on demande au navigateur de ne plus jamais revenir en clair.
+if (is_https()) {
+    header('Strict-Transport-Security: max-age=31536000');
+}
 // L'admin n'utilise ni CDN ni script externe : tout est servi localement.
 header(
     "Content-Security-Policy: default-src 'self'; img-src 'self' data:; "

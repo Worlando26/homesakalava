@@ -1,18 +1,20 @@
 {
-  "name": "home-sakalava",
-  "version": "1.0.0",
-  "description": "Site vitrine et back-office de la maison d'hôtes Home Sakalava, Nosy Be, Madagascar.",
-  "private": true,
-  "license": "UNLICENSED",
-  "type": "commonjs",
-  "scripts": {
-    "build": "php tools/build.php",
-    "test": "node tools/smoke-test.js .",
-    "admin": "php tools/create-admin.php",
-    "serve": "php -S localhost:8000"
-  },
-  "engines": {
-    "node": ">=18"
-  },
-  "comment": "Aucune dépendance : le site est en HTML/CSS/JS natifs, le back-office en PHP 8 sans framework. Node ne sert qu'au test de rendu (tools/smoke-test.js)."
+    "name": "home-sakalava",
+    "version": "1.0.0",
+    "description": "Site vitrine et back-office de la maison d'hôtes Home Sakalava, Nosy Be, Madagascar.",
+    "private": true,
+    "license": "UNLICENSED",
+    "type": "commonjs",
+    "scripts": {
+        "build": "php tools/build.php",
+        "test": "node tools/smoke-test.js .",
+        "test:admin": "php tools/test-admin.php",
+        "package": "php tools/package.php",
+        "admin": "php tools/create-admin.php",
+        "serve": "php -S localhost:8000"
+    },
+    "engines": {
+        "node": ">=18"
+    },
+    "comment": "Aucune dépendance : le site est en HTML/CSS/JS natifs, le back-office en PHP 8 sans framework. Node ne sert qu'au test de rendu (tools/smoke-test.js)."
 }
