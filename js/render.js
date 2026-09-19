@@ -25,6 +25,16 @@ function icon(name) {
   return i;
 }
 
+/**
+ * Écrit un texte dans un hook s'il existe sur la page courante.
+ * Les pages intérieures reprennent certains titres dans leur en-tête : le
+ * hook de section correspondant n'y figure alors plus.
+ */
+function setText(selector, value) {
+  const node = document.querySelector(selector);
+  if (node) node.textContent = value == null ? '' : value;
+}
+
 /* Applique un dégradé CSS en fond d'un élément */
 function applyGradient(elm, gradient) {
   if (gradient) elm.style.background = gradient;
@@ -112,11 +122,18 @@ function renderNav() {
   const navLinks  = document.querySelector('[data-nav-links]');
   const drawLinks = document.querySelector('[data-drawer-links]');
 
+  // Page courante, pour signaler l onglet actif dans le menu.
+  const page = (document.body && document.body.dataset.page) || 'index';
+
   nav.links.forEach(link => {
+    const cible = link.href.split('#')[0].replace('.html', '') || 'index';
+    const actif = cible === page;
+
     [navLinks, drawLinks].forEach(ul => {
       const li = el('li');
-      const a  = el('a', '', link.label);
+      const a  = el('a', actif ? 'is-current' : '', link.label);
       a.href   = link.href;
+      if (actif) a.setAttribute('aria-current', 'page');
       li.appendChild(a);
       ul.appendChild(li);
     });
@@ -129,6 +146,7 @@ function renderNav() {
 
 // ─── Hero ─────────────────────────────────────────────────
 function renderHero() {
+  if (!document.querySelector('[data-hero-img]')) return;
   const { hero, brand } = CONFIG;
 
   const wrap = document.querySelector('[data-hero-img]');
@@ -165,6 +183,7 @@ function renderHero() {
 
 // ─── Story ────────────────────────────────────────────────
 function renderStory() {
+  if (!document.querySelector('[data-story-kicker]')) return;
   const { story } = CONFIG;
   document.querySelector('[data-story-kicker]').textContent = story.kicker;
   document.querySelector('[data-story-stat]').textContent   = story.stat;
@@ -178,7 +197,7 @@ function renderStory() {
 // ─── Réputation ───────────────────────────────────────────
 function renderReputation() {
   const r = CONFIG.reputation;
-  if (!r) return;
+  if (!r || !document.querySelector('[data-rep-scores]')) return;
 
   document.querySelector('[data-rep-kicker]').textContent = r.kicker;
   document.querySelector('[data-rep-title]').textContent  = r.title;
@@ -209,6 +228,7 @@ function renderReputation() {
 
 // ─── La maison (bento) ────────────────────────────────────
 function renderAmazing() {
+  if (!document.querySelector('[data-amazing-bento]')) return;
   const { amazing } = CONFIG;
   document.querySelector('[data-amazing-kicker]').textContent = amazing.kicker;
 
@@ -233,6 +253,7 @@ function renderAmazing() {
 
 // ─── Les chambres (carousel) ──────────────────────────────
 function renderIdeal() {
+  if (!document.querySelector('[data-carousel-track]')) return;
   const { ideal } = CONFIG;
   document.querySelector('[data-ideal-kicker]').textContent = ideal.kicker;
   document.querySelector('[data-ideal-intro]').textContent  = ideal.intro || '';
@@ -270,25 +291,19 @@ function renderIdeal() {
     // encore connu (il affiche alors la mention de repli).
     if (item.price) body.appendChild(el('div', 'ideal-card__price', item.price));
 
-    // Bouton d'ouverture de la visionneuse. Un bouton explicite plutôt qu'une
-    // carte cliquable : le carrousel se manipule au glissé, et un glissé ne
-    // doit jamais ouvrir une fenêtre par accident.
-    if (item.gallery && item.gallery.length) {
-      const open = el('button', 'ideal-card__open');
-      open.type = 'button';
-      open.setAttribute('data-gallery-index', String(roomIndex));
-      open.setAttribute(
-        'aria-label',
-        'Voir les photos de la chambre ' + (item.name || '')
-      );
-      open.appendChild(icon('image'));
-      open.appendChild(el('span', '',
-        item.gallery.length > 1
-          ? 'Voir les ' + item.gallery.length + ' photos'
-          : 'Voir la photo'
-      ));
-      body.appendChild(open);
-    }
+    // Lien vers la fiche complete de la chambre. Un lien explicite plutôt
+    // qu'une carte cliquable : le carrousel se manipule au glissé, et un
+    // glissé ne doit jamais déclencher une navigation par accident.
+    const t = CONFIG.t || {};
+    const open = el('a', 'ideal-card__open');
+    open.href = 'chambres.html#' + item.id;
+    open.setAttribute(
+      'aria-label',
+      (t.seeRoom || 'Voir la chambre') + ' ' + (item.name || '')
+    );
+    open.appendChild(icon('arrow-right'));
+    open.appendChild(el('span', '', t.seeRoom || 'Voir la chambre'));
+    body.appendChild(open);
 
     card.appendChild(body);
     track.appendChild(card);
@@ -312,7 +327,7 @@ function renderIdeal() {
 // ─── Le restaurant ────────────────────────────────────────
 function renderRestaurant() {
   const r = CONFIG.restaurant;
-  if (!r) return;
+  if (!r || !document.querySelector('[data-resto-list]')) return;
 
   applyBackdrop(document.querySelector('[data-resto-media]'), r.image, r.gradient);
 
@@ -332,6 +347,7 @@ function renderRestaurant() {
 
 // ─── Services ─────────────────────────────────────────────
 function renderTrusted() {
+  if (!document.querySelector('[data-trusted-title]')) return;
   const { trusted } = CONFIG;
 
   document.querySelector('[data-trusted-title]').textContent = trusted.title;
@@ -381,12 +397,12 @@ function renderTrusted() {
 // ─── Les activités ────────────────────────────────────────
 function renderActivities() {
   const a = CONFIG.activities;
-  if (!a) return;
+  if (!a || !document.querySelector('[data-act-grid]')) return;
 
-  document.querySelector('[data-act-kicker]').textContent = a.kicker;
-  document.querySelector('[data-act-title]').textContent  = a.title;
-  document.querySelector('[data-act-text]').textContent   = a.text;
-  document.querySelector('[data-act-note]').textContent   = a.note || '';
+  setText('[data-act-kicker]', a.kicker);
+  setText('[data-act-title]',  a.title);
+  setText('[data-act-text]',   a.text);
+  setText('[data-act-note]',   a.note);
 
   const grid = document.querySelector('[data-act-grid]');
   (a.items || []).forEach(i => {
@@ -405,6 +421,7 @@ function renderActivities() {
 
 // ─── FAQ ──────────────────────────────────────────────────
 function renderFaq() {
+  if (!document.querySelector('[data-faq-list]')) return;
   const { faq } = CONFIG;
 
   document.querySelector('[data-faq-kicker]').textContent = faq.kicker;
@@ -443,11 +460,11 @@ function renderFaq() {
 // ─── Accès & contact ──────────────────────────────────────
 function renderAccess() {
   const a = CONFIG.access;
-  if (!a) return;
+  if (!a || !document.querySelector('[data-acces-rows]')) return;
 
-  document.querySelector('[data-acces-kicker]').textContent = a.kicker;
-  document.querySelector('[data-acces-title]').textContent  = a.title;
-  document.querySelector('[data-acces-text]').textContent   = a.text;
+  setText('[data-acces-kicker]', a.kicker);
+  setText('[data-acces-title]',  a.title);
+  setText('[data-acces-text]',   a.text);
 
   const fb = document.querySelector('[data-acces-fb]');
   if (a.facebook) {
@@ -693,6 +710,7 @@ function renderBooking() {
 
 // ─── Footer ───────────────────────────────────────────────
 function renderFooter() {
+  if (!document.querySelector('[data-footer-cta-block]')) return;
   const { footer, brand } = CONFIG;
 
   const ctaBlock = document.querySelector('[data-footer-cta-block]');
@@ -758,6 +776,7 @@ function applyTheme() {
 function renderAll() {
   applyTheme();
   renderNav();
+  renderPageHead();
   renderHero();
   renderStory();
   renderReputation();
@@ -768,6 +787,7 @@ function renderAll() {
   renderActivities();
   renderFaq();
   renderAccess();
+  renderRoomsPage();
   renderBooking();
   renderFooter();
 }

@@ -131,7 +131,8 @@ function parseHtml(html) {
   return root;
 }
 
-const html = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
+const PAGE = process.argv[3] || 'index.html';
+const html = fs.readFileSync(path.join(ROOT, PAGE), 'utf8');
 const tree = parseHtml(html);
 
 const document = {
@@ -144,8 +145,17 @@ const document = {
   getElementById: (id) => tree.querySelector('#' + id),
 };
 
+// rooms.js lit document.body.dataset.page pour savoir quelle page rendre.
+document.body = tree.querySelectorAll('BODY')[0] || new Node('body');
+
 global.document = document;
-global.window = { matchMedia: () => ({ matches: false }), location: {}, addEventListener(){} };
+global.window = {
+  matchMedia: () => ({ matches: false }),
+  location: { hash: '' },
+  addEventListener(){},
+  requestAnimationFrame(){},
+  scrollTo(){},
+};
 global.navigator = { userAgent: 'smoke' };
 global.gsap = undefined;
 
@@ -157,8 +167,9 @@ console.warn = (...a) => warnings.push(a.join(' '));
 try {
   const cfg = fs.readFileSync(path.join(ROOT, 'config.js'), 'utf8');
   const rnd = fs.readFileSync(path.join(ROOT, 'js/render.js'), 'utf8');
+  const rms = fs.readFileSync(path.join(ROOT, 'js/rooms.js'), 'utf8');
   // eslint-disable-next-line no-eval
-  eval(cfg + '\n' + rnd + '\nrenderAll();');
+  eval(cfg + '\n' + rnd + '\n' + rms + '\nrenderAll();');
 } catch (e) {
   console.warn = origWarn;
   console.error('ÉCHEC DU RENDU :', e.message);
@@ -234,7 +245,7 @@ if (untyped) problems.push(`${untyped} bouton(s) sans attribut type`);
 
 console.log(`Titres : ${headings.map(h => 'h' + h.level).join(' ')}`);
 
-console.log(`Rendu exécuté : ${countNodes(tree)} nœuds, ${imgs} <img>.`);
+console.log(`${PAGE} — ${countNodes(tree)} nœuds, ${imgs} <img>.`);
 if (warnings.length) console.log('Avertissements :', warnings.join(' | '));
 if (problems.length) {
   console.log('\nPROBLÈMES :');

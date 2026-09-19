@@ -12,6 +12,7 @@
 declare(strict_types=1);
 
 require_once __DIR__ . '/images.php';
+require_once __DIR__ . '/pages.php';
 
 final class ContentStore
 {
@@ -82,11 +83,25 @@ final class SiteBuilder
     /** @return array<string,int> fichier => octets écrits */
     public function buildAll(): array
     {
-        return [
-            'config.js'   => $this->writeFile('config.js', $this->buildConfigJs()),
-            'index.html'  => $this->patchIndexHtml(),
-            'sitemap.xml' => $this->writeFile('sitemap.xml', $this->buildSitemap()),
-        ];
+        $ecrits = ['config.js' => $this->writeFile('config.js', $this->buildConfigJs())];
+
+        // Les quatre pages du site sont générées à partir des gabarits :
+        // une seule source pour la navigation, le pied de page et les
+        // scripts, quel que soit le nombre de pages.
+        foreach (PageTemplates::PAGES as $page) {
+            $fichier = $page . '.html';
+            $ecrits[$fichier] = $this->writeFile($fichier, PageTemplates::render(
+                $page,
+                '',                       // pages à la racine
+                'fr',
+                $this->buildSeoBlock($page),
+                ''                        // sélecteur de langue (étape suivante)
+            ));
+        }
+
+        $ecrits['sitemap.xml'] = $this->writeFile('sitemap.xml', $this->buildSitemap());
+
+        return $ecrits;
     }
 
     // ══ config.js ═══════════════════════════════════════════════════════════
@@ -110,6 +125,7 @@ final class SiteBuilder
             'faq'         => $this->faq(),
             'booking'     => $this->booking(),
             'footer'      => $this->footer(),
+            'pages'       => $this->pages(),
         ];
 
         $json = json_encode(
@@ -408,6 +424,36 @@ final class SiteBuilder
         ];
     }
 
+    /**
+     * En-tete de chaque page interieure. Le titre de page est distinct du
+     * titre de section : « Nos chambres » en tete de page, « Cinq chambres,
+     * pas une de plus » a l interieur.
+     */
+    private function pages(): array
+    {
+        $p = $this->c['pages'] ?? [];
+        $mk = fn(string $k, string $kicker, string $title, string $intro) => [
+            'kicker' => $p[$k]['kicker'] ?? $kicker,
+            'title'  => $p[$k]['title']  ?? $title,
+            'intro'  => $p[$k]['intro']  ?? $intro,
+        ];
+
+        return [
+            'chambres'  => $mk('chambres',
+                (string) ($this->c['rooms']['kicker'] ?? ''),
+                'Nos chambres',
+                (string) ($this->c['rooms']['intro'] ?? '')),
+            'activites' => $mk('activites',
+                (string) ($this->c['activities']['kicker'] ?? ''),
+                (string) ($this->c['activities']['title'] ?? ''),
+                (string) ($this->c['activities']['text'] ?? '')),
+            'acces'     => $mk('acces',
+                (string) ($this->c['access']['kicker'] ?? ''),
+                (string) ($this->c['access']['title'] ?? ''),
+                (string) ($this->c['access']['text'] ?? '')),
+        ];
+    }
+
     private function footer(): array
     {
         $f = $this->c['footer']  ?? [];
@@ -501,41 +547,54 @@ final class SiteBuilder
         ];
     }
 
-    // ══ index.html : blocs SEO ══════════════════════════════════════════════
+    // ══ Blocs SEO par page ══════════════════════════════════════════════════
 
-    private function patchIndexHtml(): int
+    /**
+     * Titre et description propres à chaque page. Une page qui reprendrait
+     * le titre de l'accueil serait considérée comme un doublon par Google.
+     *
+     * @return array{0:string,1:string} [titre, description]
+     */
+    private function pageSeo(string $page): array
     {
-        $path = $this->root . '/index.html';
-        $html = (string) file_get_contents($path);
+        $seo   = $this->c['seo'] ?? [];
+        $brand = (string) ($this->c['brand']['name'] ?? '');
 
-        $new = $this->replaceBlock($html, 'SEO', $this->buildSeoBlock());
-
-        if ($new !== $html) {
-            file_put_contents($path, $new);
+        $meta = $this->c['pages'][$page] ?? [];
+        if (($meta['seoTitle'] ?? '') !== '' && ($meta['seoDescription'] ?? '') !== '') {
+            return [$meta['seoTitle'], $meta['seoDescription']];
         }
-        return strlen($new);
+
+        // Repli construit à partir du contenu de la page, pour qu'un titre
+        // existe même si le gérant n'a rien saisi.
+        return match ($page) {
+            'chambres' => [
+                'Nos 5 chambres — ' . $brand,
+                (string) ($this->c['rooms']['intro'] ?? ''),
+            ],
+            'activites' => [
+                (string) ($this->c['activities']['title'] ?? 'Activités') . ' — ' . $brand,
+                (string) ($this->c['activities']['text'] ?? ''),
+            ],
+            'acces' => [
+                'Accès et contact — ' . $brand,
+                (string) ($this->c['access']['text'] ?? ''),
+            ],
+            default => [
+                (string) ($seo['title'] ?? ''),
+                (string) ($seo['description'] ?? ''),
+            ],
+        };
     }
 
-    /** Remplace le contenu entre <!-- BUILD:NOM --> et <!-- /BUILD:NOM -->. */
-    private function replaceBlock(string $html, string $name, string $inner): string
+    private function buildSeoBlock(string $page = 'index'): string
     {
-        $pattern = '/(<!-- BUILD:' . $name . ' -->)(.*?)(<!-- \/BUILD:' . $name . ' -->)/s';
-        if (!preg_match($pattern, $html)) {
-            fwrite(STDERR, "Repère BUILD:$name absent de index.html — bloc non mis à jour.\n");
-            return $html;
-        }
-        return preg_replace($pattern, '$1' . "\n" . $inner . '  $3', $html) ?? $html;
-    }
+        $seo   = $this->c['seo'] ?? [];
+        $brand = $this->c['brand'] ?? [];
 
-    private function buildSeoBlock(): string
-    {
-        $seo     = $this->c['seo'] ?? [];
-
-        $brand   = $this->c['brand'] ?? [];
-
-        $title = $seo['title']       ?? '';
-        $desc  = $seo['description'] ?? '';
-        $url   = rtrim((string) ($seo['siteUrl'] ?? ''), '/');
+        [$title, $desc] = $this->pageSeo($page);
+        $url  = rtrim((string) ($seo['siteUrl'] ?? ''), '/');
+        $file = $page === 'index' ? '' : $page . '.html';
         $ogImg = $this->c['media'][$seo['ogImageId'] ?? ''] ?? null;
         $ogAbs = $ogImg ? ($url !== '' ? $url . '/' . $ogImg['src'] : $ogImg['src']) : '';
 
@@ -546,7 +605,7 @@ final class SiteBuilder
         $lines[] = '  <meta name="description" content="' . $e($desc) . '">';
         $lines[] = '  <meta name="theme-color" content="' . $e($this->c['theme']['dark'] ?? '#0a1a1a') . '">';
         if ($url !== '') {
-            $lines[] = '  <link rel="canonical" href="' . $e($url) . '/">';
+            $lines[] = '  <link rel="canonical" href="' . $e($url . '/' . $file) . '">';
         }
         $lines[] = '';
         $lines[] = '  <meta property="og:type" content="website">';
@@ -559,13 +618,16 @@ final class SiteBuilder
             $lines[] = '  <meta property="og:image:alt" content="' . $e($ogImg['alt'] ?? '') . '">';
         }
         if ($url !== '') {
-            $lines[] = '  <meta property="og:url" content="' . $e($url) . '/">';
+            $lines[] = '  <meta property="og:url" content="' . $e($url . '/' . $file) . '">';
         }
         $lines[] = '  <meta name="twitter:card" content="summary_large_image">';
         $lines[] = '';
-        $lines[] = '  <script type="application/ld+json">';
-        $lines[] = '  ' . $this->buildJsonLd();
-        $lines[] = '  </script>';
+        if ($page === 'index') {
+            $lines[] = '';
+            $lines[] = '  <script type="application/ld+json">';
+            $lines[] = '  ' . $this->buildJsonLd();
+            $lines[] = '  </script>';
+        }
 
         return implode("\n", $lines) . "\n";
     }

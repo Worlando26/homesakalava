@@ -1177,3 +1177,257 @@
   .float-card  { width: clamp(96px, 30vw, 130px); height: clamp(116px, 36vw, 160px); }
   .reputation__score-value { font-size: 44px; }
 }
+
+/* ══════════════════════════════════════════════════
+   PAGES INTERIEURES (chambres, activites, acces)
+   ══════════════════════════════════════════════════ */
+
+/* Barre de navigation opaque : sur les pages sans hero, elle n a pas
+   d image sombre derriere elle. */
+.nav--solid {
+  background: var(--c-surface);
+  border-bottom: 1px solid var(--c-line);
+}
+.nav__links a.is-current {
+  color: var(--c-accent);
+  font-weight: 600;
+}
+.nav__drawer a.is-current {
+  color: var(--c-accent);
+  font-weight: 600;
+  background: var(--c-bg);
+}
+
+/* ── En-tete de page ─────────────────────────────── */
+.pagehead {
+  padding-top: calc(var(--nav-h) + clamp(28px, 6vw, 64px));
+  padding-bottom: clamp(24px, 4vw, 48px);
+  background: var(--c-surface);
+  border-bottom: 1px solid var(--c-line);
+}
+.pagehead__title {
+  font-size: clamp(30px, 6vw, 60px);
+  line-height: 1.05;
+  margin-bottom: 16px;
+  max-width: 16ch;
+}
+.pagehead__intro {
+  color: var(--c-muted);
+  font-size: clamp(15px, 1.8vw, 18px);
+  max-width: 58ch;
+}
+.pagehead__jump {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 26px;
+}
+.pagehead__jump-item {
+  display: inline-flex;
+  align-items: center;
+  min-height: 40px;
+  padding: 0 16px;
+  border: 1.5px solid var(--c-line);
+  border-radius: var(--r-pill);
+  background: var(--c-bg);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--c-ink);
+  transition: border-color .2s, background .2s;
+}
+.pagehead__jump-item:hover {
+  border-color: var(--c-accent);
+  color: var(--c-accent);
+}
+
+/* ── Fiche d une chambre ─────────────────────────── */
+.rooms { background: var(--c-bg); }
+
+.room {
+  padding-block: clamp(36px, 6vw, 72px);
+  border-bottom: 1px solid var(--c-line);
+  /* Le titre ne doit pas passer sous la barre de navigation quand on
+     arrive directement sur une ancre. */
+  scroll-margin-top: calc(var(--nav-h) + 16px);
+}
+.room:last-child { border-bottom: none; }
+
+.room__inner {
+  display: grid;
+  grid-template-columns: 1.15fr 1fr;
+  gap: clamp(24px, 4vw, 56px);
+  align-items: start;
+}
+.room--reverse .room__gallery { order: 2; }
+.room--reverse .room__detail  { order: 1; }
+
+.room__main {
+  position: relative;
+  border-radius: var(--r-frame);
+  overflow: hidden;
+  aspect-ratio: 4 / 3;
+  background: var(--c-line);
+  box-shadow: var(--shadow-card);
+}
+.room__main-btn {
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  position: relative;
+}
+.room__pic,
+.room__pic img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.room__zoom {
+  position: absolute;
+  right: 14px;
+  bottom: 14px;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: rgba(10,26,26,.62);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: #fff;
+  transition: background .2s;
+}
+.room__main-btn:hover .room__zoom { background: rgba(10,26,26,.85); }
+.room__zoom svg { width: 17px; height: 17px; }
+
+.room__thumbs {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+  margin-top: 10px;
+}
+.room__thumb {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 2px solid transparent;
+  background: var(--c-line);
+  padding: 0;
+  transition: border-color .2s, opacity .2s;
+  opacity: .72;
+}
+.room__thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.room__thumb:hover { opacity: 1; }
+.room__thumb.is-active { border-color: var(--c-accent); opacity: 1; }
+
+/* ── Panneau de details ──────────────────────────── */
+.room__name {
+  font-size: clamp(24px, 3.4vw, 38px);
+  line-height: 1.1;
+  margin-bottom: 16px;
+}
+.room__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-bottom: 18px;
+}
+.room__chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 1.5px solid var(--c-line);
+  border-radius: 9px;
+  background: var(--c-surface);
+  padding: 6px 11px;
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--c-ink);
+}
+.room__chip svg { width: 14px; height: 14px; color: var(--c-accent); flex-shrink: 0; }
+.room__chip--area {
+  background: var(--c-dark);
+  border-color: var(--c-dark);
+  color: #fff;
+  font-weight: 700;
+}
+.room__chip--area svg { color: #fff; }
+
+.room__desc {
+  color: var(--c-muted);
+  font-size: clamp(14px, 1.6vw, 16px);
+  max-width: 52ch;
+  margin-bottom: 20px;
+}
+
+.room__price {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding: 14px 18px;
+  border-radius: var(--r-card);
+  background: var(--c-surface);
+  border: 1.5px solid var(--c-line);
+  margin-bottom: 22px;
+}
+.room__price-label {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--c-muted);
+}
+.room__price-value {
+  font-family: var(--font-display);
+  font-size: clamp(17px, 2.2vw, 22px);
+  font-weight: 800;
+  color: var(--c-ink);
+}
+
+.room__subtitle {
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+.room__shared {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 7px 18px;
+  margin-bottom: 24px;
+}
+.room__shared li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--c-muted);
+}
+.room__shared svg { width: 14px; height: 14px; color: var(--c-accent); flex-shrink: 0; }
+
+.room__cta { display: inline-flex; }
+
+/* Carte d acces : emplacement de la carte, en attente des coordonnees GPS */
+.acces__map { display: none; }
+
+/* ══ RESPONSIVE ═══════════════════════════════════ */
+
+@media (max-width: 1023px) {
+  .room__inner { grid-template-columns: 1fr; }
+  /* Sur une colonne, alterner l ordre n a plus de sens : la photo
+     passe toujours avant le texte. */
+  .room--reverse .room__gallery { order: 0; }
+  .room--reverse .room__detail  { order: 0; }
+}
+
+@media (max-width: 639px) {
+  .pagehead__title { max-width: none; }
+  .room__thumbs { grid-template-columns: repeat(4, 1fr); }
+  .room__shared { grid-template-columns: 1fr; }
+  .room__cta    { width: 100%; }
+  .room__main   { aspect-ratio: 3 / 2; }
+}

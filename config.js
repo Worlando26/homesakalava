@@ -7,7 +7,7 @@
 //
 //  Source des données : data/content.json
 //  Régénérer          : php tools/build.php
-//  Généré le          : 19/09/2026 à 22:14
+//  Généré le          : 19/09/2026 à 22:22
 // ═══════════════════════════════════════════════════════════════
 
 const CONFIG = {
@@ -28,25 +28,25 @@ const CONFIG = {
     "nav": {
         "links": [
             {
-                "label": "Les chambres",
-                "href": "#ideal"
+                "label": "Nos chambres",
+                "href": "chambres.html"
             },
             {
                 "label": "Le restaurant",
-                "href": "#restaurant"
+                "href": "index.html#restaurant"
             },
             {
-                "label": "Les activités",
-                "href": "#activites"
+                "label": "Activités",
+                "href": "activites.html"
             },
             {
-                "label": "Accès",
-                "href": "#acces"
+                "label": "Accès & Contact",
+                "href": "acces.html"
             }
         ],
         "cta": {
             "label": "Nous écrire",
-            "href": "#booking"
+            "href": "acces.html#booking"
         }
     },
     "hero": {
@@ -105,7 +105,7 @@ const CONFIG = {
         "kicker": "La maison",
         "cta": {
             "label": "Voir les chambres",
-            "href": "#ideal"
+            "href": "chambres.html"
         },
         "items": [
             {
@@ -623,7 +623,7 @@ const CONFIG = {
         "title": "Une maison au bord de l'eau,\ntenue par ceux qui y vivent",
         "cta": {
             "label": "Nous écrire",
-            "href": "#booking"
+            "href": "acces.html#booking"
         },
         "amenities": [
             "Accès direct à la plage",
@@ -1082,7 +1082,7 @@ const CONFIG = {
         "cta": {
             "title": "La plage vous attend\nà deux pas",
             "button": "Nous écrire",
-            "href": "#booking",
+            "href": "acces.html#booking",
             "image": {
                 "src": "uploads/plage-coucher-soleil-59c20778-med.jpg",
                 "webp": "uploads/plage-coucher-soleil-59c20778-med.webp",
@@ -1117,5 +1117,22 @@ const CONFIG = {
             "Politique de confidentialité"
         ],
         "copyright": "© 2026 Home Sakalava. Tous droits réservés."
+    },
+    "pages": {
+        "chambres": {
+            "kicker": "Nos chambres",
+            "title": "Cinq chambres, pas une de plus",
+            "intro": "Chacune a son caractère : une vue, une terrasse, une baignoire taillée dans un tronc. Toutes ont une salle de bain privée, une entrée indépendante et une moustiquaire."
+        },
+        "activites": {
+            "kicker": "Autour de la maison",
+            "title": "Que faire à Nosy Be",
+            "intro": "Boda a passé des années à accompagner des voyageurs ici. Il sait quel bateau prendre, quel jour, et avec qui. Demandez-lui : c'est plus fiable que n'importe quel guide."
+        },
+        "acces": {
+            "kicker": "Venir chez nous",
+            "title": "Accès et contact",
+            "intro": "Nous sommes à Ampasikely, sur la commune de Dzamandzar, à 25 km de l'aéroport de Fascene. Dites-nous votre heure d'arrivée : nous pouvons organiser la navette."
+        }
     }
 };

@@ -1,6 +1,6 @@
 {
     "version": 1,
-    "updated_at": "2026-09-19T22:14:10+02:00",
+    "updated_at": "2026-09-19T22:22:28+02:00",
     "settings": {
         "showPrices": true,
         "priceFallback": "250.000Ar"
@@ -749,25 +749,25 @@
     "nav": {
         "links": [
             {
-                "label": "Les chambres",
-                "href": "#ideal"
+                "label": "Nos chambres",
+                "href": "chambres.html"
             },
             {
                 "label": "Le restaurant",
-                "href": "#restaurant"
+                "href": "index.html#restaurant"
             },
             {
-                "label": "Les activités",
-                "href": "#activites"
+                "label": "Activités",
+                "href": "activites.html"
             },
             {
-                "label": "Accès",
-                "href": "#acces"
+                "label": "Accès & Contact",
+                "href": "acces.html"
             }
         ],
         "cta": {
             "label": "Nous écrire",
-            "href": "#booking"
+            "href": "acces.html#booking"
         }
     },
     "hero": {
@@ -811,7 +811,7 @@
         "kicker": "La maison",
         "cta": {
             "label": "Voir les chambres",
-            "href": "#ideal"
+            "href": "chambres.html"
         },
         "items": [
             {
@@ -974,7 +974,7 @@
         "title": "Une maison au bord de l'eau,\ntenue par ceux qui y vivent",
         "cta": {
             "label": "Nous écrire",
-            "href": "#booking"
+            "href": "acces.html#booking"
         },
         "pills": [
             "Accès direct à la plage",
@@ -1284,7 +1284,7 @@
     "footer": {
         "ctaTitle": "La plage vous attend\nà deux pas",
         "ctaButton": "Nous écrire",
-        "ctaHref": "#booking",
+        "ctaHref": "acces.html#booking",
         "ctaMediaId": "plage-coucher-soleil-59c20778",
         "ctaGradient": "linear-gradient(145deg, #0c1015 0%, #152030 100%)",
         "legal": [
@@ -1299,5 +1299,22 @@
         "ogImageId": "plage-coucher-soleil-59c20778",
         "siteUrl": "",
         "locale": "fr_FR"
+    },
+    "pages": {
+        "chambres": {
+            "kicker": "Nos chambres",
+            "title": "Cinq chambres, pas une de plus",
+            "intro": "Chacune a son caractère : une vue, une terrasse, une baignoire taillée dans un tronc. Toutes ont une salle de bain privée, une entrée indépendante et une moustiquaire."
+        },
+        "activites": {
+            "kicker": "Autour de la maison",
+            "title": "Que faire à Nosy Be",
+            "intro": "Boda a passé des années à accompagner des voyageurs ici. Il sait quel bateau prendre, quel jour, et avec qui. Demandez-lui : c'est plus fiable que n'importe quel guide."
+        },
+        "acces": {
+            "kicker": "Venir chez nous",
+            "title": "Accès et contact",
+            "intro": "Nous sommes à Ampasikely, sur la commune de Dzamandzar, à 25 km de l'aéroport de Fascene. Dites-nous votre heure d'arrivée : nous pouvons organiser la navette."
+        }
     }
 }

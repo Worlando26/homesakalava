@@ -503,3 +503,6 @@ picture.hero__pic {
   }
   .ideal-card__body { padding: 16px 15px; }
 }
+
+/* Le lien vers la fiche de chambre remplace l ancien bouton de galerie. */
+a.ideal-card__open { text-decoration: none; }
