@@ -58,7 +58,8 @@
   flex-shrink: 0;
   transition: color 0.3s;
 }
-.nav.is-solid .nav__logo { color: var(--c-ink); }
+.nav.is-solid .nav__logo,
+.nav--solid .nav__logo { color: var(--c-ink); }
 
 .nav__links {
   display: flex;
@@ -74,8 +75,10 @@
   transition: color 0.2s, background 0.2s;
 }
 .nav__links a:hover { color: #fff; background: rgba(255,255,255,.1); }
-.nav.is-solid .nav__links a { color: var(--c-ink); }
-.nav.is-solid .nav__links a:hover { background: var(--c-line); }
+.nav.is-solid .nav__links a,
+.nav--solid .nav__links a { color: var(--c-ink); }
+.nav.is-solid .nav__links a:hover,
+.nav--solid .nav__links a:hover { background: var(--c-line); }
 
 .nav__actions { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
 .nav__cta     { padding: 10px 20px; font-size: 13px; }
@@ -96,7 +99,8 @@
   border-radius: 2px;
   transition: background 0.3s, transform 0.3s, opacity 0.3s;
 }
-.nav.is-solid .nav__burger span { background: var(--c-ink); }
+.nav.is-solid .nav__burger span,
+.nav--solid .nav__burger span { background: var(--c-ink); }
 .nav__burger.is-open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
 .nav__burger.is-open span:nth-child(2) { opacity: 0; }
 .nav__burger.is-open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }

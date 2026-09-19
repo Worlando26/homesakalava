@@ -78,7 +78,13 @@ function renderRoomsPage() {
         (t.viewPhotosOf || 'Voir les photos de la chambre') + ' ' + room.name
       );
 
-      const picture = makePicture(photos[0], 'room__pic');
+      // La photo de la première chambre est au-dessus de la ligne de
+      // flottaison : la différer retarderait l'affichage de la page.
+      const first = index === 0
+        ? Object.assign({}, photos[0], { eager: true })
+        : photos[0];
+
+      const picture = makePicture(first, 'room__pic');
       if (picture) openBtn.appendChild(picture);
 
       const loupe = el('span', 'room__zoom');
