@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Talinjoo Hotel — Fort Dauphin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&family=Cormorant+Garamond:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/sections.css">
+</head>
+<body>
+
+  <!-- ═══ NAV ═══ -->
+  <nav class="nav" data-nav>
+    <div class="nav__inner container">
+      <a class="nav__logo" data-nav-logo href="#"></a>
+      <ul class="nav__links" data-nav-links></ul>
+      <div class="nav__actions">
+        <a class="btn btn--accent btn--pill nav__cta" data-nav-cta href="#faq"></a>
+        <button class="nav__burger" data-burger aria-label="Ouvrir le menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+    <div class="nav__drawer" data-drawer>
+      <ul data-drawer-links></ul>
+    </div>
+  </nav>
+
+  <!-- ═══ HERO GLASSMORPHISM ═══ -->
+  <section class="hero" data-section="hero">
+
+    <!-- Fond plein écran -->
+    <div class="hero__img-wrap" data-hero-img></div>
+    <div class="hero__overlay"></div>
+
+    <!-- TOP BAR -->
+    <header class="hero__topbar">
+      <button class="glass-pill hero__book-btn" data-hero-book>
+        <i data-lucide="menu"></i>
+        <span data-hero-cta></span>
+      </button>
+      <div class="hero__brand">
+        <div class="hero__brand-name" data-hero-logo></div>
+        <div class="hero__brand-sub"  data-hero-logo-sub></div>
+      </div>
+      <button class="glass-circle hero__more-btn">•••</button>
+    </header>
+
+    <!-- BADGE haut droite -->
+    <div class="glass-pill hero__badge">
+      <span data-hero-badge></span>
+      <button class="glass-circle hero__badge-arrow">
+        <i data-lucide="arrow-up-right"></i>
+      </button>
+    </div>
+
+    <!-- TEXTE VERTICAL DROIT -->
+    <p class="hero__scroll-hint" data-hero-scroll-hint></p>
+
+    <!-- HEADLINE centre bas -->
+    <div class="hero__headline">
+      <p class="hero__headline-sub"   data-hero-headline-sub></p>
+      <h1 class="hero__headline-title" data-hero-headline-title></h1>
+    </div>
+
+    <!-- BARRE BAS = 3 panneaux glassmorphism -->
+    <div class="hero__bottombar">
+      <button class="glass-panel hero__nav-prev" data-hero-prev>
+        <i data-lucide="arrow-left" class="hero__nav-icon"></i>
+        <div class="hero__nav-info">
+          <span class="hero__nav-label">PRÉCÉDENT</span>
+          <span class="hero__nav-room" data-hero-prev-name></span>
+        </div>
+      </button>
+      <div class="glass-panel hero__features-panel" data-hero-features></div>
+      <button class="glass-panel hero__nav-next" data-hero-next>
+        <div class="hero__nav-info">
+          <span class="hero__nav-label">SUIVANT</span>
+          <span class="hero__nav-room" data-hero-next-name></span>
+        </div>
+        <i data-lucide="arrow-right" class="hero__nav-icon"></i>
+      </button>
+    </div>
+
+  </section>
+
+  <!-- ═══ NOTRE HISTOIRE ═══ -->
+  <section class="story section" data-section="story">
+    <div class="container story__inner">
+      <div class="story__left">
+        <span class="kicker" data-story-kicker></span>
+        <p class="story__stat" data-story-stat></p>
+        <a class="btn btn--pill btn--outline story__cta" data-story-cta href="#amazing"></a>
+      </div>
+      <div class="story__right">
+        <p class="story__text" data-story-text></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ NOS ESPACES (BENTO) ═══ -->
+  <section class="amazing section" data-section="amazing">
+    <div class="container">
+      <div class="section-header">
+        <span class="kicker" data-amazing-kicker></span>
+        <a class="btn btn--pill btn--outline" data-amazing-cta href="#ideal"></a>
+      </div>
+      <div class="amazing__bento" data-amazing-bento></div>
+    </div>
+  </section>
+
+  <!-- ═══ NOS CHAMBRES (CAROUSEL) ═══ -->
+  <section class="ideal section" data-section="ideal">
+    <div class="container">
+      <div class="section-header">
+        <span class="kicker" data-ideal-kicker></span>
+        <div class="carousel__arrows">
+          <button class="carousel-arrow carousel-arrow--prev" data-prev aria-label="Précédent">
+            <i data-lucide="arrow-left"></i>
+          </button>
+          <button class="carousel-arrow carousel-arrow--next is-active" data-next aria-label="Suivant">
+            <i data-lucide="arrow-right"></i>
+          </button>
+        </div>
+      </div>
+      <div class="carousel__viewport" data-carousel-viewport>
+        <div class="carousel__track" data-carousel-track></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ NOS ATOUTS ═══ -->
+  <section class="trusted section" data-section="trusted">
+    <div class="container trusted__container">
+      <h2 class="trusted__title" data-trusted-title></h2>
+      <a class="btn btn--accent btn--pill trusted__btn" data-trusted-cta href="#faq"></a>
+      <div class="trusted__amenities" data-trusted-amenities></div>
+      <div class="trusted__stage">
+        <div class="trusted__floats trusted__floats--left" data-float-left></div>
+        <div class="trusted__card" data-trusted-card></div>
+        <div class="trusted__floats trusted__floats--right" data-float-right></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ TÉMOIGNAGE ═══ -->
+  <section class="testimonial section" data-section="testimonial">
+    <div class="container testimonial__inner">
+      <div class="testimonial__left">
+        <span class="kicker" data-testi-kicker></span>
+        <p class="testimonial__intro" data-testi-intro></p>
+        <div class="testimonial__quote-icon">"</div>
+      </div>
+      <div class="testimonial__right">
+        <h2 class="testimonial__title" data-testi-title></h2>
+        <p class="testimonial__body" data-testi-body></p>
+        <div class="testimonial__author" data-testi-author></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ FAQ ═══ -->
+  <section class="faq section" data-section="faq">
+    <div class="container faq__inner">
+      <div class="faq__left">
+        <span class="kicker" data-faq-kicker></span>
+        <h2 class="faq__title" data-faq-title></h2>
+        <p class="faq__intro" data-faq-intro></p>
+        <div class="faq__list" data-faq-list></div>
+      </div>
+      <div class="faq__right">
+        <div class="faq__image" data-faq-image></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ RÉSERVATION ═══ -->
+  <section class="booking section" data-section="booking">
+    <div class="container booking__inner">
+      <div class="booking__left"  data-booking-left></div>
+      <div class="booking__right" data-booking-right></div>
+    </div>
+  </section>
+
+  <!-- ═══ FOOTER ═══ -->
+  <footer class="footer" data-section="footer">
+    <div class="container">
+      <div class="footer__cta-block" data-footer-cta-block></div>
+      <div class="footer__meta">
+        <div class="footer__address" data-footer-address></div>
+        <div class="footer__social" data-footer-social></div>
+        <div class="footer__legal" data-footer-legal></div>
+      </div>
+      <div class="footer__wordmark-wrap">
+        <span class="footer__wordmark" data-footer-wordmark></span>
+      </div>
+      <p class="footer__copyright" data-footer-copyright></p>
+    </div>
+  </footer>
+
+  <!-- CDN libs -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- App -->
+  <script src="config.js"></script>
+  <script src="js/render.js"></script>
+  <script src="js/carousel.js"></script>
+  <script src="js/faq.js"></script>
+  <script src="js/animations.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

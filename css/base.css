@@ -1,0 +1,48 @@
+/* ── Base ─────────────────────────────────────────────── */
+
+html { background: var(--c-bg); color: var(--c-ink); font-family: var(--font-body); }
+body { background: var(--c-bg); overflow-x: hidden; }
+
+/* Conteneur centré */
+.container {
+  max-width: var(--maxw);
+  margin-inline: auto;
+  padding-inline: var(--gap);
+}
+
+/* Section standard */
+.section { padding-block: var(--section-py); }
+
+/* Kicker = badge orange arrondi */
+.kicker {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--c-accent);
+  border: 1.5px solid var(--c-line);
+  border-radius: var(--r-pill);
+  padding: 5px 14px;
+  margin-bottom: 20px;
+}
+
+/* En-tête de section (kicker + bouton côte-à-côte) */
+.section-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: clamp(24px, 4vw, 48px);
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+/* Typo */
+h1, h2, h3 {
+  font-family: var(--font-display);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -0.025em;
+}
+
+p { line-height: 1.7; }

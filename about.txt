@@ -1,0 +1,113 @@
+# HOME SAKALAVA — FICHE ÉTABLISSEMENT
+# Source de vérité pour le contenu du site web.
+# Les champs marqués [A FOURNIR] ne sont pas encore connus : laisser un
+# placeholder visible dans le code, ne rien inventer.
+
+## IDENTITE
+Nom : Home SAKALAVA
+Type : maison d'hôtes / bed & breakfast (5 chambres)
+Hôtes : Boda et Bakoly
+Adresse : Ampasikely, 207 Dzamandzar, Nosy Be, région Diana, Madagascar
+Situation : en bord de plage, à quelques pas de la plage de Djamanjary
+Langues parlées : français, anglais
+Téléphone : [A FOURNIR]
+Email : [A FOURNIR]
+Coordonnées GPS : [A FOURNIR]
+Facebook : facebook.com/home.sakalava.nosybe
+
+## POSITIONNEMENT
+Petite maison d'hôtes de charme tenue par ses propriétaires, au bord de la
+plage. Décoration artisanale malgache : murs colorés, mobilier en bois local,
+vanneries, lits à baldaquin avec moustiquaire. L'accueil personnel des hôtes
+est l'argument central — on n'est pas dans un hôtel, on est reçu chez
+quelqu'un. Boda connaît très bien le tourisme à Nosy Be et oriente les
+clients vers les bonnes excursions.
+Ton à adopter sur le site : chaleureux, simple, humain. Éviter le vocabulaire
+d'hôtellerie de chaîne ("établissement", "prestations haut de gamme").
+
+## REPUTATION
+Note Booking : 9,6 / 10 — "Exceptionnel", sur 75 avis.
+Détail : propreté 10 · personnel 10 · confort 9,9 · rapport qualité-prix 9,8
+· wifi 10 · équipements 9,6 · emplacement 9.
+Badge Booking : "Excellent emplacement", label bord de plage.
+Ces chiffres peuvent être affichés tels quels comme preuve sociale.
+
+## CHAMBRES (5)
+Toutes avec salle de bain privée (douche à l'italienne, articles de toilette
+offerts), entrée privée, armoire, linge de lit et serviettes fournis.
+
+1. Comfort Triple — 30 m² — climatisation, terrasse privée, vue mer
+2. Standard Triple — 18 m² — terrasse privée, balcon
+3. Double vue jardin — 16 m² — baignoire, vue jardin / cour intérieure
+4. Double avec terrasse — 14 m² — climatisation, terrasse privée, balcon
+5. Standard Double — 13 m²
+
+Tarifs : [A FOURNIR] — prévoir un emplacement prix par chambre.
+
+## RESTAURATION
+Restaurant sur place, familial, ouvert midi et soir + cocktails.
+Cuisine fruits de mer et européenne, ambiance traditionnelle et moderne.
+Petit-déjeuner : continental ou à la carte, servi en chambre sur demande ;
+options végétariennes et sans gluten. Paniers repas. Menus spéciaux sur
+demande. Repas pour enfants (supplément). Service en chambre. Café sur place.
+
+## SERVICES
+- Wifi gratuit dans tout l'établissement
+- Parking privé gratuit sur place
+- Sécurité 24h/24
+- Navette aéroport (aller et/ou retour, payante)
+- Location de voiture, location de vélos
+- Bureau d'excursions / conseils sur place
+- Change de devises
+- Blanchisserie et repassage (payant)
+- Consigne à bagages (payant)
+- Massages (dos, nuque, pieds, tête, mains, corps entier, en duo)
+- Baby-sitting sur demande (payant)
+- Ménage quotidien
+- Jeux de société
+- Facture fournie
+
+## ESPACES COMMUNS
+Jardin, terrasse, solarium, mobilier d'extérieur, parasols, salon commun,
+cuisine commune, réfrigérateur, accès direct à la plage.
+
+## ACCESSIBILITE & CONFORT
+Accessible aux personnes à mobilité réduite, chambres familiales, chambres
+insonorisées, chambres non-fumeurs, espace fumeurs dédié, trousse de premiers
+secours, accès à un professionnel de santé.
+
+## ACTIVITES ALENTOUR
+Plongée, snorkeling, pêche, randonnée, vélo, tours à vélo, équitation, golf,
+balades à pied, découverte de la culture locale, soirées à thème.
+(la plupart en supplément)
+
+## DISTANCES
+Plage de Djamanjary : à quelques pas
+Aéroport de Fascene (NOS) : 25 km
+Réserve de Lokobe : 20 km
+Mont Passot : 17 km
+Hell-Ville, Nosy Komba, Nosy Sakatia, Nosy Tanikely : excursions au départ
+
+## POLITIQUES
+Arrivée : 12h00 – 23h00
+Départ : 11h00 – 12h00
+Paiement sur place, en espèces
+Âge minimum à l'arrivée : 18 ans
+Enfants de tout âge acceptés
+Animaux acceptés sur demande (supplément possible)
+Pas de caution
+Enterrements de vie de garçon / de jeune fille non acceptés
+
+## CONSIGNES POUR LE SITE
+- Structure suggérée : Accueil · Chambres · Restaurant · Activités ·
+  Accès & contact · Réserver
+- Langue principale : français. Prévoir une version anglaise (clientèle
+  européenne majoritaire).
+- Mettre en avant dans cet ordre : bord de plage → accueil des hôtes →
+  note 9,6 → chambres → restaurant fruits de mer → excursions.
+- Bouton de réservation : lien vers la fiche Booking ou formulaire de
+  demande par email, à trancher avec le client.
+- NE PAS reprendre les textes et photos de Booking tels quels. Rédiger des
+  textes originaux à partir de cette fiche. Photos : attendre les originaux
+  fournis par le client.
+- Aucun tarif affiché tant que le client ne les a pas validés.

@@ -1,0 +1,110 @@
+# MISSION AUTONOME — SITE HOME SAKALAVA
+# Exécution complète et sans supervision. Je ne serai pas disponible pendant
+# la session. Ne me pose aucune question, ne demande aucune validation :
+# décide toi-même à chaque choix et justifie tout à la fin.
+
+## REGLE DE FONCTIONNEMENT
+Tu travailles seul, du début à la fin, sans interruption.
+- Ne demande jamais mon accord, ni pour une décision technique, ni pour une
+  décision de design, ni pour passer d'une phase à la suivante.
+- Face à une ambiguïté : choisis l'option la plus raisonnable, note-la dans
+  le journal de décisions, continue. Ne t'arrête pas pour demander.
+- Si un fichier de consigne contredit cette règle (par exemple
+  gestionnaire.txt qui demande une validation par étape), cette règle-ci
+  l'emporte : tu enchaînes sans validation.
+- Tu ne t'arrêtes que si tu es réellement bloqué et qu'aucune option de
+  repli n'existe. Dans ce cas, tu consignes le blocage, tu passes au reste,
+  et tu me le signales en fin de rapport.
+
+## FICHIERS DE REFERENCE
+- about.txt — toutes les informations de l'hôtel. Source de vérité pour le
+  contenu. Les champs marqués [A FOURNIR] restent des placeholders visibles
+  dans le code, ne les invente pas.
+- gestionnaire.txt — cahier des charges du back-office admin. Applique-le,
+  sauf sa section "LIVRAISON" qui demande des validations : tu l'ignores.
+- photo_sakalava/ — dossier d'images à la racine du projet, contient déjà
+  un hero. Utilise ces photos pour le site.
+
+## REGLES DE SECURITE NON NEGOCIABLES
+Ces règles ne sont pas des préférences, tu ne peux pas décider de les
+contourner :
+- Crée une branche git dédiée au début et travaille uniquement dessus.
+  Ne touche pas à la branche principale.
+- Commit après chaque phase, avec un message clair. Jamais de force push,
+  jamais de reset destructif, jamais de rebase sur du travail existant.
+- Ne supprime jamais un fichier du dossier photo_sakalava/. Tu peux copier,
+  convertir, redimensionner vers un autre dossier, jamais écraser l'original.
+- Ne déploie rien. Ne pousse sur aucun serveur de production. Ne touche à
+  aucune base de données distante.
+- Ne commit aucun identifiant, mot de passe, clé ou .env.
+- N'installe pas de dépendance lourde sans nécessité réelle : reste sur ce
+  qui est déjà dans le projet.
+- Si une commande peut détruire du travail existant, ne la lance pas :
+  trouve une autre voie et note-le.
+
+## PHASE 1 — ANALYSE
+Inspecte tout le projet : stack, framework, structure des dossiers, moteur
+de template, système de build, dépendances, base de données éventuelle,
+état d'avancement réel de chaque page, ce qui est en dur et ce qui ne l'est
+pas, qualité du responsive actuel, bugs visibles.
+Produis un état des lieux écrit dans le rapport final. Cette analyse
+détermine toutes tes décisions ensuite : ne plaque pas une architecture,
+adapte-toi à ce qui existe.
+Ne réécris pas le site. Le design et la structure existants sont conservés.
+
+## PHASE 2 — CONTENU
+Intègre les informations de about.txt dans le site.
+- Remplace les contenus factices, lorem ipsum ou textes de démo.
+- Rédige les textes en français, dans le ton indiqué par about.txt :
+  chaleureux, simple, humain. Pas de vocabulaire d'hôtellerie de chaîne.
+- Textes originaux uniquement. Ne recopie pas de descriptions venant de
+  Booking ou d'ailleurs.
+- Crée les sections manquantes nécessaires : chambres, restaurant,
+  activités, services, accès et contact.
+- Intègre les photos de photo_sakalava/ aux endroits pertinents. Garde le
+  hero existant comme image principale sauf si une autre est manifestement
+  meilleure — dans ce cas, justifie le changement.
+- Aucun tarif affiché : les prix sont inconnus, prévois l'emplacement.
+- Coordonnées manquantes : placeholder visible, jamais de numéro inventé.
+
+## PHASE 3 — BACK-OFFICE
+Applique gestionnaire.txt intégralement.
+Rappel du périmètre : gestion des prix, des photos, des équipements, des
+textes et des infos pratiques, derrière un login admin unique.
+Formellement exclu : pas de calendrier, pas de disponibilités, pas de
+moteur de réservation, pas de gestion de clients ou de paiements, pas de
+synchronisation Booking. Ne construis rien de tout ça même si ça te paraît
+utile.
+Le site public doit rester visuellement identique après le passage en
+contenu dynamique. C'est le critère de réussite de cette phase.
+
+## PHASE 4 — FINALISATION
+- Responsive complet, testé sur petites largeurs. La clientèle et le
+  gérant sont majoritairement sur mobile : le mobile prime sur le desktop
+  en cas d'arbitrage.
+- Correction de tous les bugs repérés en phase 1 et de ceux introduits
+  depuis.
+- Optimisation des images : compression, dimensions adaptées, lazy loading,
+  WebP si le stack le permet.
+- Accessibilité de base : attributs alt, contrastes, navigation clavier,
+  hiérarchie des titres.
+- SEO de base : title et meta description par page, données structurées
+  LodgingBusiness, Open Graph, favicon, sitemap.
+- Performance : pas de ressource bloquante inutile, pas de fichier mort.
+- Vérifie que le site tourne sans erreur console et que chaque lien
+  fonctionne.
+
+## RAPPORT FINAL — OBLIGATOIRE
+Écris un fichier RAPPORT.md à la racine, en français, contenant :
+1. Etat des lieux du projet tel que trouvé en phase 1.
+2. Toutes les décisions que tu as prises, une par une : ce que tu as
+   choisi, quelles étaient les alternatives, pourquoi tu as tranché ainsi.
+   C'est la partie la plus importante du rapport, sois exhaustif.
+3. Liste des fichiers créés, modifiés, déplacés.
+4. Ce que j'ai à fournir pour finaliser : informations manquantes,
+   photos supplémentaires, décisions qui m'appartiennent.
+5. Ce que tu n'as pas pu faire et pourquoi.
+6. Comment lancer le projet et accéder à l'admin, pas à pas, en français.
+7. Ce que je devrais vérifier en priorité à mon réveil.
+
+Va au bout des quatre phases. Bon travail.

@@ -1,0 +1,14 @@
+# Secrets & comptes — jamais commités
+data/admin.json
+.env
+*.env
+
+# Médias uploadés depuis le back-office
+uploads/*
+!uploads/.gitkeep
+storage/originals/*
+!storage/originals/.gitkeep
+
+# Divers
+Thumbs.db
+.DS_Store

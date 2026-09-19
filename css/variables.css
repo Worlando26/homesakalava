@@ -1,0 +1,30 @@
+:root {
+  /* Couleurs */
+  --c-bg:       #f0ece5;
+  --c-surface:  #faf8f4;
+  --c-ink:      #0d1e1c;
+  --c-muted:    #7a8c86;
+  --c-accent:   #1d8f8a;
+  --c-accent-2: #136e6a;
+  --c-dark:     #0a1a1a;
+  --c-line:     #dedad2;
+
+  /* Typo */
+  --font-display: 'Bricolage Grotesque', sans-serif;
+  --font-body:    'Inter', system-ui, sans-serif;
+
+  /* Rayons */
+  --r-card:  18px;
+  --r-pill:  999px;
+  --r-frame: 28px;
+
+  /* Ombres */
+  --shadow-soft: 0 24px 80px rgba(0,0,0,.12);
+  --shadow-card: 0 8px 32px rgba(0,0,0,.08);
+
+  /* Layout */
+  --maxw: 1200px;
+  --gap:  clamp(16px, 3vw, 40px);
+  --section-py: clamp(64px, 9vw, 120px);
+  --nav-h: 72px;
+}

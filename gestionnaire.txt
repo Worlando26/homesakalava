@@ -1,0 +1,108 @@
+# GESTIONNAIRE — PROMPT POUR CLAUDE CODE
+# Objectif : ajouter un back-office d'administration au site vitrine
+# Home SAKALAVA, pour que le client gère son contenu sans me rappeler.
+
+## CONTEXTE
+Le site vitrine existe déjà. Tu ne refais pas le design ni la structure
+publique. Tu ajoutes une couche d'administration par-dessus, et tu rends
+dynamique le contenu qui est aujourd'hui écrit en dur dans les pages.
+
+Première étape obligatoire : inspecte le projet et dis-moi quel stack tu
+détectes (framework, moteur de template, base de données, système de build)
+avant d'écrire du code. Adapte tout ce qui suit à ce stack.
+Si le site est purement statique, propose-moi deux options — Laravel + MySQL,
+ou un back-office léger en PHP + JSON/SQLite — et attends mon choix.
+Stack de référence si tu dois trancher : Laravel, MySQL, Blade ou React.
+
+## PERIMETRE — CE QUI EST DANS LE SCOPE
+Le client doit pouvoir, seul, depuis une interface admin :
+
+1. CHAMBRES
+   - modifier le prix de chaque chambre
+   - modifier le titre, la description, la superficie
+   - modifier la liste des équipements de la chambre (ajouter, retirer,
+     réordonner)
+   - ajouter, remplacer, supprimer et réordonner les photos d'une chambre
+   - définir la photo principale
+   - activer / désactiver une chambre (la masquer du site sans la supprimer)
+
+2. PHOTOS GENERALES
+   - galerie du site : ajout, remplacement, suppression, réordonnancement
+   - photo de couverture / hero de la page d'accueil
+   - photos des sections restaurant et activités
+
+3. EQUIPEMENTS ET SERVICES DE L'ETABLISSEMENT
+   - liste des services (wifi, parking, navette, massages, etc.)
+   - ajouter, modifier, supprimer, réordonner
+   - chaque entrée : libellé, icône, mention "supplément" optionnelle
+
+4. TEXTES ET INFOS PRATIQUES
+   - textes des sections principales (accueil, à propos, restaurant)
+   - horaires d'arrivée et de départ
+   - téléphone, email, adresse, liens réseaux sociaux
+   - tarifs affichés ou masqués selon un réglage global
+
+## PERIMETRE — CE QUI EST HORS SCOPE
+Ne construis rien de tout ça, même si ça semble logique :
+- pas de calendrier de disponibilités
+- pas de moteur de réservation
+- pas de gestion de séjours, de clients ou de paiements
+- pas de synchronisation avec Booking ou un channel manager
+- pas de statistiques ou de tableaux de bord chiffrés
+Le site reste une vitrine. La réservation continue de passer par Booking ou
+par un simple formulaire de contact.
+
+## AUTHENTIFICATION
+- Un seul rôle : administrateur. Pas de gestion multi-utilisateurs, pas de
+  rôles, pas d'inscription publique.
+- Page de login dédiée, hors de la navigation publique.
+- Mot de passe hashé (bcrypt ou argon2), jamais en clair, jamais en dur.
+- Session avec expiration, protection CSRF sur tous les formulaires.
+- Limitation des tentatives de connexion (throttling).
+- Toutes les routes admin protégées par middleware, pas seulement masquées.
+- Commande ou seeder pour créer le compte admin initial et changer le mot
+  de passe ; les identifiants ne sont jamais commités.
+
+## GESTION DES IMAGES
+- Upload depuis le navigateur, glisser-déposer si c'est simple à faire.
+- Validation stricte : extension, type MIME réel, taille maximale.
+- Redimensionnement automatique et compression à l'upload ; génération d'une
+  miniature pour l'admin.
+- Conversion en WebP avec fallback si le stack le permet.
+- Noms de fichiers générés, jamais le nom d'origine.
+- Stockage hors du dossier public si le framework le permet, servi via une
+  route ou un lien symbolique.
+- Suppression d'une image = suppression du fichier et de l'enregistrement.
+
+## INTERFACE ADMIN
+- Simple avant tout. Le client n'est pas technique et travaillera souvent
+  depuis son téléphone : l'admin doit être responsive et utilisable au doigt.
+- Interface en français.
+- Formulaires courts, un écran par type de contenu, boutons explicites.
+- Confirmation avant toute suppression.
+- Message de succès ou d'erreur clair après chaque action.
+- Aperçu de l'image avant validation.
+- Pas de librairie UI lourde : reste cohérent avec ce qui est déjà utilisé
+  dans le projet.
+
+## TECHNIQUE
+- Le site public lit désormais ses contenus depuis la base ou le fichier de
+  données, plus depuis le HTML en dur. Migre le contenu existant dans un
+  seeder pour ne rien perdre.
+- Mise en cache du contenu public, invalidée à chaque modification en admin.
+- Validation côté serveur sur tous les champs, pas seulement côté client.
+- Échappement de tous les textes affichés.
+- Le site doit rester fonctionnel et identique visuellement après la
+  migration : c'est le critère de réussite.
+
+## LIVRAISON
+Procède par étapes et fais-moi valider chacune avant de passer à la suite :
+1. rapport d'inspection du projet et plan technique proposé
+2. schéma de données et migrations
+3. authentification admin
+4. CRUD chambres avec gestion des photos
+5. équipements, services et textes
+6. branchement du site public sur les données dynamiques
+7. passe de sécurité et README d'utilisation en français pour le client
+
+Ne commence pas l'étape suivante sans mon accord.
