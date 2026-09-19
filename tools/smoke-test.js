@@ -68,6 +68,14 @@ class Node {
   set id(v)      { this.setAttribute('id', v); }
   get type()     { return this.attrs.type ?? ''; }
   set type(v)    { this.setAttribute('type', v); }
+  get loading()  { return this.attrs.loading ?? ''; }
+  set loading(v) { this.setAttribute('loading', v); }
+  get decoding() { return this.attrs.decoding ?? ''; }
+  set decoding(v){ this.setAttribute('decoding', v); }
+  get width()    { return this.attrs.width ?? ''; }
+  set width(v)   { this.setAttribute('width', v); }
+  get height()   { return this.attrs.height ?? ''; }
+  set height(v)  { this.setAttribute('height', v); }
   // Recherche descendante, suffisante pour les sélecteurs utilisés
   querySelector(sel) { return this.querySelectorAll(sel)[0] || null; }
   querySelectorAll(sel) {

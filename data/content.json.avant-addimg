@@ -1,6 +1,6 @@
 {
     "version": 1,
-    "updated_at": "2026-09-19T22:11:22+02:00",
+    "updated_at": "2026-09-19T14:08:48+02:00",
     "settings": {
         "showPrices": true,
         "priceFallback": "250.000Ar"
@@ -99,7 +99,7 @@
         },
         "images-4-ea73bfbe": {
             "id": "images-4-ea73bfbe",
-            "alt": "Vue d'ensemble de la chambre et de son couchage",
+            "alt": "Chambre double",
             "src": "uploads/images-4-ea73bfbe-thumb.jpg",
             "webp": "uploads/images-4-ea73bfbe-thumb.webp",
             "width": 194,
@@ -117,7 +117,7 @@
         },
         "img-2309-1024x683-9050f9b3": {
             "id": "img-2309-1024x683-9050f9b3",
-            "alt": "Grand bassin bordé de dalles claires, pelouse plantée de cocotiers et plage en arrière-plan",
+            "alt": "Le jardin et la terrasse",
             "src": "uploads/img-2309-1024x683-9050f9b3-med.jpg",
             "webp": "uploads/img-2309-1024x683-9050f9b3-med.webp",
             "width": 1024,
@@ -147,7 +147,7 @@
         },
         "whatsapp-image-2026-08-26-at-23-54-53-00c45911": {
             "id": "whatsapp-image-2026-08-26-at-23-54-53-00c45911",
-            "alt": "Bassin turquoise bordé d'une terrasse en bois, mur végétalisé et bougainvillées en fleurs",
+            "alt": "restau",
             "src": "uploads/whatsapp-image-2026-08-26-at-23-54-53-00c45911-med.jpg",
             "webp": "uploads/whatsapp-image-2026-08-26-at-23-54-53-00c45911-med.webp",
             "width": 1280,
@@ -177,7 +177,7 @@
         },
         "images-3-91832ad7": {
             "id": "images-3-91832ad7",
-            "alt": "Chambre avec lit double, tables de chevet et baie vitrée donnant sur l'extérieur",
+            "alt": "chambre 2",
             "src": "uploads/images-3-91832ad7-small.jpg",
             "webp": "uploads/images-3-91832ad7-small.webp",
             "width": 536,
@@ -201,7 +201,7 @@
         },
         "images-4-e88c2c6d": {
             "id": "images-4-e88c2c6d",
-            "alt": "Deux lits accolés sous moustiquaire, murs clairs et rideaux",
+            "alt": "chambre 3",
             "src": "uploads/images-4-e88c2c6d-thumb.jpg",
             "webp": "uploads/images-4-e88c2c6d-thumb.webp",
             "width": 259,
@@ -216,534 +216,6 @@
             },
             "original": "storage/originals/images-4-e88c2c6d.jpg",
             "added_at": "2026-09-19T14:08:35+02:00"
-        },
-        "comfort-triple-01-063a697f": {
-            "id": "comfort-triple-01-063a697f",
-            "alt": "Lit à baldaquin et coussins bleus brodés, banc en bois brut au pied du lit",
-            "src": "uploads/comfort-triple-01-063a697f-small.jpg",
-            "webp": "uploads/comfort-triple-01-063a697f-small.webp",
-            "width": 558,
-            "height": 496,
-            "variants": {
-                "thumb": {
-                    "webp": "uploads/comfort-triple-01-063a697f-thumb.webp",
-                    "fallback": "uploads/comfort-triple-01-063a697f-thumb.jpg",
-                    "w": 320,
-                    "h": 284
-                },
-                "small": {
-                    "webp": "uploads/comfort-triple-01-063a697f-small.webp",
-                    "fallback": "uploads/comfort-triple-01-063a697f-small.jpg",
-                    "w": 558,
-                    "h": 496
-                }
-            },
-            "original": "storage/originals/comfort-triple-01-063a697f.png",
-            "added_at": "2026-09-19T22:08:33+02:00"
-        },
-        "comfort-triple-02-02ade22d": {
-            "id": "comfort-triple-02-02ade22d",
-            "alt": "La chambre triple vue d'ensemble, lits sous moustiquaire",
-            "src": "uploads/comfort-triple-02-02ade22d-small.jpg",
-            "webp": "uploads/comfort-triple-02-02ade22d-small.webp",
-            "width": 557,
-            "height": 498,
-            "variants": {
-                "thumb": {
-                    "webp": "uploads/comfort-triple-02-02ade22d-thumb.webp",
-                    "fallback": "uploads/comfort-triple-02-02ade22d-thumb.jpg",
-                    "w": 320,
-                    "h": 286
-                },
-                "small": {
-                    "webp": "uploads/comfort-triple-02-02ade22d-small.webp",
-                    "fallback": "uploads/comfort-triple-02-02ade22d-small.jpg",
-                    "w": 557,
-                    "h": 498
-                }
-            },
-            "original": "storage/originals/comfort-triple-02-02ade22d.png",
-            "added_at": "2026-09-19T22:08:34+02:00"
-        },
-        "comfort-triple-03-969cc933": {
-            "id": "comfort-triple-03-969cc933",
-            "alt": "Salle de bain avec baignoire balnéo et double vasque en pierre",
-            "src": "uploads/comfort-triple-03-969cc933-small.jpg",
-            "webp": "uploads/comfort-triple-03-969cc933-small.webp",
-            "width": 614,
-            "height": 485,
-            "variants": {
-                "thumb": {
-                    "webp": "uploads/comfort-triple-03-969cc933-thumb.webp",
-                    "fallback": "uploads/comfort-triple-03-969cc933-thumb.jpg",
-                    "w": 320,
-                    "h": 253
-                },
-                "small": {
-                    "webp": "uploads/comfort-triple-03-969cc933-small.webp",
-                    "fallback": "uploads/comfort-triple-03-969cc933-small.jpg",
-                    "w": 614,
-                    "h": 485
-                }
-            },
-            "original": "storage/originals/comfort-triple-03-969cc933.png",
-            "added_at": "2026-09-19T22:08:34+02:00"
-        },
-        "comfort-triple-04-6a29e70f": {
-            "id": "comfort-triple-04-6a29e70f",
-            "alt": "Chapeau de paille et gousses de vanille posés sur le lit",
-            "src": "uploads/comfort-triple-04-6a29e70f-small.jpg",
-            "webp": "uploads/comfort-triple-04-6a29e70f-small.webp",
-            "width": 333,
-            "height": 496,
-            "variants": {
-                "thumb": {
-                    "webp": "uploads/comfort-triple-04-6a29e70f-thumb.webp",
-                    "fallback": "uploads/comfort-triple-04-6a29e70f-thumb.jpg",
-                    "w": 320,
-                    "h": 477
-                },
-                "small": {
-                    "webp": "uploads/comfort-triple-04-6a29e70f-small.webp",
-                    "fallback": "uploads/comfort-triple-04-6a29e70f-small.jpg",
-                    "w": 333,
-                    "h": 496
-                }
-            },
-            "original": "storage/originals/comfort-triple-04-6a29e70f.png",
-            "added_at": "2026-09-19T22:08:34+02:00"
-        },
-        "comfort-triple-05-3d7857ac": {
-            "id": "comfort-triple-05-3d7857ac",
-            "alt": "Coin salon de la chambre, mobilier en bois local",
-            "src": "uploads/comfort-triple-05-3d7857ac-small.jpg",
-            "webp": "uploads/comfort-triple-05-3d7857ac-small.webp",
-            "width": 562,
-            "height": 493,
-            "variants": {
-                "thumb": {
-                    "webp": "uploads/comfort-triple-05-3d7857ac-thumb.webp",
-                    "fallback": "uploads/comfort-triple-05-3d7857ac-thumb.jpg",
-                    "w": 320,
-                    "h": 281
-                },
-                "small": {
-                    "webp": "uploads/comfort-triple-05-3d7857ac-small.webp",
-                    "fallback": "uploads/comfort-triple-05-3d7857ac-small.jpg",
-                    "w": 562,
-                    "h": 493
-                }
-            },
-            "original": "storage/originals/comfort-triple-05-3d7857ac.png",
-            "added_at": "2026-09-19T22:08:35+02:00"
-        },
-        "standard-triple-01-5de95294": {
-            "id": "standard-triple-01-5de95294",
-            "alt": "Les deux lits de la chambre triple, murs en enduit ocre",
-            "src": "uploads/standard-triple-01-5de95294-small.jpg",
-            "webp": "uploads/standard-triple-01-5de95294-small.webp",
-            "width": 608,
-            "height": 444,
-            "variants": {
-                "thumb": {
-                    "webp": "uploads/standard-triple-01-5de95294-thumb.webp",
-                    "fallback": "uploads/standard-triple-01-5de95294-thumb.jpg",
-                    "w": 320,
-                    "h": 234
-                },
-                "small": {
-                    "webp": "uploads/standard-triple-01-5de95294-small.webp",
-                    "fallback": "uploads/standard-triple-01-5de95294-small.jpg",
-                    "w": 608,
-                    "h": 444
-                }
-            },
-            "original": "storage/originals/standard-triple-01-5de95294.png",
-            "added_at": "2026-09-19T22:08:35+02:00"
-        },
-        "standard-triple-02-05bcb866": {
-            "id": "standard-triple-02-05bcb866",
-            "alt": "Lits jumeaux et coussins, suspension en vannerie et volets en bois",
-            "src": "uploads/standard-triple-02-05bcb866-small.jpg",
-            "webp": "uploads/standard-triple-02-05bcb866-small.webp",
-            "width": 610,
-            "height": 443,
-            "variants": {
-                "thumb": {
-                    "webp": "uploads/standard-triple-02-05bcb866-thumb.webp",
-                    "fallback": "uploads/standard-triple-02-05bcb866-thumb.jpg",
-                    "w": 320,
-                    "h": 232
-                },
-                "small": {
-                    "webp": "uploads/standard-triple-02-05bcb866-small.webp",
-                    "fallback": "uploads/standard-triple-02-05bcb866-small.jpg",
-                    "w": 610,
-                    "h": 443
-                }
-            },
-            "original": "storage/originals/standard-triple-02-05bcb866.png",
-            "added_at": "2026-09-19T22:08:35+02:00"
-        },
-        "standard-triple-03-34dc5ff8": {
-            "id": "standard-triple-03-34dc5ff8",
-            "alt": "La chambre vue depuis la porte, décoration artisanale malgache",
-            "src": "uploads/standard-triple-03-34dc5ff8-small.jpg",
-            "webp": "uploads/standard-triple-03-34dc5ff8-small.webp",
-            "width": 608,
-            "height": 448,
-            "variants": {
-                "thumb": {
-                    "webp": "uploads/standard-triple-03-34dc5ff8-thumb.webp",
-                    "fallback": "uploads/standard-triple-03-34dc5ff8-thumb.jpg",
-                    "w": 320,
-                    "h": 236
-                },
-                "small": {
-                    "webp": "uploads/standard-triple-03-34dc5ff8-small.webp",
-                    "fallback": "uploads/standard-triple-03-34dc5ff8-small.jpg",
-                    "w": 608,
-                    "h": 448
-                }
-            },
-            "original": "storage/originals/standard-triple-03-34dc5ff8.png",
-            "added_at": "2026-09-19T22:08:36+02:00"
-        },
-        "standard-triple-04-209f99b5": {
-            "id": "standard-triple-04-209f99b5",
-            "alt": "Salle de bain privative de la chambre triple standard",
-            "src": "uploads/standard-triple-04-209f99b5-small.jpg",
-            "webp": "uploads/standard-triple-04-209f99b5-small.webp",
-            "width": 610,
-            "height": 439,
-            "variants": {
-                "thumb": {
-                    "webp": "uploads/standard-triple-04-209f99b5-thumb.webp",
-                    "fallback": "uploads/standard-triple-04-209f99b5-thumb.jpg",
-                    "w": 320,
-                    "h": 230
-                },
-                "small": {
-                    "webp": "uploads/standard-triple-04-209f99b5-small.webp",
-                    "fallback": "uploads/standard-triple-04-209f99b5-small.jpg",
-                    "w": 610,
-                    "h": 439
-                }
-            },
-            "original": "storage/originals/standard-triple-04-209f99b5.png",
-            "added_at": "2026-09-19T22:08:36+02:00"
-        },
-        "double-jardin-01-0b8d07d4": {
-            "id": "double-jardin-01-0b8d07d4",
-            "alt": "Lit à baldaquin avec moustiquaire et tête de lit en bois brut, ventilateur et ouverture sur la cour",
-            "src": "uploads/double-jardin-01-0b8d07d4-small.jpg",
-            "webp": "uploads/double-jardin-01-0b8d07d4-small.webp",
-            "width": 603,
-            "height": 434,
-            "variants": {
-                "thumb": {
-                    "webp": "uploads/double-jardin-01-0b8d07d4-thumb.webp",
-                    "fallback": "uploads/double-jardin-01-0b8d07d4-thumb.jpg",
-                    "w": 320,
-                    "h": 230
-                },
-                "small": {
-                    "webp": "uploads/double-jardin-01-0b8d07d4-small.webp",
-                    "fallback": "uploads/double-jardin-01-0b8d07d4-small.jpg",
-                    "w": 603,
-                    "h": 434
-                }
-            },
-            "original": "storage/originals/double-jardin-01-0b8d07d4.png",
-            "added_at": "2026-09-19T22:08:36+02:00"
-        },
-        "double-jardin-02-00a2e652": {
-            "id": "double-jardin-02-00a2e652",
-            "alt": "La chambre vue depuis l'entrée, lit à baldaquin et murs blancs",
-            "src": "uploads/double-jardin-02-00a2e652-small.jpg",
-            "webp": "uploads/double-jardin-02-00a2e652-small.webp",
-            "width": 604,
-            "height": 428,
-            "variants": {
-                "thumb": {
-                    "webp": "uploads/double-jardin-02-00a2e652-thumb.webp",
-                    "fallback": "uploads/double-jardin-02-00a2e652-thumb.jpg",
-                    "w": 320,
-                    "h": 227
-                },
-                "small": {
-                    "webp": "uploads/double-jardin-02-00a2e652-small.webp",
-                    "fallback": "uploads/double-jardin-02-00a2e652-small.jpg",
-                    "w": 604,
-                    "h": 428
-                }
-            },
-            "original": "storage/originals/double-jardin-02-00a2e652.png",
-            "added_at": "2026-09-19T22:08:37+02:00"
-        },
-        "double-jardin-03-e5182ca1": {
-            "id": "double-jardin-03-e5182ca1",
-            "alt": "Salle de bain de la chambre, vasque en pierre et mur de pierre apparente",
-            "src": "uploads/double-jardin-03-e5182ca1-small.jpg",
-            "webp": "uploads/double-jardin-03-e5182ca1-small.webp",
-            "width": 618,
-            "height": 448,
-            "variants": {
-                "thumb": {
-                    "webp": "uploads/double-jardin-03-e5182ca1-thumb.webp",
-                    "fallback": "uploads/double-jardin-03-e5182ca1-thumb.jpg",
-                    "w": 320,
-                    "h": 232
-                },
-                "small": {
-                    "webp": "uploads/double-jardin-03-e5182ca1-small.webp",
-                    "fallback": "uploads/double-jardin-03-e5182ca1-small.jpg",
-                    "w": 618,
-                    "h": 448
-                }
-            },
-            "original": "storage/originals/double-jardin-03-e5182ca1.png",
-            "added_at": "2026-09-19T22:08:37+02:00"
-        },
-        "double-jardin-04-a718b05c": {
-            "id": "double-jardin-04-a718b05c",
-            "alt": "Baignoire taillée dans un tronc, face à la douche à l'italienne",
-            "src": "uploads/double-jardin-04-a718b05c-small.jpg",
-            "webp": "uploads/double-jardin-04-a718b05c-small.webp",
-            "width": 603,
-            "height": 443,
-            "variants": {
-                "thumb": {
-                    "webp": "uploads/double-jardin-04-a718b05c-thumb.webp",
-                    "fallback": "uploads/double-jardin-04-a718b05c-thumb.jpg",
-                    "w": 320,
-                    "h": 235
-                },
-                "small": {
-                    "webp": "uploads/double-jardin-04-a718b05c-small.webp",
-                    "fallback": "uploads/double-jardin-04-a718b05c-small.jpg",
-                    "w": 603,
-                    "h": 443
-                }
-            },
-            "original": "storage/originals/double-jardin-04-a718b05c.png",
-            "added_at": "2026-09-19T22:08:37+02:00"
-        },
-        "double-jardin-05-465e8294": {
-            "id": "double-jardin-05-465e8294",
-            "alt": "Coin toilette avec miroir encadré de bois flotté",
-            "src": "uploads/double-jardin-05-465e8294-small.jpg",
-            "webp": "uploads/double-jardin-05-465e8294-small.webp",
-            "width": 582,
-            "height": 439,
-            "variants": {
-                "thumb": {
-                    "webp": "uploads/double-jardin-05-465e8294-thumb.webp",
-                    "fallback": "uploads/double-jardin-05-465e8294-thumb.jpg",
-                    "w": 320,
-                    "h": 241
-                },
-                "small": {
-                    "webp": "uploads/double-jardin-05-465e8294-small.webp",
-                    "fallback": "uploads/double-jardin-05-465e8294-small.jpg",
-                    "w": 582,
-                    "h": 439
-                }
-            },
-            "original": "storage/originals/double-jardin-05-465e8294.png",
-            "added_at": "2026-09-19T22:08:38+02:00"
-        },
-        "double-terrasse-01-55baf871": {
-            "id": "double-terrasse-01-55baf871",
-            "alt": "Terrasse privée meublée d'un fauteuil en rotin et d'une table en bois, suspensions en vannerie",
-            "src": "uploads/double-terrasse-01-55baf871-small.jpg",
-            "webp": "uploads/double-terrasse-01-55baf871-small.webp",
-            "width": 618,
-            "height": 446,
-            "variants": {
-                "thumb": {
-                    "webp": "uploads/double-terrasse-01-55baf871-thumb.webp",
-                    "fallback": "uploads/double-terrasse-01-55baf871-thumb.jpg",
-                    "w": 320,
-                    "h": 231
-                },
-                "small": {
-                    "webp": "uploads/double-terrasse-01-55baf871-small.webp",
-                    "fallback": "uploads/double-terrasse-01-55baf871-small.jpg",
-                    "w": 618,
-                    "h": 446
-                }
-            },
-            "original": "storage/originals/double-terrasse-01-55baf871.png",
-            "added_at": "2026-09-19T22:08:38+02:00"
-        },
-        "double-terrasse-02-14603b99": {
-            "id": "double-terrasse-02-14603b99",
-            "alt": "La chambre et son lit double sous moustiquaire",
-            "src": "uploads/double-terrasse-02-14603b99-small.jpg",
-            "webp": "uploads/double-terrasse-02-14603b99-small.webp",
-            "width": 610,
-            "height": 443,
-            "variants": {
-                "thumb": {
-                    "webp": "uploads/double-terrasse-02-14603b99-thumb.webp",
-                    "fallback": "uploads/double-terrasse-02-14603b99-thumb.jpg",
-                    "w": 320,
-                    "h": 232
-                },
-                "small": {
-                    "webp": "uploads/double-terrasse-02-14603b99-small.webp",
-                    "fallback": "uploads/double-terrasse-02-14603b99-small.jpg",
-                    "w": 610,
-                    "h": 443
-                }
-            },
-            "original": "storage/originals/double-terrasse-02-14603b99.png",
-            "added_at": "2026-09-19T22:08:38+02:00"
-        },
-        "double-terrasse-03-3b2c6e01": {
-            "id": "double-terrasse-03-3b2c6e01",
-            "alt": "Vue de la chambre depuis la terrasse, baie vitrée ouverte",
-            "src": "uploads/double-terrasse-03-3b2c6e01-small.jpg",
-            "webp": "uploads/double-terrasse-03-3b2c6e01-small.webp",
-            "width": 608,
-            "height": 447,
-            "variants": {
-                "thumb": {
-                    "webp": "uploads/double-terrasse-03-3b2c6e01-thumb.webp",
-                    "fallback": "uploads/double-terrasse-03-3b2c6e01-thumb.jpg",
-                    "w": 320,
-                    "h": 235
-                },
-                "small": {
-                    "webp": "uploads/double-terrasse-03-3b2c6e01-small.webp",
-                    "fallback": "uploads/double-terrasse-03-3b2c6e01-small.jpg",
-                    "w": 608,
-                    "h": 447
-                }
-            },
-            "original": "storage/originals/double-terrasse-03-3b2c6e01.png",
-            "added_at": "2026-09-19T22:08:39+02:00"
-        },
-        "double-terrasse-04-cff0f772": {
-            "id": "double-terrasse-04-cff0f772",
-            "alt": "Salle de bain privative avec douche à l'italienne",
-            "src": "uploads/double-terrasse-04-cff0f772-small.jpg",
-            "webp": "uploads/double-terrasse-04-cff0f772-small.webp",
-            "width": 596,
-            "height": 444,
-            "variants": {
-                "thumb": {
-                    "webp": "uploads/double-terrasse-04-cff0f772-thumb.webp",
-                    "fallback": "uploads/double-terrasse-04-cff0f772-thumb.jpg",
-                    "w": 320,
-                    "h": 238
-                },
-                "small": {
-                    "webp": "uploads/double-terrasse-04-cff0f772-small.webp",
-                    "fallback": "uploads/double-terrasse-04-cff0f772-small.jpg",
-                    "w": 596,
-                    "h": 444
-                }
-            },
-            "original": "storage/originals/double-terrasse-04-cff0f772.png",
-            "added_at": "2026-09-19T22:08:39+02:00"
-        },
-        "double-terrasse-05-c063528e": {
-            "id": "double-terrasse-05-c063528e",
-            "alt": "Détail du mobilier en bois local de la chambre",
-            "src": "uploads/double-terrasse-05-c063528e-small.jpg",
-            "webp": "uploads/double-terrasse-05-c063528e-small.webp",
-            "width": 610,
-            "height": 451,
-            "variants": {
-                "thumb": {
-                    "webp": "uploads/double-terrasse-05-c063528e-thumb.webp",
-                    "fallback": "uploads/double-terrasse-05-c063528e-thumb.jpg",
-                    "w": 320,
-                    "h": 237
-                },
-                "small": {
-                    "webp": "uploads/double-terrasse-05-c063528e-small.webp",
-                    "fallback": "uploads/double-terrasse-05-c063528e-small.jpg",
-                    "w": 610,
-                    "h": 451
-                }
-            },
-            "original": "storage/originals/double-terrasse-05-c063528e.png",
-            "added_at": "2026-09-19T22:08:39+02:00"
-        },
-        "standard-double-01-a3aa2a30": {
-            "id": "standard-double-01-a3aa2a30",
-            "alt": "Chambre double avec mur ocre et décoration en vannerie",
-            "src": "uploads/standard-double-01-a3aa2a30-small.jpg",
-            "webp": "uploads/standard-double-01-a3aa2a30-small.webp",
-            "width": 556,
-            "height": 491,
-            "variants": {
-                "thumb": {
-                    "webp": "uploads/standard-double-01-a3aa2a30-thumb.webp",
-                    "fallback": "uploads/standard-double-01-a3aa2a30-thumb.jpg",
-                    "w": 320,
-                    "h": 283
-                },
-                "small": {
-                    "webp": "uploads/standard-double-01-a3aa2a30-small.webp",
-                    "fallback": "uploads/standard-double-01-a3aa2a30-small.jpg",
-                    "w": 556,
-                    "h": 491
-                }
-            },
-            "original": "storage/originals/standard-double-01-a3aa2a30.png",
-            "added_at": "2026-09-19T22:08:39+02:00"
-        },
-        "standard-double-02-75413bfe": {
-            "id": "standard-double-02-75413bfe",
-            "alt": "Le lit double de la chambre, linge blanc et jeté de lit coloré",
-            "src": "uploads/standard-double-02-75413bfe-small.jpg",
-            "webp": "uploads/standard-double-02-75413bfe-small.webp",
-            "width": 573,
-            "height": 492,
-            "variants": {
-                "thumb": {
-                    "webp": "uploads/standard-double-02-75413bfe-thumb.webp",
-                    "fallback": "uploads/standard-double-02-75413bfe-thumb.jpg",
-                    "w": 320,
-                    "h": 275
-                },
-                "small": {
-                    "webp": "uploads/standard-double-02-75413bfe-small.webp",
-                    "fallback": "uploads/standard-double-02-75413bfe-small.jpg",
-                    "w": 573,
-                    "h": 492
-                }
-            },
-            "original": "storage/originals/standard-double-02-75413bfe.png",
-            "added_at": "2026-09-19T22:08:40+02:00"
-        },
-        "standard-double-03-2ff56239": {
-            "id": "standard-double-03-2ff56239",
-            "alt": "Salle de bain privative, vasque en pierre et mur de pierre apparente",
-            "src": "uploads/standard-double-03-2ff56239-small.jpg",
-            "webp": "uploads/standard-double-03-2ff56239-small.webp",
-            "width": 373,
-            "height": 501,
-            "variants": {
-                "thumb": {
-                    "webp": "uploads/standard-double-03-2ff56239-thumb.webp",
-                    "fallback": "uploads/standard-double-03-2ff56239-thumb.jpg",
-                    "w": 320,
-                    "h": 430
-                },
-                "small": {
-                    "webp": "uploads/standard-double-03-2ff56239-small.webp",
-                    "fallback": "uploads/standard-double-03-2ff56239-small.jpg",
-                    "w": 373,
-                    "h": 501
-                }
-            },
-            "original": "storage/originals/standard-double-03-2ff56239.png",
-            "added_at": "2026-09-19T22:08:40+02:00"
         }
     },
     "nav": {
@@ -866,12 +338,7 @@
                     "Jusqu'à 3 personnes"
                 ],
                 "mediaIds": [
-                    "chambre-lit-baldaquin-52286be5",
-                    "comfort-triple-01-063a697f",
-                    "comfort-triple-02-02ade22d",
-                    "comfort-triple-03-969cc933",
-                    "comfort-triple-04-6a29e70f",
-                    "comfort-triple-05-3d7857ac"
+                    "chambre-lit-baldaquin-52286be5"
                 ],
                 "coverId": "chambre-lit-baldaquin-52286be5",
                 "gradient": "linear-gradient(145deg, #1a2a3a 0%, #3a6a90 100%)",
@@ -892,11 +359,7 @@
                 ],
                 "mediaIds": [
                     "images-3-91832ad7",
-                    "images-4-ea73bfbe",
-                    "standard-triple-01-5de95294",
-                    "standard-triple-02-05bcb866",
-                    "standard-triple-03-34dc5ff8",
-                    "standard-triple-04-209f99b5"
+                    "images-4-ea73bfbe"
                 ],
                 "coverId": "images-3-91832ad7",
                 "gradient": "linear-gradient(145deg, #4a6a7a 0%, #6a8a9a 100%)",
@@ -916,12 +379,7 @@
                     "Cour intérieure"
                 ],
                 "mediaIds": [
-                    "images-4-e88c2c6d",
-                    "double-jardin-01-0b8d07d4",
-                    "double-jardin-02-00a2e652",
-                    "double-jardin-03-e5182ca1",
-                    "double-jardin-04-a718b05c",
-                    "double-jardin-05-465e8294"
+                    "images-4-e88c2c6d"
                 ],
                 "coverId": "images-4-e88c2c6d",
                 "gradient": "linear-gradient(145deg, #2a4a2f 0%, #5a8a60 100%)",
@@ -940,14 +398,8 @@
                     "Terrasse privée",
                     "Balcon"
                 ],
-                "mediaIds": [
-                    "double-terrasse-01-55baf871",
-                    "double-terrasse-02-14603b99",
-                    "double-terrasse-03-3b2c6e01",
-                    "double-terrasse-04-cff0f772",
-                    "double-terrasse-05-c063528e"
-                ],
-                "coverId": "double-terrasse-01-55baf871",
+                "mediaIds": [],
+                "coverId": "",
                 "gradient": "linear-gradient(145deg, #6a5840 0%, #9a8060 100%)",
                 "active": true
             },
@@ -963,12 +415,8 @@
                     "Salle de bain privée",
                     "Entrée indépendante"
                 ],
-                "mediaIds": [
-                    "standard-double-01-a3aa2a30",
-                    "standard-double-02-75413bfe",
-                    "standard-double-03-2ff56239"
-                ],
-                "coverId": "standard-double-01-a3aa2a30",
+                "mediaIds": [],
+                "coverId": "",
                 "gradient": "linear-gradient(145deg, #3a4a55 0%, #5a6a75 100%)",
                 "active": true
             }
