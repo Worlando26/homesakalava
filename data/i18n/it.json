@@ -1,0 +1,369 @@
+{
+  "_comment": "Traduzione italiana. Qui compaiono solo i testi tradotti: tutto ciò che manca ricade sul francese di data/content.json.",
+
+  "ui": {
+    "skip": "Vai al contenuto",
+    "openMenu": "Apri il menu",
+    "follow": "Seguici",
+    "info": "Informazioni",
+    "supplement": "supplemento",
+    "toFill": "[da inserire]",
+    "around": "Nei dintorni",
+    "facebookPage": "La nostra pagina Facebook",
+    "langLabel": "Scegli la lingua",
+
+    "room": "Camera",
+    "seeRoom": "Vedi la camera",
+    "allRooms": "Vedi tutte e 5 le camere in dettaglio",
+    "prevRoom": "Camera precedente",
+    "nextRoom": "Camera successiva",
+    "inEveryRoom": "In tutte le camere",
+    "askThisRoom": "Richiedi questa camera",
+    "viewPhotosOf": "Vedi le foto della camera",
+    "photo": "Foto",
+    "from": "Tariffa",
+    "accessTitle": "Come arrivare e contatti",
+
+    "address": "Indirizzo",
+    "phone": "Telefono",
+    "email": "E-mail",
+    "gps": "Coordinate GPS",
+    "checkin": "Arrivo",
+    "checkout": "Partenza",
+    "languages": "Lingue parlate",
+    "languagesShort": "Lingue",
+    "payment": "Pagamento",
+
+    "formFirstName": "Nome",
+    "formLastName": "Cognome",
+    "formEmail": "E-mail",
+    "formPhone": "Telefono",
+    "formCheckIn": "Data di arrivo",
+    "formCheckOut": "Data di partenza",
+    "formRoomType": "Camera desiderata",
+    "formGuests": "Viaggiatori",
+    "formMessage": "Il tuo messaggio",
+    "formSubmit": "Prepara la mia richiesta",
+    "formSelect": "— Seleziona —",
+    "guest": "viaggiatore",
+    "guests": "viaggiatori",
+    "formError": "Compila i campi obbligatori.",
+    "formNote": "Questo pulsante apre il tuo programma di posta con il messaggio già scritto. Nulla viene inviato automaticamente: prima lo rileggi.",
+    "formNoEmail": "L'indirizzo e-mail della casa non è ancora online. Nel frattempo scrivici su Facebook:",
+    "formFbLink": "Apri la pagina Facebook",
+    "formSuccessTitle": "Il tuo messaggio è pronto",
+    "formSuccessText": "Il tuo programma di posta si è appena aperto con la richiesta già compilata. Rileggila e inviala: rispondiamo entro qualche giorno.",
+    "formReset": "Ricomincia",
+    "phFirstName": "Nome",
+    "phLastName": "Cognome",
+    "phEmail": "tu@esempio.com",
+    "phPhone": "Con prefisso internazionale",
+    "phMessage": "Numero di notti, ora di arrivo, transfer dall'aeroporto, esigenze alimentari…",
+
+    "mailGreeting": "Buongiorno Boda e Bakoly,",
+    "mailIntro": "Vorrei prenotare una camera a Home Sakalava.",
+    "mailName": "Nome",
+    "mailEmail": "E-mail",
+    "mailPhone": "Telefono",
+    "mailDates": "Date",
+    "mailRoom": "Camera",
+    "mailGuests": "Viaggiatori",
+    "mailMessage": "Messaggio",
+    "mailThanks": "Grazie in anticipo,",
+    "mailAdvise": "secondo il vostro consiglio",
+    "mailSubject": "Richiesta di prenotazione",
+    "mailNoDates": "date da definire",
+
+    "pageRooms": "Le nostre camere",
+    "pageActivities": "Attività",
+    "pageAccess": "Come arrivare e contatti"
+  },
+
+  "content": {
+    "settings": { "priceFallback": "Tariffa su richiesta" },
+
+    "brand": { "tagline": "Una casa per ospiti con i piedi nella sabbia, a Nosy Be" },
+
+    "contact": {
+      "languages": "Francese e inglese",
+      "payment": "Pagamento in loco, in contanti"
+    },
+
+    "nav": {
+      "links": [
+        { "label": "Le camere" },
+        { "label": "Il ristorante" },
+        { "label": "Attività" },
+        { "label": "Come arrivare" }
+      ],
+      "cta": { "label": "Scrivici" }
+    },
+
+    "hero": {
+      "logoSub": "NOSY BE · MADAGASCAR",
+      "bookLabel": "SCRIVICI",
+      "badge": "IN RIVA AL MARE",
+      "scrollHint": "SCORRI VERSO IL BASSO",
+      "headlineSub": "AMPASIKELY · DZAMANDZAR",
+      "headlineTitle": "LA SPIAGGIA\nÈ A DUE PASSI",
+      "features": [
+        { "label": "Accesso diretto\nalla spiaggia" },
+        { "label": "Wi-Fi\ngratuito" },
+        { "label": "Ristorante\ninterno" },
+        { "label": "Parcheggio\ngratuito" }
+      ]
+    },
+
+    "story": {
+      "kicker": "Da Boda e Bakoly",
+      "text": "Home Sakalava sono cinque camere in riva all'acqua, ad Ampasikely, e due padroni di casa che ci vivono. Boda e Bakoly vi aprono la loro casa più che una camera d'albergo: si prende il caffè insieme la mattina, si parla della giornata che comincia, e vi dicono dove andare.",
+      "stat": "I muri sono dipinti di colori vivaci, i letti hanno il loro baldacchino e la zanzariera, i mobili vengono dagli artigiani di qui. Niente di impersonale, niente di standardizzato. E a pochi passi, la sabbia della spiaggia di Djamanjary.",
+      "cta": { "label": "Scopri la casa →" }
+    },
+
+    "spaces": {
+      "kicker": "La casa",
+      "cta": { "label": "Vedi le camere" },
+      "items": [
+        { "name": "Le camere", "meta": "Letti a baldacchino · artigianato malgascio" },
+        { "name": "Il giardino e la terrazza", "meta": "Solarium, ombrelloni, salotto comune" },
+        { "name": "Il ristorante", "meta": "Frutti di mare, a pranzo e a cena" }
+      ]
+    },
+
+    "rooms": {
+      "kicker": "Cinque camere, non una di più",
+      "intro": "Tutte con bagno privato, doccia a filo pavimento, ingresso indipendente, armadio, biancheria e asciugamani forniti.",
+      "shared": [
+        "Bagno privato",
+        "Doccia a filo pavimento",
+        "Prodotti da bagno inclusi",
+        "Ingresso indipendente",
+        "Armadio",
+        "Biancheria e asciugamani forniti",
+        "Zanzariera",
+        "Camera per non fumatori"
+      ],
+      "items": [
+        {
+          "name": "Tripla Comfort",
+          "loc": "Vista mare · 30 m²",
+          "tag": "La più grande",
+          "desc": "La camera più spaziosa della casa, con terrazza privata affacciata sul mare. Climatizzata, ospita comodamente tre persone.",
+          "amenities": ["Aria condizionata", "Terrazza privata", "Vista mare", "Fino a 3 persone"],
+          "price": "Da 56 € a notte"
+        },
+        {
+          "name": "Tripla Standard",
+          "loc": "Terrazza privata · 18 m²",
+          "tag": "Per tre",
+          "desc": "Una camera per tre con terrazza e balcone, per fare colazione fuori senza incrociare nessuno.",
+          "amenities": ["Terrazza privata", "Balcone", "Fino a 3 persone"],
+          "price": "Da 43 € a notte"
+        },
+        {
+          "name": "Doppia vista giardino",
+          "loc": "Cortile interno · 16 m²",
+          "tag": "Con vasca",
+          "desc": "Affacciata sul giardino e sul cortile interno, è l'unica camera con vasca da bagno. Tranquilla tutto il giorno.",
+          "amenities": ["Vasca da bagno", "Vista giardino", "Cortile interno"],
+          "price": "Da 44 € a notte"
+        },
+        {
+          "name": "Doppia con terrazza",
+          "loc": "Climatizzata · 14 m²",
+          "tag": "Climatizzata",
+          "desc": "Compatta e climatizzata, con terrazza privata e balcone. Il giusto compromesso per due.",
+          "amenities": ["Aria condizionata", "Terrazza privata", "Balcone"],
+          "price": "Da 44 € a notte"
+        },
+        {
+          "name": "Doppia Standard",
+          "loc": "Per due · 13 m²",
+          "tag": "L'essenziale",
+          "desc": "La più semplice: un letto, un bagno tutto per sé e la spiaggia a due passi. Spesso è tutto quello che serve.",
+          "amenities": ["Bagno privato", "Ingresso indipendente"],
+          "price": "Da 24 € a notte"
+        }
+      ]
+    },
+
+    "services": {
+      "title": "Una casa in riva all'acqua,\ngestita da chi ci vive",
+      "pills": [
+        "Accesso diretto alla spiaggia",
+        "Wi-Fi gratuito",
+        "Parcheggio privato gratuito",
+        "Ristorante interno",
+        "Sicurezza 24 ore su 24",
+        "Pulizia quotidiana"
+      ],
+      "items": [
+        { "label": "Wi-Fi gratuito in tutta la casa" },
+        { "label": "Parcheggio privato gratuito in loco" },
+        { "label": "Sicurezza 24 ore su 24" },
+        { "label": "Pulizia quotidiana" },
+        { "label": "Accesso diretto alla spiaggia" },
+        { "label": "Banco escursioni e consigli" },
+        { "label": "Cambio valuta" },
+        { "label": "Giochi da tavolo" },
+        { "label": "Navetta aeroporto" },
+        { "label": "Noleggio auto" },
+        { "label": "Noleggio biciclette" },
+        { "label": "Massaggi" },
+        { "label": "Lavanderia e stireria" },
+        { "label": "Deposito bagagli" },
+        { "label": "Baby-sitting su richiesta" }
+      ],
+      "note": "I servizi contrassegnati « supplemento » sono fatturati in aggiunta al soggiorno.",
+      "card": { "title": "Una domanda prima di venire? Boda e Bakoly rispondono di persona, in francese come in inglese." },
+      "floatImages": [
+        { "label": "Le camere" },
+        { "label": "Il giardino" },
+        { "label": "La spiaggia" },
+        { "label": "Il ristorante" }
+      ]
+    },
+
+    "restaurant": {
+      "kicker": "A tavola",
+      "title": "Il ristorante della casa",
+      "text": "Qui si mangia a pranzo e a cena, in una sala che è tanto cucina di famiglia quanto ristorante. Soprattutto frutti di mare, e qualche piatto europeo. I cocktail si prendono fuori.",
+      "items": [
+        { "label": "Frutti di mare e cucina europea" },
+        { "label": "Colazione continentale o à la carte" },
+        { "label": "Colazione servita in camera su richiesta" },
+        { "label": "Opzioni vegetariane e senza glutine" },
+        { "label": "Menu per bambini (supplemento)" },
+        { "label": "Cestini da viaggio da asporto" },
+        { "label": "Servizio in camera" },
+        { "label": "Cocktail e caffè in loco" }
+      ],
+      "note": "Menu speciali su richiesta: segnalatecelo al momento della prenotazione."
+    },
+
+    "activities": {
+      "kicker": "Intorno alla casa",
+      "title": "Nosy Be, e Boda che conosce l'isola",
+      "text": "Boda ha accompagnato viaggiatori qui per anni. Sa quale barca prendere, in quale giorno e con chi. Chiedete a lui: è più affidabile di qualsiasi guida.",
+      "items": [
+        { "label": "Immersioni" },
+        { "label": "Snorkeling" },
+        { "label": "Pesca" },
+        { "label": "Escursioni a piedi" },
+        { "label": "Bicicletta e tour in bici" },
+        { "label": "Equitazione" },
+        { "label": "Golf" },
+        { "label": "Cultura locale e serate a tema" }
+      ],
+      "note": "La maggior parte di queste attività prevede un supplemento.",
+      "distances": [
+        { "label": "Spiaggia di Djamanjary", "value": "a pochi passi" },
+        { "label": "Mont Passot", "value": "17 km" },
+        { "label": "Riserva di Lokobe", "value": "20 km" },
+        { "label": "Aeroporto di Fascene (NOS)", "value": "25 km" },
+        { "label": "Hell-Ville, Nosy Komba, Nosy Sakatia, Nosy Tanikely", "value": "escursioni in partenza da qui" }
+      ]
+    },
+
+    "reputation": {
+      "kicker": "Cosa dicono i nostri ospiti",
+      "title": "9,6 su 10",
+      "label": "Eccezionale",
+      "intro": "Voto medio su Booking, su 75 recensioni di viaggiatori. Non mostriamo recensioni scelte a mano: ecco il dettaglio, così com'è.",
+      "badge": "Posizione eccellente · Fronte spiaggia",
+      "scores": [
+        { "label": "Pulizia" },
+        { "label": "Personale" },
+        { "label": "Wi-Fi" },
+        { "label": "Comfort" },
+        { "label": "Rapporto qualità-prezzo" },
+        { "label": "Servizi" },
+        { "label": "Posizione" }
+      ],
+      "source": "Fonte: Booking.com · 75 recensioni"
+    },
+
+    "access": {
+      "kicker": "Venire da noi",
+      "title": "Come arrivare e contatti",
+      "text": "Siamo ad Ampasikely, nel comune di Dzamandzar, a 25 km dall'aeroporto di Fascene. Diteci il vostro orario di arrivo: possiamo organizzare la navetta."
+    },
+
+    "faq": {
+      "kicker": "Domande frequenti",
+      "title": "Le domande\nche ci fanno",
+      "intro": "E se la vostra non c'è, scriveteci.",
+      "items": [
+        {
+          "q": "Come prenoto una camera?",
+          "a": "Scriveteci dal modulo in fondo alla pagina o dalla nostra pagina Facebook. Rispondiamo con la disponibilità e la tariffa. La prenotazione si conferma direttamente con noi."
+        },
+        {
+          "q": "A che ora posso arrivare e ripartire?",
+          "a": "L'arrivo è tra le 12:00 e le 23:00, la partenza tra le 11:00 e le 12:00. Se il vostro volo atterra fuori da questi orari, avvisateci: troviamo una soluzione."
+        },
+        {
+          "q": "Come si paga il soggiorno?",
+          "a": "Il pagamento si effettua in loco, in contanti. Non chiediamo cauzione e vi rilasciamo una ricevuta."
+        },
+        {
+          "q": "Offrite una navetta dall'aeroporto?",
+          "a": "Sì, sia all'andata che al ritorno. L'aeroporto di Fascene è a 25 km. Il servizio è a pagamento: inviateci il numero del volo e vi diamo la tariffa."
+        },
+        {
+          "q": "C'è un ristorante in loco?",
+          "a": "Sì, aperto a pranzo e a cena. Frutti di mare e cucina europea, con opzioni vegetariane e senza glutine. La colazione può essere servita in camera se la chiedete la sera prima."
+        },
+        {
+          "q": "Venite con bambini o un animale?",
+          "a": "I bambini di ogni età sono i benvenuti e abbiamo camere familiari. Gli animali sono ammessi su richiesta, con possibile supplemento. Si può organizzare un baby-sitting."
+        },
+        {
+          "q": "Che lingue parlate?",
+          "a": "Francese e inglese. Boda e Bakoly vi accolgono di persona."
+        },
+        {
+          "q": "La casa è accessibile in sedia a rotelle?",
+          "a": "La casa è accessibile alle persone a mobilità ridotta. Scriveteci prima di prenotare, così vi indirizziamo verso la camera più adatta."
+        }
+      ]
+    },
+
+    "booking": {
+      "kicker": "Richiesta di prenotazione",
+      "title": "Scrivici",
+      "subtitle": "Nosy Be · Madagascar",
+      "intro": "Compila questo modulo: prepara un messaggio per Boda e Bakoly. Qui non viene chiesto alcun pagamento — rispondiamo prima con la disponibilità e la tariffa."
+    },
+
+    "footer": {
+      "ctaTitle": "La spiaggia vi aspetta\na due passi",
+      "ctaButton": "Scrivici",
+      "legal": ["Note legali", "Informativa sulla privacy"]
+    },
+
+    "pages": {
+      "chambres": {
+        "kicker": "Le nostre camere",
+        "title": "Cinque camere, non una di più",
+        "intro": "Ognuna ha il suo carattere: una vista, una terrazza, una vasca ricavata da un tronco. Tutte hanno bagno privato, ingresso indipendente e zanzariera."
+      },
+      "activites": {
+        "kicker": "Intorno alla casa",
+        "title": "Cosa fare a Nosy Be",
+        "intro": "Boda ha accompagnato viaggiatori qui per anni. Sa quale barca prendere, in quale giorno e con chi. Chiedete a lui: è più affidabile di qualsiasi guida."
+      },
+      "acces": {
+        "kicker": "Venire da noi",
+        "title": "Come arrivare e contatti",
+        "intro": "Siamo ad Ampasikely, nel comune di Dzamandzar, a 25 km dall'aeroporto di Fascene. Diteci il vostro orario di arrivo: possiamo organizzare la navetta."
+      }
+    },
+
+    "seo": {
+      "title": "Home Sakalava — Casa per ospiti fronte spiaggia, Nosy Be",
+      "description": "Cinque camere gestite da Boda e Bakoly ad Ampasikely, Nosy Be, a pochi passi dalla spiaggia di Djamanjary. Ristorante di pesce, Wi-Fi e parcheggio gratuiti, navetta aeroporto. Valutato 9,6/10 su Booking."
+    }
+  }
+}

@@ -1,50 +1,50 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="it">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Nos chambres — Home Sakalava</title>
-  <meta name="description" content="Toutes avec salle de bain privée, douche à l&#039;italienne, entrée indépendante, armoire, linge de lit et serviettes fournis.">
+  <title>Nosy Be, e Boda che conosce l&#039;isola — Home Sakalava</title>
+  <meta name="description" content="Boda ha accompagnato viaggiatori qui per anni. Sa quale barca prendere, in quale giorno e con chi. Chiedete a lui: è più affidabile di qualsiasi guida.">
   <meta name="theme-color" content="#0a1a1a">
 
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Home Sakalava">
-  <meta property="og:title" content="Nos chambres — Home Sakalava">
-  <meta property="og:description" content="Toutes avec salle de bain privée, douche à l&#039;italienne, entrée indépendante, armoire, linge de lit et serviettes fournis.">
-  <meta property="og:locale" content="fr_FR">
+  <meta property="og:title" content="Nosy Be, e Boda che conosce l&#039;isola — Home Sakalava">
+  <meta property="og:description" content="Boda ha accompagnato viaggiatori qui per anni. Sa quale barca prendere, in quale giorno e con chi. Chiedete a lui: è più affidabile di qualsiasi guida.">
+  <meta property="og:locale" content="it_IT">
   <meta property="og:image" content="uploads/plage-coucher-soleil-59c20778-med.jpg">
   <meta property="og:image:alt" content="Coucher de soleil sur la plage à marée basse, un arbre isolé se reflétant dans l&#039;eau, à quelques pas de Home Sakalava">
   <meta name="twitter:card" content="summary_large_image">
 
 
-  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
-  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
-  <link rel="manifest" href="site.webmanifest">
+  <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+  <link rel="manifest" href="../site.webmanifest">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&family=Cormorant+Garamond:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="css/reset.css">
-  <link rel="stylesheet" href="css/variables.css">
-  <link rel="stylesheet" href="css/base.css">
-  <link rel="stylesheet" href="css/components.css">
-  <link rel="stylesheet" href="css/sections.css">
+  <link rel="stylesheet" href="../css/reset.css">
+  <link rel="stylesheet" href="../css/variables.css">
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/sections.css">
 </head>
-<body data-page="chambres">
+<body data-page="activites">
 
-  <a class="skip-link" href="#contenu" data-t="skip">Aller au contenu</a>
+  <a class="skip-link" href="#contenu" data-t="skip">Vai al contenuto</a>
 
   <nav class="nav nav--solid" data-nav aria-label="Navigation principale">
     <div class="nav__inner container">
-      <a class="nav__logo" data-nav-logo href="index.html"></a>
+      <a class="nav__logo" data-nav-logo href="../index.html"></a>
       <ul class="nav__links" data-nav-links></ul>
       <div class="nav__actions">
-        <div class="langsel" role="group" aria-label="Choisir la langue"><a class="langsel__item is-active" href="chambres.html" lang="fr" hreflang="fr" title="Français" aria-current="true">FR</a><a class="langsel__item" href="en/chambres.html" lang="en" hreflang="en" title="English">EN</a><a class="langsel__item" href="de/chambres.html" lang="de" hreflang="de" title="Deutsch">DE</a><a class="langsel__item" href="it/chambres.html" lang="it" hreflang="it" title="Italiano">IT</a></div>
+        <div class="langsel" role="group" aria-label="Scegli la lingua"><a class="langsel__item" href="../activites.html" lang="fr" hreflang="fr" title="Français">FR</a><a class="langsel__item" href="../en/activites.html" lang="en" hreflang="en" title="English">EN</a><a class="langsel__item" href="../de/activites.html" lang="de" hreflang="de" title="Deutsch">DE</a><a class="langsel__item is-active" href="../it/activites.html" lang="it" hreflang="it" title="Italiano" aria-current="true">IT</a></div>
         <a class="btn btn--accent btn--pill nav__cta" data-nav-cta href="#booking"></a>
         <button class="nav__burger" data-burger type="button"
-                aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="nav-drawer">
+                aria-label="Apri il menu" aria-expanded="false" aria-controls="nav-drawer">
           <span></span><span></span><span></span>
         </button>
       </div>
@@ -61,16 +61,17 @@
       <p class="kicker" data-page-kicker></p>
       <h1 class="pagehead__title" data-page-title></h1>
       <p class="pagehead__intro" data-page-intro></p>
-      <nav class="pagehead__jump" data-rooms-jump aria-label="Aller à une chambre"></nav>
     </div>
   </header>
 
-  <div class="rooms" data-rooms-list></div>
-
-  <section class="booking section" data-section="booking" aria-labelledby="booking-title">
-    <div class="container booking__inner">
-      <div class="booking__left"  data-booking-left></div>
-      <div class="booking__right" data-booking-right></div>
+  <section class="activites section" data-section="activites">
+    <div class="container">
+      <ul class="activites__grid" data-act-grid></ul>
+      <p class="activites__note" data-act-note></p>
+      <div class="activites__distances">
+        <h2 class="activites__dist-title" data-t="around">Nei dintorni</h2>
+        <dl class="activites__dist-list" data-act-distances></dl>
+      </div>
     </div>
   </section>
 
@@ -96,13 +97,13 @@
   <script defer src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.454.0/umd/lucide.min.js"></script>
 
-  <script defer src="config.js"></script>
-  <script defer src="js/render.js"></script>
-  <script defer src="js/rooms.js"></script>
-  <script defer src="js/carousel.js"></script>
-  <script defer src="js/faq.js"></script>
-  <script defer src="js/lightbox.js"></script>
-  <script defer src="js/animations.js"></script>
-  <script defer src="js/main.js"></script>
+  <script defer src="../config.js"></script>
+  <script defer src="../js/render.js"></script>
+  <script defer src="../js/rooms.js"></script>
+  <script defer src="../js/carousel.js"></script>
+  <script defer src="../js/faq.js"></script>
+  <script defer src="../js/lightbox.js"></script>
+  <script defer src="../js/animations.js"></script>
+  <script defer src="../js/main.js"></script>
 </body>
 </html>

@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 require_once __DIR__ . '/images.php';
 require_once __DIR__ . '/pages.php';
+require_once __DIR__ . '/i18n.php';
 
 final class ContentStore
 {
@@ -78,26 +79,64 @@ final class ContentStore
 
 final class SiteBuilder
 {
-    public function __construct(private string $root, private array $c) {}
+    /** Contenu français d'origine, jamais modifié : base de chaque traduction. */
+    private array $source;
+
+    private I18n $i18n;
+
+    public function __construct(private string $root, private array $c)
+    {
+        $this->source = $c;
+        $this->i18n   = new I18n($root, I18n::SOURCE);
+    }
+
+    /** Raccourci vers un texte d'interface dans la langue en cours de génération. */
+    private function t(string $cle, string $repli = ''): string
+    {
+        return $this->i18n->t($cle, $repli);
+    }
 
     /** @return array<string,int> fichier => octets écrits */
     public function buildAll(): array
     {
-        $ecrits = ['config.js' => $this->writeFile('config.js', $this->buildConfigJs())];
+        $ecrits = [];
 
-        // Les quatre pages du site sont générées à partir des gabarits :
-        // une seule source pour la navigation, le pied de page et les
-        // scripts, quel que soit le nombre de pages.
-        foreach (PageTemplates::PAGES as $page) {
-            $fichier = $page . '.html';
-            $ecrits[$fichier] = $this->writeFile($fichier, PageTemplates::render(
-                $page,
-                '',                       // pages à la racine
-                'fr',
-                $this->buildSeoBlock($page),
-                ''                        // sélecteur de langue (étape suivante)
-            ));
+        // Une passe complète par langue. Le français sort à la racine, les
+        // autres dans leur propre dossier : chaque langue a ainsi sa propre
+        // adresse, ce qu'exige le référencement.
+        foreach (array_keys(I18n::LANGUES) as $lang) {
+            $this->i18n = new I18n($this->root, $lang);
+            $this->c    = $this->i18n->traduire($this->source);
+
+            $dossier = $this->i18n->dossier();
+            $prefixe = $this->i18n->prefixe();
+
+            if ($dossier !== '') {
+                $chemin = rtrim($this->root . '/' . $dossier, '/');
+                if (!is_dir($chemin) && !mkdir($chemin, 0775, true) && !is_dir($chemin)) {
+                    throw new RuntimeException("Création impossible : $chemin");
+                }
+            }
+
+            $ecrits[$dossier . 'config.js'] =
+                $this->writeFile($dossier . 'config.js', $this->buildConfigJs());
+
+            foreach (PageTemplates::PAGES as $page) {
+                $fichier = $dossier . $page . '.html';
+                $ecrits[$fichier] = $this->writeFile($fichier, PageTemplates::render(
+                    $page,
+                    $prefixe,
+                    $lang,
+                    $this->buildSeoBlock($page),
+                    $this->i18n->selecteur($page),
+                    $this->i18n->ui()
+                ));
+            }
         }
+
+        // Le contenu français est rétabli pour les appels ultérieurs.
+        $this->i18n = new I18n($this->root, I18n::SOURCE);
+        $this->c    = $this->source;
 
         $ecrits['sitemap.xml'] = $this->writeFile('sitemap.xml', $this->buildSitemap());
 
@@ -126,6 +165,8 @@ final class SiteBuilder
             'booking'     => $this->booking(),
             'footer'      => $this->footer(),
             'pages'       => $this->pages(),
+            't'           => $this->i18n->ui(),
+            'lang'        => $this->i18n->lang(),
         ];
 
         $json = json_encode(
@@ -320,27 +361,27 @@ final class SiteBuilder
         // gérant voit tout de suite ce qu'il reste à renseigner, et aucun
         // numéro n'est inventé.
         $rows = [
-            ['icon' => 'map-pin', 'label' => 'Adresse',
+            ['icon' => 'map-pin', 'label' => $this->t('address'),
              'value' => implode(', ', array_slice($k['addressLines'] ?? [], 1)),
              'href'  => ''],
-            ['icon' => 'phone', 'label' => 'Téléphone',
-             'value' => ($k['phone'] ?? '') ?: '[À renseigner]',
+            ['icon' => 'phone', 'label' => $this->t('phone'),
+             'value' => ($k['phone'] ?? '') ?: $this->t('toFill'),
              'href'  => ($k['phone'] ?? '') ? 'tel:' . preg_replace('/\s+/', '', $k['phone']) : ''],
-            ['icon' => 'mail', 'label' => 'E-mail',
-             'value' => ($k['email'] ?? '') ?: '[À renseigner]',
+            ['icon' => 'mail', 'label' => $this->t('email'),
+             'value' => ($k['email'] ?? '') ?: $this->t('toFill'),
              'href'  => ($k['email'] ?? '') ? 'mailto:' . $k['email'] : ''],
-            ['icon' => 'navigation', 'label' => 'Coordonnées GPS',
-             'value' => ($k['gps'] ?? '') ?: '[À renseigner]',
+            ['icon' => 'navigation', 'label' => $this->t('gps'),
+             'value' => ($k['gps'] ?? '') ?: $this->t('toFill'),
              'href'  => ''],
-            ['icon' => 'log-in', 'label' => 'Arrivée',
+            ['icon' => 'log-in', 'label' => $this->t('checkin'),
              'value' => trim(($k['checkinFrom'] ?? '') . ' – ' . ($k['checkinTo'] ?? ''), ' –'),
              'href'  => ''],
-            ['icon' => 'log-out', 'label' => 'Départ',
+            ['icon' => 'log-out', 'label' => $this->t('checkout'),
              'value' => trim(($k['checkoutFrom'] ?? '') . ' – ' . ($k['checkoutTo'] ?? ''), ' –'),
              'href'  => ''],
-            ['icon' => 'languages', 'label' => 'Langues parlées',
+            ['icon' => 'languages', 'label' => $this->t('languages'),
              'value' => $k['languages'] ?? '', 'href' => ''],
-            ['icon' => 'wallet', 'label' => 'Paiement',
+            ['icon' => 'wallet', 'label' => $this->t('payment'),
              'value' => $k['payment'] ?? '', 'href' => ''],
         ];
 
@@ -374,12 +415,12 @@ final class SiteBuilder
         $k = $this->c['contact'] ?? [];
 
         $infoCard = [
-            ['label' => 'Arrivée',  'value' => trim(($k['checkinFrom'] ?? '') . ' – ' . ($k['checkinTo'] ?? ''), ' –')],
-            ['label' => 'Départ',   'value' => trim(($k['checkoutFrom'] ?? '') . ' – ' . ($k['checkoutTo'] ?? ''), ' –')],
-            ['label' => 'Langues',  'value' => $k['languages'] ?? ''],
-            ['label' => 'Paiement', 'value' => $k['payment'] ?? ''],
-            ['label' => 'Téléphone','value' => ($k['phone'] ?? '') ?: '[À renseigner]'],
-            ['label' => 'E-mail',   'value' => ($k['email'] ?? '') ?: '[À renseigner]'],
+            ['label' => $this->t('checkin'),  'value' => trim(($k['checkinFrom'] ?? '') . ' – ' . ($k['checkinTo'] ?? ''), ' –')],
+            ['label' => $this->t('checkout'),   'value' => trim(($k['checkoutFrom'] ?? '') . ' – ' . ($k['checkoutTo'] ?? ''), ' –')],
+            ['label' => $this->t('languagesShort'),  'value' => $k['languages'] ?? ''],
+            ['label' => $this->t('payment'), 'value' => $k['payment'] ?? ''],
+            ['label' => $this->t('phone'),'value' => ($k['phone'] ?? '') ?: $this->t('toFill')],
+            ['label' => $this->t('email'),   'value' => ($k['email'] ?? '') ?: $this->t('toFill')],
         ];
 
         return [
@@ -394,31 +435,28 @@ final class SiteBuilder
             'mailto'   => $this->contactEmail(),
             'facebook' => $k['facebook'] ?? '',
             'labels'   => [
-                'firstName' => 'Prénom',
-                'lastName'  => 'Nom',
-                'email'     => 'E-mail',
-                'phone'     => 'Téléphone',
-                'checkIn'   => "Date d'arrivée",
-                'checkOut'  => 'Date de départ',
-                'roomType'  => 'Chambre souhaitée',
-                'guests'    => 'Voyageurs',
-                'message'   => 'Votre message',
-                'submit'    => 'Préparer ma demande',
-                'note'      => "Ce bouton ouvre votre messagerie avec le message déjà rédigé. "
-                             . "Rien n'est envoyé automatiquement, vous relisez avant.",
-                'noEmail'   => "L'adresse e-mail de la maison n'est pas encore en ligne. "
-                             . "En attendant, écrivez-nous sur Facebook :",
-                'fbLink'    => 'Ouvrir la page Facebook',
-                'successTitle' => 'Votre message est prêt',
-                'successText'  => "Votre messagerie vient de s'ouvrir avec la demande pré-remplie. "
-                                . "Relisez-la et envoyez-la — nous répondons sous quelques jours.",
-                'resetBtn'  => 'Recommencer',
+                'firstName' => $this->t('formFirstName'),
+                'lastName'  => $this->t('formLastName'),
+                'email'     => $this->t('formEmail'),
+                'phone'     => $this->t('formPhone'),
+                'checkIn'   => $this->t('formCheckIn'),
+                'checkOut'  => $this->t('formCheckOut'),
+                'roomType'  => $this->t('formRoomType'),
+                'guests'    => $this->t('formGuests'),
+                'message'   => $this->t('formMessage'),
+                'submit'    => $this->t('formSubmit'),
+                'note'         => $this->t('formNote'),
+                'noEmail'      => $this->t('formNoEmail'),
+                'fbLink'       => $this->t('formFbLink'),
+                'successTitle' => $this->t('formSuccessTitle'),
+                'successText'  => $this->t('formSuccessText'),
+                'resetBtn'     => $this->t('formReset'),
                 'ph' => [
-                    'firstName' => 'Prénom',
-                    'lastName'  => 'Nom',
-                    'email'     => 'vous@exemple.com',
-                    'phone'     => 'Indicatif compris',
-                    'message'   => "Nombre de nuits, heure d'arrivée, navette aéroport, régime alimentaire…",
+                    'firstName' => $this->t('phFirstName'),
+                    'lastName'  => $this->t('phLastName'),
+                    'email'     => $this->t('phEmail'),
+                    'phone'     => $this->t('phPhone'),
+                    'message'   => $this->t('phMessage'),
                 ],
             ],
         ];
@@ -441,7 +479,7 @@ final class SiteBuilder
         return [
             'chambres'  => $mk('chambres',
                 (string) ($this->c['rooms']['kicker'] ?? ''),
-                'Nos chambres',
+                $this->t('pageRooms'),
                 (string) ($this->c['rooms']['intro'] ?? '')),
             'activites' => $mk('activites',
                 (string) ($this->c['activities']['kicker'] ?? ''),
@@ -515,11 +553,15 @@ final class SiteBuilder
             return null;
         }
 
+        // Les pages d une langue vivent dans leur propre dossier : leurs
+        // chemins d images doivent remonter d un cran.
+        $base = $this->i18n->prefixe();
+
         $webpSet = [];
         $jpgSet  = [];
         foreach ($m['variants'] ?? [] as $v) {
-            $webpSet[] = $v['webp']     . ' ' . $v['w'] . 'w';
-            $jpgSet[]  = $v['fallback'] . ' ' . $v['w'] . 'w';
+            $webpSet[] = $base . $v['webp']     . ' ' . $v['w'] . 'w';
+            $jpgSet[]  = $base . $v['fallback'] . ' ' . $v['w'] . 'w';
         }
 
         $sizes = match ($usage) {
@@ -531,8 +573,8 @@ final class SiteBuilder
         };
 
         return [
-            'src'    => $m['src'],
-            'webp'   => $m['webp'],
+            'src'    => $base . $m['src'],
+            'webp'   => $base . $m['webp'],
             'srcset' => [
                 'webp' => implode(', ', $webpSet),
                 'jpg'  => implode(', ', $jpgSet),
@@ -569,15 +611,15 @@ final class SiteBuilder
         // existe même si le gérant n'a rien saisi.
         return match ($page) {
             'chambres' => [
-                'Nos 5 chambres — ' . $brand,
+                $this->t('pageRooms') . ' — ' . $brand,
                 (string) ($this->c['rooms']['intro'] ?? ''),
             ],
             'activites' => [
-                (string) ($this->c['activities']['title'] ?? 'Activités') . ' — ' . $brand,
+                (string) ($this->c['activities']['title'] ?: $this->t('pageActivities')) . ' — ' . $brand,
                 (string) ($this->c['activities']['text'] ?? ''),
             ],
             'acces' => [
-                'Accès et contact — ' . $brand,
+                $this->t('pageAccess') . ' — ' . $brand,
                 (string) ($this->c['access']['text'] ?? ''),
             ],
             default => [
@@ -612,7 +654,7 @@ final class SiteBuilder
         $lines[] = '  <meta property="og:site_name" content="' . $e($brand['name'] ?? '') . '">';
         $lines[] = '  <meta property="og:title" content="' . $e($title) . '">';
         $lines[] = '  <meta property="og:description" content="' . $e($desc) . '">';
-        $lines[] = '  <meta property="og:locale" content="' . $e($seo['locale'] ?? 'fr_FR') . '">';
+        $lines[] = '  <meta property="og:locale" content="' . $e($this->i18n->locale()) . '">';
         if ($ogAbs !== '') {
             $lines[] = '  <meta property="og:image" content="' . $e($ogAbs) . '">';
             $lines[] = '  <meta property="og:image:alt" content="' . $e($ogImg['alt'] ?? '') . '">';
@@ -621,6 +663,9 @@ final class SiteBuilder
             $lines[] = '  <meta property="og:url" content="' . $e($url . '/' . $file) . '">';
         }
         $lines[] = '  <meta name="twitter:card" content="summary_large_image">';
+
+        $alt = $this->i18n->hreflang($page, $url);
+        if ($alt !== '') { $lines[] = ''; $lines[] = $alt; }
         $lines[] = '';
         if ($page === 'index') {
             $lines[] = '';
@@ -843,16 +888,44 @@ final class SiteBuilder
                  . "<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\"></urlset>\n";
         }
 
-        // Site une seule page : les sections sont des ancres, pas des URL.
-        return "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-             . "<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">\n"
-             . "  <url>\n"
-             . "    <loc>{$url}/</loc>\n"
-             . "    <lastmod>{$day}</lastmod>\n"
-             . "    <changefreq>monthly</changefreq>\n"
-             . "    <priority>1.0</priority>\n"
-             . "  </url>\n"
-             . "</urlset>\n";
+        // Quatre pages × quatre langues. Chaque version a sa propre adresse
+        // et déclare les autres en alternative : c'est ce qui permet à Google
+        // de servir la bonne langue sans considérer les pages comme dupliquées.
+        $priorites = [
+            'index'     => '1.0',
+            'chambres'  => '0.9',
+            'activites' => '0.7',
+            'acces'     => '0.7',
+        ];
+
+        $xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+             . "<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\"\n"
+             . "        xmlns:xhtml=\"http://www.w3.org/1999/xhtml\">\n";
+
+        foreach (PageTemplates::PAGES as $page) {
+            $fichier = $page === 'index' ? '' : $page . '.html';
+
+            foreach (array_keys(I18n::LANGUES) as $lg) {
+                $dossier = $lg === I18n::SOURCE ? '' : $lg . '/';
+                $loc     = $url . '/' . $dossier . $fichier;
+
+                $xml .= "  <url>\n"
+                      . "    <loc>{$loc}</loc>\n"
+                      . "    <lastmod>{$day}</lastmod>\n"
+                      . "    <changefreq>monthly</changefreq>\n"
+                      . "    <priority>{$priorites[$page]}</priority>\n";
+
+                foreach (array_keys(I18n::LANGUES) as $autre) {
+                    $d2 = $autre === I18n::SOURCE ? '' : $autre . '/';
+                    $xml .= "    <xhtml:link rel=\"alternate\" hreflang=\"{$autre}\""
+                          . " href=\"{$url}/{$d2}{$fichier}\"/>\n";
+                }
+
+                $xml .= "  </url>\n";
+            }
+        }
+
+        return $xml . "</urlset>\n";
     }
 
     private function writeFile(string $name, string $contents): int

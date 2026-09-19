@@ -34,7 +34,8 @@ final class PageTemplates
         string $prefix,
         string $lang,
         string $head,
-        string $langNav
+        string $langNav,
+        array $ui = []
     ): string {
         $body = match ($page) {
             'chambres'  => self::roomsPage(),
@@ -43,7 +44,55 @@ final class PageTemplates
             default     => self::homePage(),
         };
 
-        return self::shell($page, $prefix, $lang, $head, $langNav, $body);
+        $html = self::shell($page, $prefix, $lang, $head, $langNav, $body);
+
+        return $ui ? self::traduire($html, $ui) : $html;
+    }
+
+    /**
+     * Traduit les quelques textes écrits directement dans les gabarits.
+     *
+     * Ils sont marqués data-t (contenu) ou data-t-aria (intitulé pour les
+     * lecteurs d'écran). La traduction est appliquée à la génération, et non
+     * dans le navigateur : le texte est ainsi correct avant même que le
+     * JavaScript s'exécute, et lisible par les moteurs de recherche.
+     */
+    private static function traduire(string $html, array $ui): string
+    {
+        // Contenu : <tag data-t="cle">texte</tag>
+        $html = preg_replace_callback(
+            '/(<(\w+)[^>]*\bdata-t="([a-zA-Z]+)"[^>]*>)([^<]*)(<\/\2>)/',
+            static function (array $m) use ($ui): string {
+                $texte = $ui[$m[3]] ?? $m[4];
+                return $m[1] . htmlspecialchars($texte, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') . $m[5];
+            },
+            $html
+        ) ?? $html;
+
+        // Intitulé accessible : aria-label="…" data-t-aria="cle"
+        $html = preg_replace_callback(
+            '/aria-label="[^"]*"(\s*)data-t-aria="([a-zA-Z]+)"/',
+            static function (array $m) use ($ui): string {
+                $texte = $ui[$m[2]] ?? '';
+                if ($texte === '') {
+                    return $m[0];
+                }
+                return 'aria-label="' . htmlspecialchars($texte, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8')
+                     . '"' . $m[1] . 'data-t-aria="' . $m[2] . '"';
+            },
+            $html
+        ) ?? $html;
+
+        // Intitulé du bouton de menu, commun à toutes les pages.
+        if (!empty($ui['openMenu'])) {
+            $html = str_replace(
+                'aria-label="Ouvrir le menu"',
+                'aria-label="' . htmlspecialchars($ui['openMenu'], ENT_QUOTES) . '"',
+                $html
+            );
+        }
+
+        return $html;
     }
 
     // ══ Enveloppe commune ═══════════════════════════════════════════════

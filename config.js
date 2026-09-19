@@ -7,7 +7,7 @@
 //
 //  Source des données : data/content.json
 //  Régénérer          : php tools/build.php
-//  Généré le          : 19/09/2026 à 22:22
+//  Généré le          : 19/09/2026 à 22:32
 // ═══════════════════════════════════════════════════════════════
 
 const CONFIG = {
@@ -1134,5 +1134,78 @@ const CONFIG = {
             "title": "Accès et contact",
             "intro": "Nous sommes à Ampasikely, sur la commune de Dzamandzar, à 25 km de l'aéroport de Fascene. Dites-nous votre heure d'arrivée : nous pouvons organiser la navette."
         }
-    }
+    },
+    "t": {
+        "skip": "Aller au contenu",
+        "openMenu": "Ouvrir le menu",
+        "follow": "Suivez-nous",
+        "info": "Informations",
+        "supplement": "supplément",
+        "toFill": "[À renseigner]",
+        "around": "Aux alentours",
+        "facebookPage": "Notre page Facebook",
+        "langLabel": "Choisir la langue",
+        "room": "Chambre",
+        "seeRoom": "Voir la chambre",
+        "allRooms": "Voir les 5 chambres en détail",
+        "prevRoom": "Chambre précédente",
+        "nextRoom": "Chambre suivante",
+        "inEveryRoom": "Dans toutes les chambres",
+        "askThisRoom": "Demander cette chambre",
+        "viewPhotosOf": "Voir les photos de la chambre",
+        "photo": "Photo",
+        "from": "Tarif",
+        "accessTitle": "Accès et contact",
+        "address": "Adresse",
+        "phone": "Téléphone",
+        "email": "E-mail",
+        "gps": "Coordonnées GPS",
+        "checkin": "Arrivée",
+        "checkout": "Départ",
+        "languages": "Langues parlées",
+        "languagesShort": "Langues",
+        "payment": "Paiement",
+        "formFirstName": "Prénom",
+        "formLastName": "Nom",
+        "formEmail": "E-mail",
+        "formPhone": "Téléphone",
+        "formCheckIn": "Date d'arrivée",
+        "formCheckOut": "Date de départ",
+        "formRoomType": "Chambre souhaitée",
+        "formGuests": "Voyageurs",
+        "formMessage": "Votre message",
+        "formSubmit": "Préparer ma demande",
+        "formSelect": "— Sélectionner —",
+        "guest": "voyageur",
+        "guests": "voyageurs",
+        "formError": "Merci de compléter les champs obligatoires.",
+        "formNote": "Ce bouton ouvre votre messagerie avec le message déjà rédigé. Rien n'est envoyé automatiquement, vous relisez avant.",
+        "formNoEmail": "L'adresse e-mail de la maison n'est pas encore en ligne. En attendant, écrivez-nous sur Facebook :",
+        "formFbLink": "Ouvrir la page Facebook",
+        "formSuccessTitle": "Votre message est prêt",
+        "formSuccessText": "Votre messagerie vient de s'ouvrir avec la demande pré-remplie. Relisez-la et envoyez-la — nous répondons sous quelques jours.",
+        "formReset": "Recommencer",
+        "phFirstName": "Prénom",
+        "phLastName": "Nom",
+        "phEmail": "vous@exemple.com",
+        "phPhone": "Indicatif compris",
+        "phMessage": "Nombre de nuits, heure d'arrivée, navette aéroport, régime alimentaire…",
+        "mailGreeting": "Bonjour Boda et Bakoly,",
+        "mailIntro": "Je souhaite réserver une chambre à Home Sakalava.",
+        "mailName": "Nom",
+        "mailEmail": "E-mail",
+        "mailPhone": "Téléphone",
+        "mailDates": "Dates",
+        "mailRoom": "Chambre",
+        "mailGuests": "Voyageurs",
+        "mailMessage": "Message",
+        "mailThanks": "Merci d'avance,",
+        "mailAdvise": "à conseiller",
+        "mailSubject": "Demande de réservation",
+        "mailNoDates": "dates à définir",
+        "pageRooms": "Nos chambres",
+        "pageActivities": "Activités",
+        "pageAccess": "Accès et contact"
+    },
+    "lang": "fr"
 };

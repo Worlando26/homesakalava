@@ -9,6 +9,15 @@
 //  dégradé CSS sinon. Une section sans photo reste donc présentable.
 // ═══════════════════════════════════════════════════════════
 
+/**
+ * Texte d interface traduit. Le second argument est le francais, utilise
+ * en repli : une traduction manquante affiche du francais, jamais du vide.
+ */
+function T(key, fallback) {
+  const dict = (typeof CONFIG !== 'undefined' && CONFIG.t) || {};
+  return dict[key] || fallback;
+}
+
 /* Crée un élément avec classes optionnelles */
 function el(tag, classes, text) {
   const e = document.createElement(tag);
@@ -312,7 +321,7 @@ function renderIdeal() {
   // Équipements communs à toutes les chambres
   const sharedEl = document.querySelector('[data-ideal-shared]');
   if (sharedEl && ideal.shared && ideal.shared.length) {
-    sharedEl.appendChild(el('h3', 'ideal__shared-title', 'Dans toutes les chambres'));
+    sharedEl.appendChild(el('h3', 'ideal__shared-title', T('inEveryRoom', 'Dans toutes les chambres')));
     const ul = el('ul', 'ideal__shared-list');
     ideal.shared.forEach(s => {
       const li = el('li');
@@ -388,7 +397,7 @@ function renderTrusted() {
     const li = el('li', 'service-item');
     li.appendChild(icon(s.icon));
     li.appendChild(el('span', 'service-item__label', s.label));
-    if (s.supplement) li.appendChild(el('span', 'service-item__badge', 'supplément'));
+    if (s.supplement) li.appendChild(el('span', 'service-item__badge', T('supplement', 'supplément')));
     list.appendChild(li);
   });
   document.querySelector('[data-trusted-note]').textContent = trusted.note || '';
@@ -589,9 +598,9 @@ function renderBooking() {
   const iIn    = inp('date', '', true);  iIn.min  = today;
   const iOut   = inp('date', '', true);  iOut.min = today;
 
-  const sRoom = sel([['', '— Sélectionner —'], ...booking.rooms.map(r => [r, r])]);
+  const sRoom = sel([['', T('formSelect', '— Sélectionner —')], ...booking.rooms.map(r => [r, r])]);
   const sGuests = sel(
-    ['1','2','3','4','5','6'].map(n => [n, n + (n === '1' ? ' voyageur' : ' voyageurs')])
+    ['1','2','3','4','5','6'].map(n => [n, n + ' ' + (n === '1' ? T('guest', 'voyageur') : T('guests', 'voyageurs'))])
   );
   const iMsg = el('textarea', 'booking__textarea');
   iMsg.placeholder = ph.message;
@@ -658,7 +667,7 @@ function renderBooking() {
     if (!booking.mailto) return;
 
     if (!form.checkValidity()) {
-      errorEl.textContent = 'Merci de compléter les champs obligatoires.';
+      errorEl.textContent = T('formError', 'Merci de compléter les champs obligatoires.');
       errorEl.hidden = false;
       const firstInvalid = form.querySelector(':invalid');
       if (firstInvalid) firstInvalid.focus();
@@ -666,27 +675,30 @@ function renderBooking() {
     }
     errorEl.hidden = true;
 
+    // Le message est rédigé dans la langue du visiteur : c'est lui qui le
+    // relit avant de l'envoyer, et les hôtes parlent français et anglais.
     const nights = [iIn.value, iOut.value].filter(Boolean).join(' → ');
     const lines = [
-      'Bonjour Boda et Bakoly,',
+      T('mailGreeting', 'Bonjour Boda et Bakoly,'),
       '',
-      "Je souhaite réserver une chambre à Home Sakalava.",
+      T('mailIntro', 'Je souhaite réserver une chambre à Home Sakalava.'),
       '',
-      'Nom : '        + iFirst.value + ' ' + iLast.value,
-      'E-mail : '     + iMail.value,
-      'Téléphone : '  + (iPhone.value || '—'),
-      'Dates : '      + (nights || '—'),
-      'Chambre : '    + (sRoom.value || 'à conseiller'),
-      'Voyageurs : '  + sGuests.value,
+      T('mailName',   'Nom')       + ' : ' + iFirst.value + ' ' + iLast.value,
+      T('mailEmail',  'E-mail')    + ' : ' + iMail.value,
+      T('mailPhone',  'Téléphone') + ' : ' + (iPhone.value || '—'),
+      T('mailDates',  'Dates')     + ' : ' + (nights || '—'),
+      T('mailRoom',   'Chambre')   + ' : ' + (sRoom.value || T('mailAdvise', 'à conseiller')),
+      T('mailGuests', 'Voyageurs') + ' : ' + sGuests.value,
       '',
-      'Message :',
+      T('mailMessage', 'Message') + ' :',
       iMsg.value || '—',
       '',
-      'Merci d\'avance,',
+      T('mailThanks', "Merci d'avance,"),
       iFirst.value + ' ' + iLast.value,
     ];
 
-    const subject = 'Demande de réservation — ' + (nights || 'dates à définir');
+    const subject = T('mailSubject', 'Demande de réservation')
+      + ' — ' + (nights || T('mailNoDates', 'dates à définir'));
     const href = 'mailto:' + booking.mailto
       + '?subject=' + encodeURIComponent(subject)
       + '&body='    + encodeURIComponent(lines.join('\n'));
@@ -734,7 +746,7 @@ function renderFooter() {
   });
 
   const socialEl = document.querySelector('[data-footer-social]');
-  socialEl.appendChild(el('h3', '', 'Suivez-nous'));
+  socialEl.appendChild(el('h3', '', T('follow', 'Suivez-nous')));
   const socialUl = el('ul');
   footer.social.forEach(s => {
     const li = el('li');
@@ -748,7 +760,7 @@ function renderFooter() {
   socialEl.appendChild(socialUl);
 
   const legalEl = document.querySelector('[data-footer-legal]');
-  legalEl.appendChild(el('h3', '', 'Informations'));
+  legalEl.appendChild(el('h3', '', T('info', 'Informations')));
   const legalUl = el('ul');
   footer.legal.forEach(l => {
     const li = el('li');

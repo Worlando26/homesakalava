@@ -11,3 +11,6 @@ Disallow: /tools/
 # Sitemap : la ligne ci-dessous sera complétée automatiquement dès que le
 # domaine définitif sera renseigné dans l'admin (Réglages → Site).
 # Sitemap: https://VOTRE-DOMAINE/sitemap.xml
+
+# Les versions EN, DE et IT sont des traductions a part entiere :
+# elles doivent etre indexees, ne les excluez pas.

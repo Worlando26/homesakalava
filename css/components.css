@@ -506,3 +506,48 @@ picture.hero__pic {
 
 /* Le lien vers la fiche de chambre remplace l ancien bouton de galerie. */
 a.ideal-card__open { text-decoration: none; }
+
+/* ── Selecteur de langue ─────────────────────────── */
+.langsel {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 3px;
+  border-radius: var(--r-pill);
+  background: var(--c-bg);
+  border: 1.5px solid var(--c-line);
+}
+.langsel__item {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 34px;
+  min-height: 30px;
+  padding: 0 7px;
+  border-radius: var(--r-pill);
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: .04em;
+  color: var(--c-muted);
+  transition: background .15s, color .15s;
+}
+.langsel__item:hover { color: var(--c-ink); background: var(--c-surface); }
+.langsel__item.is-active { background: var(--c-accent); color: #fff; }
+
+/* Sur la page d accueil, la barre est transparente au-dessus du hero :
+   le selecteur doit rester lisible sur la photo. */
+.nav:not(.nav--solid):not(.is-solid) .langsel {
+  background: rgba(255,255,255,.14);
+  border-color: rgba(255,255,255,.26);
+}
+.nav:not(.nav--solid):not(.is-solid) .langsel__item { color: rgba(255,255,255,.82); }
+.nav:not(.nav--solid):not(.is-solid) .langsel__item:hover { color: #fff; background: rgba(255,255,255,.2); }
+
+@media (max-width: 860px) {
+  /* Les libelles longs du menu ne tiennent plus a cote du selecteur :
+     on masque le bouton d appel a l action, deja present dans le tiroir. */
+  .nav__cta { display: none; }
+}
+@media (max-width: 400px) {
+  .langsel__item { min-width: 28px; padding: 0 4px; font-size: 10.5px; }
+}
