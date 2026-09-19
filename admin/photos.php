@@ -59,17 +59,29 @@ if (is_post()) {
 
             // ── Affectation aux sections ─────────────────────────────────
             case 'assign':
-                $content['hero']['mediaId']       = post_str('hero');
-                $content['restaurant']['mediaId'] = post_str('restaurant');
-                $content['faq']['mediaId']        = post_str('faq');
-                $content['footer']['ctaMediaId']  = post_str('footer');
-                $content['seo']['ogImageId']      = post_str('og');
+                /**
+                 * Une valeur envoyée doit désigner une photo qui existe
+                 * réellement. Sans ce contrôle, un identifiant fantaisiste
+                 * serait enregistré tel quel et le site afficherait une image
+                 * cassée. On retombe alors sur « aucune photo », c'est-à-dire
+                 * sur le dégradé de repli.
+                 */
+                $pick = static function (string $field) use ($content): string {
+                    $id = post_str($field);
+                    return isset($content['media'][$id]) ? $id : '';
+                };
+
+                $content['hero']['mediaId']       = $pick('hero');
+                $content['restaurant']['mediaId'] = $pick('restaurant');
+                $content['faq']['mediaId']        = $pick('faq');
+                $content['footer']['ctaMediaId']  = $pick('footer');
+                $content['seo']['ogImageId']      = $pick('og');
 
                 foreach (array_keys($content['spaces']['items'] ?? []) as $i) {
-                    $content['spaces']['items'][$i]['mediaId'] = post_str("space_$i");
+                    $content['spaces']['items'][$i]['mediaId'] = $pick("space_$i");
                 }
                 foreach (array_keys($content['services']['floatImages'] ?? []) as $i) {
-                    $content['services']['floatImages'][$i]['mediaId'] = post_str("float_$i");
+                    $content['services']['floatImages'][$i]['mediaId'] = $pick("float_$i");
                 }
 
                 $store->write($content);

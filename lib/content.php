@@ -117,6 +117,11 @@ final class SiteBuilder
             JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES
         );
 
+        // config.js est un fichier externe : « </script> » y est inoffensif.
+        // En revanche U+2028 et U+2029, laissés bruts par JSON_UNESCAPED_UNICODE,
+        // cassent l'analyse du script sur les moteurs JavaScript anciens.
+        $json = str_replace(["\u{2028}", "\u{2029}"], [' ', ' '], (string) $json);
+
         $stamp = date('d/m/Y à H:i');
 
         return <<<JS
@@ -292,13 +297,13 @@ final class SiteBuilder
              'value' => implode(', ', array_slice($k['addressLines'] ?? [], 1)),
              'href'  => ''],
             ['icon' => 'phone', 'label' => 'Téléphone',
-             'value' => $k['phone'] ?: '[À renseigner]',
-             'href'  => $k['phone'] ? 'tel:' . preg_replace('/\s+/', '', $k['phone']) : ''],
+             'value' => ($k['phone'] ?? '') ?: '[À renseigner]',
+             'href'  => ($k['phone'] ?? '') ? 'tel:' . preg_replace('/\s+/', '', $k['phone']) : ''],
             ['icon' => 'mail', 'label' => 'E-mail',
-             'value' => $k['email'] ?: '[À renseigner]',
-             'href'  => $k['email'] ? 'mailto:' . $k['email'] : ''],
+             'value' => ($k['email'] ?? '') ?: '[À renseigner]',
+             'href'  => ($k['email'] ?? '') ? 'mailto:' . $k['email'] : ''],
             ['icon' => 'navigation', 'label' => 'Coordonnées GPS',
-             'value' => $k['gps'] ?: '[À renseigner]',
+             'value' => ($k['gps'] ?? '') ?: '[À renseigner]',
              'href'  => ''],
             ['icon' => 'log-in', 'label' => 'Arrivée',
              'value' => trim(($k['checkinFrom'] ?? '') . ' – ' . ($k['checkinTo'] ?? ''), ' –'),
@@ -346,8 +351,8 @@ final class SiteBuilder
             ['label' => 'Départ',   'value' => trim(($k['checkoutFrom'] ?? '') . ' – ' . ($k['checkoutTo'] ?? ''), ' –')],
             ['label' => 'Langues',  'value' => $k['languages'] ?? ''],
             ['label' => 'Paiement', 'value' => $k['payment'] ?? ''],
-            ['label' => 'Téléphone','value' => $k['phone'] ?: '[À renseigner]'],
-            ['label' => 'E-mail',   'value' => $k['email'] ?: '[À renseigner]'],
+            ['label' => 'Téléphone','value' => ($k['phone'] ?? '') ?: '[À renseigner]'],
+            ['label' => 'E-mail',   'value' => ($k['email'] ?? '') ?: '[À renseigner]'],
         ];
 
         return [
@@ -512,7 +517,7 @@ final class SiteBuilder
     private function buildSeoBlock(): string
     {
         $seo     = $this->c['seo'] ?? [];
-        $contact = $this->c['contact'] ?? [];
+
         $brand   = $this->c['brand'] ?? [];
 
         $title = $seo['title']       ?? '';
@@ -552,6 +557,131 @@ final class SiteBuilder
         return implode("\n", $lines) . "\n";
     }
 
+    /**
+     * Adresse postale structurée, déduite des lignes saisies en admin.
+     *
+     * Convention retenue : la première ligne est le nom de la maison, la
+     * dernière le pays, l'avant-dernière la région. Ce qui reste au milieu
+     * forme la rue et la localité. Un code postal en tête de ligne est
+     * reconnu et isolé.
+     */
+    private function postalAddress(): array
+    {
+        $lines = array_values(array_filter(
+            array_map('trim', $this->c['contact']['addressLines'] ?? [])
+        ));
+
+        // La première ligne répète le nom de l'établissement : on l'écarte.
+        $brand = trim((string) ($this->c['brand']['name'] ?? ''));
+        if ($lines && $brand !== '' && strcasecmp($lines[0], $brand) === 0) {
+            array_shift($lines);
+        }
+
+        $address = ['@type' => 'PostalAddress'];
+
+        if ($lines) {
+            $country = array_pop($lines);
+            $address['addressCountry'] = $this->countryCode($country);
+        }
+        if ($lines) {
+            // « Nosy Be, région Diana » → localité + région
+            $last = array_pop($lines);
+            if (str_contains($last, ',')) {
+                [$locality, $region] = array_map('trim', explode(',', $last, 2));
+                $address['addressLocality'] = $locality;
+                $address['addressRegion']   = preg_replace('/^r[ée]gion\s+/iu', '', $region);
+            } else {
+                $address['addressRegion'] = $last;
+            }
+        }
+        if ($lines) {
+            // « 207 Dzamandzar » → code postal + localité
+            $line = array_pop($lines);
+            if (preg_match('/^(\d{3,5})\s+(.+)$/', $line, $m)) {
+                $address['postalCode'] = $m[1];
+                $address['addressLocality'] ??= $m[2];
+            } elseif (!isset($address['addressLocality'])) {
+                $address['addressLocality'] = $line;
+            } else {
+                array_unshift($lines, $line);
+            }
+        }
+        if ($lines) {
+            $address['streetAddress'] = implode(', ', $lines);
+        }
+
+        return $address;
+    }
+
+    /** « 12h00 », « 12 h 00 », « 12:00 » → « 12:00 ». Vide si non reconnu. */
+    private function isoTime(string $value): string
+    {
+        if (preg_match('/(\d{1,2})\s*[h:]\s*(\d{2})?/i', $value, $m)) {
+            return sprintf('%02d:%02d', (int) $m[1], (int) ($m[2] ?? 0));
+        }
+        return '';
+    }
+
+    /**
+     * « -13.3987, 48.2345 » → GeoCoordinates.
+     * Renvoie null si la saisie n'est pas un couple de coordonnées plausible :
+     * mieux vaut pas de donnée qu'une donnée fausse.
+     */
+    private function geoPoint(string $value): ?array
+    {
+        if (!preg_match('/(-?\d{1,3}[.,]\d+)\s*[,;]\s*(-?\d{1,3}[.,]\d+)/', $value, $m)) {
+            return null;
+        }
+        $lat = (float) str_replace(',', '.', $m[1]);
+        $lon = (float) str_replace(',', '.', $m[2]);
+
+        if (abs($lat) > 90 || abs($lon) > 180) {
+            return null;
+        }
+
+        return ['@type' => 'GeoCoordinates', 'latitude' => $lat, 'longitude' => $lon];
+    }
+
+    /**
+     * Note agrégée déduite de la section réputation : la note vient du titre
+     * (« 9,6 sur 10 »), le nombre d'avis de la mention de source
+     * (« Source : Booking.com · 75 avis »). Si l'un des deux manque, on
+     * n'écrit rien plutôt que d'inventer un chiffre.
+     */
+    private function aggregateRating(array $rep): ?array
+    {
+        if (empty($rep['scores'])) {
+            return null;
+        }
+        if (!preg_match('/(\d+(?:[.,]\d+)?)/', (string) ($rep['title'] ?? ''), $v)) {
+            return null;
+        }
+        if (!preg_match('/(\d+)\s*avis/iu', (string) ($rep['source'] ?? ''), $c)) {
+            return null;
+        }
+
+        return [
+            '@type'       => 'AggregateRating',
+            'ratingValue' => str_replace(',', '.', $v[1]),
+            'bestRating'  => '10',
+            'ratingCount' => (int) $c[1],
+        ];
+    }
+
+    /** Quelques pays fréquents en code ISO ; sinon le libellé tel quel. */
+    private function countryCode(string $name): string
+    {
+        return match (mb_strtolower(trim($name))) {
+            'madagascar'                     => 'MG',
+            'france'                         => 'FR',
+            'belgique'                       => 'BE',
+            'suisse'                         => 'CH',
+            'la réunion', 'réunion'          => 'RE',
+            'maurice', 'île maurice'         => 'MU',
+            default                          => $name,
+        };
+    }
+
     /** Données structurées LodgingBusiness — uniquement des faits connus. */
     private function buildJsonLd(): string
     {
@@ -566,14 +696,9 @@ final class SiteBuilder
             '@type'    => 'LodgingBusiness',
             'name'     => $brand['name'] ?? '',
             'description' => $seo['description'] ?? '',
-            'address'  => [
-                '@type'           => 'PostalAddress',
-                'streetAddress'   => 'Ampasikely',
-                'addressLocality' => 'Dzamandzar',
-                'postalCode'      => '207',
-                'addressRegion'   => 'Diana',
-                'addressCountry'  => 'MG',
-            ],
+            // L'adresse suit celle saisie en admin. Si le gérant la corrige,
+            // les données lues par Google suivent : rien n'est figé ici.
+            'address'  => $this->postalAddress(),
             'numberOfRooms'   => count($this->activeRooms()),
             'petsAllowed'     => true,
             'availableLanguage' => ['fr', 'en'],
@@ -588,19 +713,25 @@ final class SiteBuilder
         if ($k['phone']  ?? '')     { $ld['telephone'] = $k['phone']; }
         if ($k['email']  ?? '')     { $ld['email']     = $k['email']; }
         if ($k['facebook'] ?? '')   { $ld['sameAs']    = [$k['facebook']]; }
-        if ($k['checkinFrom'] ?? '') {
-            $ld['checkinTime']  = $k['checkinFrom'];
-            $ld['checkoutTime'] = $k['checkoutFrom'] ?? '';
+
+        // Les horaires sont saisis en français (« 12h00 ») ; schema.org attend
+        // un format ISO. On convertit, sans quoi Google ignore le champ.
+        if ($in = $this->isoTime((string) ($k['checkinFrom'] ?? ''))) {
+            $ld['checkinTime'] = $in;
+        }
+        if ($out = $this->isoTime((string) ($k['checkoutTo'] ?? $k['checkoutFrom'] ?? ''))) {
+            $ld['checkoutTime'] = $out;
         }
 
-        // Note agrégée : reprise des chiffres Booking fournis dans about.txt.
-        if (!empty($rep['scores'])) {
-            $ld['aggregateRating'] = [
-                '@type'       => 'AggregateRating',
-                'ratingValue' => '9.6',
-                'bestRating'  => '10',
-                'ratingCount' => 75,
-            ];
+        // Coordonnées géographiques, dès que le gérant les a relevées.
+        if ($geo = $this->geoPoint((string) ($k['gps'] ?? ''))) {
+            $ld['geo'] = $geo;
+        }
+
+        // Note agrégée : déduite des données de la section réputation, pour
+        // qu'une correction en admin se répercute ici aussi.
+        if ($rating = $this->aggregateRating($rep)) {
+            $ld['aggregateRating'] = $rating;
         }
 
         // Une image absolue n'a de sens qu'une fois le domaine connu.
@@ -609,9 +740,15 @@ final class SiteBuilder
             $ld['image'] = $url . '/' . $ogImg['src'];
         }
 
+        // JSON_HEX_TAG est indispensable : ce JSON est écrit DANS une balise
+        // <script> de la page. Sans lui, un texte contenant « </script> »
+        // saisi en admin refermerait la balise et permettrait d'injecter du
+        // code dans le site public. Les chevrons deviennent < / >,
+        // ce qui reste du JSON valide et parfaitement lisible par Google.
         return (string) json_encode(
             $ld,
             JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT
+            | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT
         );
     }
 
