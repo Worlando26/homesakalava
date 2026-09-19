@@ -1,6 +1,6 @@
 {
     "version": 1,
-    "updated_at": "2026-09-19T22:11:22+02:00",
+    "updated_at": "2026-09-19T22:12:39+02:00",
     "settings": {
         "showPrices": true,
         "priceFallback": "250.000Ar"
@@ -857,7 +857,7 @@
                 "loc": "Vue mer · 30 m²",
                 "tag": "La plus grande",
                 "area": "30 m²",
-                "price": "",
+                "price": "À partir de 56 € la nuit",
                 "desc": "La plus spacieuse de la maison, avec sa terrasse privée face à la mer. Climatisée, elle accueille confortablement trois personnes.",
                 "amenities": [
                     "Climatisation",
@@ -883,7 +883,7 @@
                 "loc": "Terrasse privée · 18 m²",
                 "tag": "Pour trois",
                 "area": "18 m²",
-                "price": "",
+                "price": "À partir de 43 € la nuit",
                 "desc": "Une chambre pour trois avec sa terrasse et son balcon, pour prendre le petit-déjeuner dehors sans croiser personne.",
                 "amenities": [
                     "Terrasse privée",
@@ -908,7 +908,7 @@
                 "loc": "Cour intérieure · 16 m²",
                 "tag": "Avec baignoire",
                 "area": "16 m²",
-                "price": "",
+                "price": "À partir de 44 € la nuit",
                 "desc": "Ouverte sur le jardin et la cour intérieure, la seule chambre équipée d'une baignoire. Calme toute la journée.",
                 "amenities": [
                     "Baignoire",
@@ -933,7 +933,7 @@
                 "loc": "Climatisée · 14 m²",
                 "tag": "Climatisée",
                 "area": "14 m²",
-                "price": "",
+                "price": "À partir de 44 € la nuit",
                 "desc": "Compacte et climatisée, avec terrasse privée et balcon. Le bon compromis pour deux.",
                 "amenities": [
                     "Climatisation",
@@ -957,7 +957,7 @@
                 "loc": "Pour deux · 13 m²",
                 "tag": "L'essentiel",
                 "area": "13 m²",
-                "price": "",
+                "price": "À partir de 24 € la nuit",
                 "desc": "La plus simple : un lit, une salle de bain à soi, et la plage à deux pas. C'est souvent tout ce qu'il faut.",
                 "amenities": [
                     "Salle de bain privée",

@@ -7,7 +7,7 @@
 //
 //  Source des données : data/content.json
 //  Régénérer          : php tools/build.php
-//  Généré le          : 19/09/2026 à 22:11
+//  Généré le          : 19/09/2026 à 22:12
 // ═══════════════════════════════════════════════════════════════
 
 const CONFIG = {
@@ -188,7 +188,7 @@ const CONFIG = {
                 "tag": "La plus grande",
                 "area": "30 m²",
                 "desc": "La plus spacieuse de la maison, avec sa terrasse privée face à la mer. Climatisée, elle accueille confortablement trois personnes.",
-                "price": "250.000Ar",
+                "price": "À partir de 56 € la nuit",
                 "amenities": [
                     "Climatisation",
                     "Terrasse privée",
@@ -297,7 +297,7 @@ const CONFIG = {
                 "tag": "Pour trois",
                 "area": "18 m²",
                 "desc": "Une chambre pour trois avec sa terrasse et son balcon, pour prendre le petit-déjeuner dehors sans croiser personne.",
-                "price": "250.000Ar",
+                "price": "À partir de 43 € la nuit",
                 "amenities": [
                     "Terrasse privée",
                     "Balcon",
@@ -405,7 +405,7 @@ const CONFIG = {
                 "tag": "Avec baignoire",
                 "area": "16 m²",
                 "desc": "Ouverte sur le jardin et la cour intérieure, la seule chambre équipée d'une baignoire. Calme toute la journée.",
-                "price": "250.000Ar",
+                "price": "À partir de 44 € la nuit",
                 "amenities": [
                     "Baignoire",
                     "Vue jardin",
@@ -513,7 +513,7 @@ const CONFIG = {
                 "tag": "Climatisée",
                 "area": "14 m²",
                 "desc": "Compacte et climatisée, avec terrasse privée et balcon. Le bon compromis pour deux.",
-                "price": "250.000Ar",
+                "price": "À partir de 44 € la nuit",
                 "amenities": [
                     "Climatisation",
                     "Terrasse privée",
@@ -608,7 +608,7 @@ const CONFIG = {
                 "tag": "L'essentiel",
                 "area": "13 m²",
                 "desc": "La plus simple : un lit, une salle de bain à soi, et la plage à deux pas. C'est souvent tout ce qu'il faut.",
-                "price": "250.000Ar",
+                "price": "À partir de 24 € la nuit",
                 "amenities": [
                     "Salle de bain privée",
                     "Entrée indépendante"
