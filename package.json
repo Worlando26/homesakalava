@@ -6,12 +6,15 @@
     "license": "UNLICENSED",
     "type": "commonjs",
     "scripts": {
+        "admin": "php tools/create-admin.php",
         "build": "php tools/build.php",
+        "package": "php tools/package.php",
+        "serve": "php -S localhost:8000",
+        "sync:icons": "node tools/sync-lucide-icons.js",
         "test": "node tools/smoke-test.js .",
         "test:admin": "php tools/test-admin.php",
-        "package": "php tools/package.php",
-        "admin": "php tools/create-admin.php",
-        "serve": "php -S localhost:8000"
+        "test:cdn": "node tools/check-cdn.js",
+        "test:pages": "node tools/smoke-test.js . index.html && node tools/smoke-test.js . chambres.html && node tools/smoke-test.js . activites.html && node tools/smoke-test.js . acces.html"
     },
     "engines": {
         "node": ">=18"

@@ -165,11 +165,17 @@ const origWarn = console.warn;
 console.warn = (...a) => warnings.push(a.join(' '));
 
 try {
-  const cfg = fs.readFileSync(path.join(ROOT, 'config.js'), 'utf8');
+  // Le config.js chargé est celui que la page désigne vraiment, résolu
+  // depuis son propre dossier. Charger celui de la racine reviendrait à
+  // tester toutes les langues avec le contenu français.
+  const cfgRef = (html.match(/<script[^>]+src="([^"]*config\.js)"/) || [])[1] || 'config.js';
+  const cfgPath = path.resolve(path.dirname(path.join(ROOT, PAGE)), cfgRef);
+
+  const cfg = fs.readFileSync(cfgPath, 'utf8');
   const rnd = fs.readFileSync(path.join(ROOT, 'js/render.js'), 'utf8');
   const rms = fs.readFileSync(path.join(ROOT, 'js/rooms.js'), 'utf8');
   // eslint-disable-next-line no-eval
-  eval(cfg + '\n' + rnd + '\n' + rms + '\nrenderAll();');
+  eval(cfg + '\n' + rnd + '\n' + rms + '\nrenderAll();\nglobalThis.__CONFIG = CONFIG;');
 } catch (e) {
   console.warn = origWarn;
   console.error('ÉCHEC DU RENDU :', e.message);
@@ -242,6 +248,53 @@ if (mute) problems.push(`${mute} lien(s) sans intitulé lisible (ni texte, ni ar
 let untyped = 0;
 tree.querySelectorAll('BUTTON').forEach(b => { if (!b.attrs.type) untyped++; });
 if (untyped) problems.push(`${untyped} bouton(s) sans attribut type`);
+
+// 8. Chaque fichier local référencé doit exister, résolu depuis le dossier
+//    de la page. C'est ce qui attrape une page de langue qui pointerait sur
+//    un fichier de la racine, ou un chemin relatif oublié.
+const pageDir = path.dirname(path.join(ROOT, PAGE));
+const refs = [
+  ...[...html.matchAll(/\ssrc="([^"]+)"/g)].map(m => m[1]),
+  ...[...html.matchAll(/\shref="([^"]+)"/g)].map(m => m[1]),
+];
+const manquants = new Set();
+refs.forEach(ref => {
+  if (/^(https?:|mailto:|tel:|data:|#)/.test(ref)) return;
+  const cible = path.resolve(pageDir, ref.split('#')[0].split('?')[0]);
+  if (!fs.existsSync(cible)) manquants.add(ref);
+});
+manquants.forEach(r => problems.push(`Fichier référencé introuvable : ${r}`));
+
+// 9. La page doit charger le config.js de SON dossier : chaque langue a le
+//    sien. Un préfixe de chemin ici afficherait le site en français partout.
+const cfgSrc = (html.match(/<script[^>]+src="([^"]*config\.js)"/) || [])[1];
+if (cfgSrc && cfgSrc !== 'config.js') {
+  problems.push(`config.js chargé depuis « ${cfgSrc} » au lieu du dossier de la page`);
+}
+
+// 10. La langue déclarée par <html lang> doit être celle du contenu chargé.
+const htmlLang = (html.match(/<html lang="([^"]+)"/) || [])[1];
+const cfgCharge = globalThis.__CONFIG;
+if (htmlLang && cfgCharge && cfgCharge.lang && htmlLang !== cfgCharge.lang) {
+  problems.push(`<html lang="${htmlLang}"> mais le contenu chargé est en « ${cfgCharge.lang} »`);
+}
+
+// 11. Les icônes demandées à Lucide doivent porter un nom connu.
+//     Une icône mal nommée ne lève aucune erreur : elle laisse juste un vide.
+const iconNames = new Set(
+  [...html.matchAll(/data-lucide="([^"]+)"/g)].map(m => m[1])
+);
+tree.querySelectorAll('I').forEach(n => {
+  if (n.attrs['data-lucide']) iconNames.add(n.attrs['data-lucide']);
+});
+const iconFile = path.join(ROOT, 'data', 'lucide-icons.txt');
+if (fs.existsSync(iconFile)) {
+  const connues = new Set(
+    fs.readFileSync(iconFile, 'utf8').split(/\r?\n/).map(s => s.trim()).filter(Boolean)
+  );
+  const inconnues = [...iconNames].filter(n => !connues.has(n));
+  inconnues.forEach(n => problems.push(`Icône inconnue de Lucide : « ${n} »`));
+}
 
 console.log(`Titres : ${headings.map(h => 'h' + h.level).join(' ')}`);
 

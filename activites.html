@@ -95,8 +95,11 @@
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
-  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.454.0/umd/lucide.min.js"></script>
+  <!-- Lucide n'est pas hébergé par cdnjs : jsDelivr le sert depuis npm. -->
+  <script defer src="https://cdn.jsdelivr.net/npm/lucide@0.454.0/dist/umd/lucide.min.js"></script>
 
+  <!-- config.js n'est PAS préfixé : chaque langue a le sien, dans son
+       propre dossier. Le préfixer ferait charger le français partout. -->
   <script defer src="config.js"></script>
   <script defer src="js/render.js"></script>
   <script defer src="js/rooms.js"></script>
