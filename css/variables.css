@@ -26,5 +26,5 @@
   --maxw: 1200px;
   --gap:  clamp(16px, 3vw, 40px);
   --section-py: clamp(64px, 9vw, 120px);
-  --nav-h: 72px;
+  --nav-h: 88px;
 }

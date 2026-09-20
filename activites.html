@@ -72,21 +72,35 @@
 
   <a class="skip-link" href="#contenu" data-t="skip">Aller au contenu</a>
 
+  <!-- Barre de navigation en trois colonnes, disposition courante des
+       sites hôteliers : liens à gauche, nom de la maison au centre,
+       langue et réservation à droite. Le nom reste optiquement centré
+       quelle que soit la longueur des deux côtés. -->
   <nav class="nav nav--solid" data-nav aria-label="Navigation principale">
     <div class="nav__inner container">
-      <a class="nav__logo" data-nav-logo href="index.html"></a>
-      <ul class="nav__links" data-nav-links></ul>
-      <div class="nav__actions">
-        <div class="langsel" role="group" aria-label="Choisir la langue"><a class="langsel__item is-active" href="activites.html" lang="fr" hreflang="fr" data-lang="fr" title="Français" aria-current="true">FR</a><a class="langsel__item" href="en/activites.html" lang="en" hreflang="en" data-lang="en" title="English">EN</a></div>
-        <a class="btn btn--accent btn--pill nav__cta" data-nav-cta href="#booking"></a>
+
+      <div class="nav__side nav__side--left">
         <button class="nav__burger" data-burger type="button"
                 aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="nav-drawer">
           <span></span><span></span><span></span>
         </button>
+        <ul class="nav__links" data-nav-links></ul>
       </div>
+
+      <a class="nav__brand" href="index.html">
+        <span class="nav__brand-name" data-nav-logo></span>
+        <span class="nav__brand-sub" data-nav-sub></span>
+      </a>
+
+      <div class="nav__side nav__side--right">
+        <div class="langsel" role="group" aria-label="Choisir la langue"><a class="langsel__item is-active" href="activites.html" lang="fr" hreflang="fr" data-lang="fr" title="Français" aria-current="true">FR</a><a class="langsel__item" href="en/activites.html" lang="en" hreflang="en" data-lang="en" title="English">EN</a></div>
+        <a class="nav__cta" data-nav-cta href="#booking"></a>
+      </div>
+
     </div>
     <div class="nav__drawer" data-drawer id="nav-drawer">
       <ul data-drawer-links></ul>
+      <a class="nav__drawer-cta" data-drawer-cta href="#booking"></a>
     </div>
   </nav>
 

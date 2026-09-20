@@ -93,40 +93,12 @@
       rgba(0,0,0,.58) 100%);
 }
 
-/* ── TOP BAR ─────────────────────────────────────── */
-.hero__topbar {
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  z-index: 10;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: clamp(18px, 2.8vh, 30px) clamp(20px, 3vw, 44px);
-}
-.hero__brand      { text-align: center; }
-.hero__brand-name {
-  font-family: 'Cormorant Garamond', 'Playfair Display', Georgia, serif;
-  font-size: clamp(14px, 1.8vw, 22px);
-  font-weight: 600;
-  letter-spacing: 0.32em;
-  color: #fff;
-  text-transform: uppercase;
-  line-height: 1.1;
-}
-.hero__brand-sub {
-  font-size: clamp(7px, .85vw, 10px);
-  letter-spacing: 0.26em;
-  color: rgba(255,255,255,.52);
-  text-transform: uppercase;
-  margin-top: 5px;
-}
-.hero__book-btn { padding: 10px 20px 10px 12px; gap: 9px; }
-.hero__book-btn svg { width: 17px; height: 17px; }
-
 /* ── BADGE haut-droite ───────────────────────────── */
 .hero__badge {
   position: absolute;
-  top: clamp(82px, 12vh, 128px);
+  /* Sous la barre de navigation, dont la hauteur est un jeton CSS :
+     si elle change, le badge suit. */
+  top: calc(var(--nav-h) + clamp(14px, 3vh, 36px));
   right: clamp(20px, 3vw, 44px);
   z-index: 10;
   padding: 8px 8px 8px 16px;
@@ -246,7 +218,6 @@
 
 /* ── RESPONSIVE HERO ─────────────────────────────── */
 @media (max-width: 767px) {
-  .hero__brand, .hero__more-btn,
   .hero__badge, .hero__scroll-hint { display: none; }
   .hero__bottombar {
     grid-template-columns: 1fr;
@@ -257,7 +228,6 @@
   .hero__headline { bottom: calc(clamp(72px, 13vh, 110px) + 20px); }
 }
 @media (min-width: 768px) and (max-width: 1023px) {
-  .hero__brand-name { font-size: 15px; }
   .hero__headline-title { font-size: clamp(56px, 9vw, 90px); }
   .hero__bottombar { grid-template-columns: 1fr 1.8fr 1fr; }
 }
@@ -1097,21 +1067,6 @@
 }
 
 @media (max-width: 639px) {
-  /* Le nom de la maison ne doit jamais disparaitre sur mobile : la barre du
-     haut est masquee a cette largeur, on le reaffiche donc au-dessus du
-     titre du hero. */
-  .hero__headline-sub::before {
-    content: attr(data-brand);
-    display: block;
-    font-family: 'Cormorant Garamond', Georgia, serif;
-    font-size: 15px;
-    font-weight: 600;
-    letter-spacing: 0.26em;
-    text-transform: uppercase;
-    color: #fff;
-    margin-bottom: 8px;
-  }
-
   .reputation__bar {
     grid-template-columns: 1fr auto;
     gap: 4px 12px;

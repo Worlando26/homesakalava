@@ -126,7 +126,9 @@ function supportsWebp() {
 function renderNav() {
   const { brand, nav } = CONFIG;
 
-  document.querySelector('[data-nav-logo]').textContent = brand.logoText;
+  // Le nom complet, et non le nom court : c est lui qui ancre la page.
+  setText('[data-nav-logo]', brand.name || brand.logoText);
+  setText('[data-nav-sub]', CONFIG.hero ? CONFIG.hero.logoSub : '');
 
   const navLinks  = document.querySelector('[data-nav-links]');
   const drawLinks = document.querySelector('[data-drawer-links]');
@@ -148,9 +150,11 @@ function renderNav() {
     });
   });
 
-  const cta = document.querySelector('[data-nav-cta]');
-  cta.textContent = nav.cta.label;
-  cta.href        = nav.cta.href;
+  // Le meme appel a l action sert la barre et le tiroir mobile.
+  document.querySelectorAll('[data-nav-cta], [data-drawer-cta]').forEach(a => {
+    a.textContent = nav.cta.label;
+    a.href        = nav.cta.href;
+  });
 }
 
 // ─── Hero ─────────────────────────────────────────────────
@@ -163,17 +167,14 @@ function renderHero() {
   const picture = makePicture(hero.image, 'hero__pic');
   if (picture) wrap.appendChild(picture);
 
-  document.querySelector('[data-hero-logo]').textContent     = hero.logoName;
-  document.querySelector('[data-hero-logo-sub]').textContent = hero.logoSub;
-  document.querySelector('[data-hero-cta]').textContent      = hero.bookLabel;
-  document.querySelector('[data-hero-badge]').textContent    = hero.badge;
-  document.querySelector('[data-hero-scroll-hint]').textContent = hero.scrollHint;
-
-  document.querySelector('[data-hero-headline-title]').textContent = hero.headlineTitle;
-  document.querySelector('[data-hero-headline-sub]').textContent   = hero.headlineSub;
-
-  document.querySelector('[data-hero-prev-name]').textContent = hero.prevRoom;
-  document.querySelector('[data-hero-next-name]').textContent = hero.nextRoom;
+  // Le nom de la maison vit desormais dans la barre de navigation : les
+  // hooks correspondants n existent plus ici, d ou l ecriture tolerante.
+  setText('[data-hero-badge]', hero.badge);
+  setText('[data-hero-scroll-hint]', hero.scrollHint);
+  setText('[data-hero-headline-title]', hero.headlineTitle);
+  setText('[data-hero-headline-sub]', hero.headlineSub);
+  setText('[data-hero-prev-name]', hero.prevRoom);
+  setText('[data-hero-next-name]', hero.nextRoom);
 
   // Repli mobile : le nom de la maison doit rester lisible même quand la
   // barre du haut est masquée (voir css/sections.css, media query 767px).
@@ -181,7 +182,8 @@ function renderHero() {
   if (fallback && brand && brand.name) fallback.setAttribute('data-brand', brand.name);
 
   const featuresEl = document.querySelector('[data-hero-features]');
-  hero.features.forEach((feat, i) => {
+  if (!featuresEl) return;
+  (hero.features || []).forEach((feat, i) => {
     if (i > 0) featuresEl.appendChild(el('div', 'hero__feature-sep'));
     const item = el('div', 'hero__feature');
     item.appendChild(icon(feat.icon));

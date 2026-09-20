@@ -9,12 +9,20 @@
   let lenis = null;
 
   // ─── Helper scroll fluide (utilisé partout) ───────────────
+  // Hauteur reelle de la barre, lue dans le CSS : elle a change une fois,
+  // elle rechangera. Un nombre ecrit en dur finirait par mentir.
+  function hauteurBarre() {
+    const v = getComputedStyle(document.documentElement).getPropertyValue('--nav-h');
+    return parseInt(v, 10) || 88;
+  }
+
   function smoothScrollTo(target) {
     if (!target) return;
+    const decalage = hauteurBarre() + 8;
     if (lenis) {
-      lenis.scrollTo(target, { offset: -72, duration: 1.4 });
+      lenis.scrollTo(target, { offset: -decalage, duration: 1.4 });
     } else {
-      window.scrollTo({ top: target.offsetTop - 72, behavior: 'smooth' });
+      window.scrollTo({ top: target.offsetTop - decalage, behavior: 'smooth' });
     }
   }
 

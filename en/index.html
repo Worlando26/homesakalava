@@ -152,21 +152,35 @@
 
   <a class="skip-link" href="#contenu" data-t="skip">Skip to content</a>
 
+  <!-- Barre de navigation en trois colonnes, disposition courante des
+       sites hôteliers : liens à gauche, nom de la maison au centre,
+       langue et réservation à droite. Le nom reste optiquement centré
+       quelle que soit la longueur des deux côtés. -->
   <nav class="nav" data-nav aria-label="Navigation principale">
     <div class="nav__inner container">
-      <a class="nav__logo" data-nav-logo href="../index.html"></a>
-      <ul class="nav__links" data-nav-links></ul>
-      <div class="nav__actions">
-        <div class="langsel" role="group" aria-label="Choose a language"><a class="langsel__item" href="../index.html" lang="fr" hreflang="fr" data-lang="fr" title="Français">FR</a><a class="langsel__item is-active" href="../en/index.html" lang="en" hreflang="en" data-lang="en" title="English" aria-current="true">EN</a></div>
-        <a class="btn btn--accent btn--pill nav__cta" data-nav-cta href="#booking"></a>
+
+      <div class="nav__side nav__side--left">
         <button class="nav__burger" data-burger type="button"
                 aria-label="Open menu" aria-expanded="false" aria-controls="nav-drawer">
           <span></span><span></span><span></span>
         </button>
+        <ul class="nav__links" data-nav-links></ul>
       </div>
+
+      <a class="nav__brand" href="../index.html">
+        <span class="nav__brand-name" data-nav-logo></span>
+        <span class="nav__brand-sub" data-nav-sub></span>
+      </a>
+
+      <div class="nav__side nav__side--right">
+        <div class="langsel" role="group" aria-label="Choose a language"><a class="langsel__item" href="../index.html" lang="fr" hreflang="fr" data-lang="fr" title="Français">FR</a><a class="langsel__item is-active" href="../en/index.html" lang="en" hreflang="en" data-lang="en" title="English" aria-current="true">EN</a></div>
+        <a class="nav__cta" data-nav-cta href="#booking"></a>
+      </div>
+
     </div>
     <div class="nav__drawer" data-drawer id="nav-drawer">
       <ul data-drawer-links></ul>
+      <a class="nav__drawer-cta" data-drawer-cta href="#booking"></a>
     </div>
   </nav>
 
@@ -178,20 +192,12 @@
     <div class="hero__img-wrap" data-hero-img></div>
     <div class="hero__overlay"></div>
 
-    <header class="hero__topbar">
-      <button class="glass-pill hero__book-btn" data-hero-book type="button">
-        <i data-lucide="mail" aria-hidden="true"></i>
-        <span data-hero-cta></span>
-      </button>
-      <div class="hero__brand">
-        <div class="hero__brand-name" data-hero-logo></div>
-        <div class="hero__brand-sub"  data-hero-logo-sub></div>
-      </div>
-      <a class="glass-circle hero__more-btn" href="acces.html"
-         aria-label="Getting here &amp; contact" data-t-aria="accessTitle">
-        <i data-lucide="map-pin" aria-hidden="true"></i>
-      </a>
-    </header>
+    <!-- Le hero portait autrefois sa propre barre, avec le nom de la
+         maison et un bouton de réservation. Elle faisait doublon avec
+         la barre de navigation, qui devait être masquée pour éviter la
+         superposition : on ne pouvait donc pas naviguer depuis le haut
+         de la page. Une seule barre, transparente ici puis opaque au
+         défilement, comme sur les sites hôteliers. -->
 
     <div class="glass-pill hero__badge">
       <span data-hero-badge></span>

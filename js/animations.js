@@ -10,14 +10,13 @@ const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)
 // ─── A. HERO INTRO — révélation fluide ──────────────────────
 function animateHeroIntro() {
   const heroImg   = document.querySelector('.hero__img-wrap img');
-  const topbar    = document.querySelector('.hero__topbar');
   const badge     = document.querySelector('.hero__badge');
   const hint      = document.querySelector('.hero__scroll-hint');
   const headline  = document.querySelector('.hero__headline');
   const bottombar = document.querySelector('.hero__bottombar');
 
   if (prefersReducedMotion) {
-    [topbar, badge, hint, headline, bottombar].forEach(e => {
+    [badge, hint, headline, bottombar].forEach(e => {
       if (e) { e.style.opacity = '1'; e.style.transform = ''; }
     });
     return;
@@ -50,10 +49,6 @@ function animateHeroIntro() {
   }
 
   // Top bar — fondu pur, très doux
-  if (topbar) {
-    gsap.set(topbar, { opacity: 0 });
-    tl.to(topbar, { opacity: 1, duration: 1.1 }, 0.5);
-  }
 
   // Badge — fondu légèrement décalé
   if (badge) {
@@ -96,29 +91,27 @@ function animateHeroIntro() {
   }
 }
 
-// ─── NAV scroll solid ──────────────────────────────────────
-// La nav fixe reste masquée tant que le hero est visible (topbar interne = nav du hero).
-// Elle apparaît uniquement quand l'utilisateur scroll au-delà du hero.
+// ─── NAV : transparente sur le hero, opaque ensuite ────────
+//
+// La barre reste visible en permanence. Elle était auparavant masquée tant
+// que le hero occupait l'écran, parce que le hero portait sa propre barre —
+// avec deux conséquences : on ne pouvait pas naviguer depuis le haut de la
+// page d'accueil, et sur les pages sans hero le déclencheur ne se produisait
+// jamais, laissant la barre invisible et non cliquable.
 function animateNavScroll() {
-  const nav = document.querySelector('.nav');
+  const nav  = document.querySelector('.nav');
+  const hero = document.querySelector('.hero');
   if (!nav) return;
 
-  // Cachée par défaut (le hero a son propre topbar)
-  gsap.set(nav, { opacity: 0, y: -10, pointerEvents: 'none' });
+  // Sans hero, la barre est opaque dès le chargement (classe posée par le
+  // générateur) : il n'y a rien à observer.
+  if (!hero) return;
 
   ScrollTrigger.create({
     trigger: '.hero',
-    start: 'bottom 82%',
-    onEnter: () => {
-      gsap.to(nav, { opacity: 1, y: 0, duration: 0.4, ease: 'power2.out' });
-      nav.style.pointerEvents = '';
-      nav.classList.add('is-solid');
-    },
-    onLeaveBack: () => {
-      gsap.to(nav, { opacity: 0, y: -10, duration: 0.3, ease: 'power2.in' });
-      nav.style.pointerEvents = 'none';
-      nav.classList.remove('is-solid');
-    },
+    start: 'top -80',
+    onEnter:      () => nav.classList.add('is-solid'),
+    onLeaveBack:  () => nav.classList.remove('is-solid'),
   });
 }
 
