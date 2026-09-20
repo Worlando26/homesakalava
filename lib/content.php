@@ -127,7 +127,7 @@ final class SiteBuilder
                     $page,
                     $prefixe,
                     $lang,
-                    $this->buildSeoBlock($page),
+                    $this->buildSeoBlock($page) . $this->i18n->scriptLangue($page),
                     $this->i18n->selecteur($page),
                     $this->i18n->ui()
                 ));

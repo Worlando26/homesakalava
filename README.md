@@ -86,6 +86,25 @@ Ou en ligne de commande, en relançant `php tools/create-admin.php`.
 | **Réglages** | Afficher ou masquer les tarifs, le référencement Google, les couleurs, le mot de passe. |
 | **Diagnostic** | Vérifie que le serveur est bien configuré. À ouvrir après chaque mise en ligne. |
 
+### Les deux langues
+
+Le site existe en **français** (à la racine) et en **anglais** (dossier `en/`).
+
+- Le français est la langue source : c'est lui que vous modifiez dans l'admin.
+- L'anglais vit dans `data/i18n/en.json`. **Quand vous changez un texte en
+  français, pensez à le reporter dans ce fichier**, sinon la version anglaise
+  garde l'ancien texte.
+- Un texte absent du fichier anglais s'affiche en français : le site n'est
+  jamais vide, même si une traduction manque.
+
+Le visiteur arrive dans sa langue : à sa première visite sur la page d'accueil,
+le site suit la langue de son navigateur. S'il choisit une langue dans le
+menu, ce choix est retenu et prime sur tout le reste.
+
+L'allemand et l'italien ont été traduits puis retirés. Les fichiers sont
+conservés dans `data/i18n/desactive/`, avec la marche à suivre pour les
+remettre en ligne.
+
 Chaque enregistrement met le site public à jour **immédiatement**. Vous pouvez
 vérifier en cliquant sur « Voir le site » en haut à droite.
 

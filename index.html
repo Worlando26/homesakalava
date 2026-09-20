@@ -103,7 +103,43 @@
     }
 }
   </script>
+  <script>
+  (function () {
+    var PUBLIEES = ["fr","en"];
+    var COURANTE = "fr";
+    var PAGE     = "index.html";
+    var PREFIXE  = "";
+    var DEFAUT   = "fr";
+    var CLE      = "sakalava_langue";
 
+    function lire()  { try { return localStorage.getItem(CLE); } catch (e) { return null; } }
+    function ecrire(v) { try { localStorage.setItem(CLE, v); } catch (e) {} }
+
+    // Mémorise le choix au moment du clic, avant que la page ne change.
+    document.addEventListener("click", function (e) {
+      var lien = e.target && e.target.closest && e.target.closest("[data-lang]");
+      if (lien) ecrire(lien.getAttribute("data-lang"));
+    }, true);
+
+    var voulue = lire();
+
+    // Langue du navigateur : uniquement sur la page d'accueil, et
+    // seulement à la première visite. Dérouter quelqu'un qui a reçu
+    // un lien direct vers une page précise serait désagréable — et
+    // il a peut-être choisi cette langue en connaissance de cause.
+    if (!voulue && PAGE === "index.html") {
+      var nav = (navigator.languages && navigator.languages[0]) || navigator.language || "";
+      nav = String(nav).toLowerCase().slice(0, 2);
+      if (PUBLIEES.indexOf(nav) !== -1) voulue = nav;
+    }
+
+    if (!voulue || voulue === COURANTE) return;
+    if (PUBLIEES.indexOf(voulue) === -1) return;
+
+    var cible = (voulue === DEFAUT ? PREFIXE : PREFIXE + voulue + "/") + PAGE;
+    location.replace(cible + location.hash);
+  })();
+  </script>
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
   <link rel="manifest" href="site.webmanifest">
@@ -127,7 +163,7 @@
       <a class="nav__logo" data-nav-logo href="index.html"></a>
       <ul class="nav__links" data-nav-links></ul>
       <div class="nav__actions">
-        <div class="langsel" role="group" aria-label="Choisir la langue"><a class="langsel__item is-active" href="index.html" lang="fr" hreflang="fr" title="Français" aria-current="true">FR</a><a class="langsel__item" href="en/index.html" lang="en" hreflang="en" title="English">EN</a><a class="langsel__item" href="de/index.html" lang="de" hreflang="de" title="Deutsch">DE</a><a class="langsel__item" href="it/index.html" lang="it" hreflang="it" title="Italiano">IT</a></div>
+        <div class="langsel" role="group" aria-label="Choisir la langue"><a class="langsel__item is-active" href="index.html" lang="fr" hreflang="fr" data-lang="fr" title="Français" aria-current="true">FR</a><a class="langsel__item" href="en/index.html" lang="en" hreflang="en" data-lang="en" title="English">EN</a></div>
         <a class="btn btn--accent btn--pill nav__cta" data-nav-cta href="#booking"></a>
         <button class="nav__burger" data-burger type="button"
                 aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="nav-drawer">

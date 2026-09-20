@@ -1,6 +1,6 @@
 <?php
 /**
- * lib/i18n.php — Gestion des quatre langues du site.
+ * lib/i18n.php — Gestion des langues du site (français et anglais).
  *
  * Le français est la langue source : il vit dans data/content.json. Les
  * autres langues sont des surcouches dans data/i18n/<langue>.json, qui ne
@@ -9,19 +9,24 @@
  * une traduction manque.
  *
  * Les photos, les couleurs et les coordonnées ne sont pas traduits : ils
- * restent communs aux quatre langues.
+ * restent communs aux deux langues.
  */
 
 declare(strict_types=1);
 
 final class I18n
 {
-    /** Langues publiées, dans l'ordre d'affichage du sélecteur. */
+    /**
+     * Langues publiées, dans l'ordre d'affichage du sélecteur.
+     *
+     * L'allemand et l'italien ont été retirés à la demande du client. Leurs
+     * traductions sont conservées dans data/i18n/desactive/ : les remettre en
+     * ligne consiste à replacer le fichier dans data/i18n/ et à rajouter sa
+     * ligne ici, rien de plus.
+     */
     public const LANGUES = [
         'fr' => ['nom' => 'Français', 'locale' => 'fr_FR', 'court' => 'FR'],
         'en' => ['nom' => 'English',  'locale' => 'en_GB', 'court' => 'EN'],
-        'de' => ['nom' => 'Deutsch',  'locale' => 'de_DE', 'court' => 'DE'],
-        'it' => ['nom' => 'Italiano', 'locale' => 'it_IT', 'court' => 'IT'],
     ];
 
     public const SOURCE = 'fr';
@@ -223,12 +228,77 @@ final class I18n
             $out .= '<a class="langsel__item' . ($actif ? ' is-active' : '') . '"'
                   . ' href="' . htmlspecialchars($href, ENT_QUOTES) . '"'
                   . ' lang="' . $code . '" hreflang="' . $code . '"'
+                  . ' data-lang="' . $code . '"'
                   . ' title="' . htmlspecialchars($info['nom'], ENT_QUOTES) . '"'
                   . ($actif ? ' aria-current="true"' : '')
                   . '>' . $info['court'] . '</a>';
         }
 
         return $out . '</div>';
+    }
+
+    /**
+     * Petit script placé dans l'en-tête, qui ouvre le site dans la langue
+     * du visiteur et retient son choix.
+     *
+     * Trois règles, dans cet ordre :
+     *   1. un choix explicite fait autorité et n'est jamais contredit ;
+     *   2. à défaut, et à la première visite seulement, on suit la langue
+     *      du navigateur ;
+     *   3. si cette langue n'est pas publiée, on ne touche à rien.
+     *
+     * Il est écrit directement dans l'en-tête, avant l'affichage : une
+     * redirection décidée plus tard ferait clignoter la page dans la
+     * mauvaise langue. Il ne dépend d'aucune librairie et échoue en silence
+     * si le navigateur refuse le stockage local (navigation privée).
+     */
+    public function scriptLangue(string $page): string
+    {
+        $fichier = $page . '.html';
+        $langues = json_encode(array_keys(self::LANGUES));
+        $courante = $this->lang;
+        $prefixe  = $this->prefixe();
+        $defaut   = self::SOURCE;
+
+        return <<<JS
+          <script>
+          (function () {
+            var PUBLIEES = {$langues};
+            var COURANTE = "{$courante}";
+            var PAGE     = "{$fichier}";
+            var PREFIXE  = "{$prefixe}";
+            var DEFAUT   = "{$defaut}";
+            var CLE      = "sakalava_langue";
+
+            function lire()  { try { return localStorage.getItem(CLE); } catch (e) { return null; } }
+            function ecrire(v) { try { localStorage.setItem(CLE, v); } catch (e) {} }
+
+            // Mémorise le choix au moment du clic, avant que la page ne change.
+            document.addEventListener("click", function (e) {
+              var lien = e.target && e.target.closest && e.target.closest("[data-lang]");
+              if (lien) ecrire(lien.getAttribute("data-lang"));
+            }, true);
+
+            var voulue = lire();
+
+            // Langue du navigateur : uniquement sur la page d'accueil, et
+            // seulement à la première visite. Dérouter quelqu'un qui a reçu
+            // un lien direct vers une page précise serait désagréable — et
+            // il a peut-être choisi cette langue en connaissance de cause.
+            if (!voulue && PAGE === "index.html") {
+              var nav = (navigator.languages && navigator.languages[0]) || navigator.language || "";
+              nav = String(nav).toLowerCase().slice(0, 2);
+              if (PUBLIEES.indexOf(nav) !== -1) voulue = nav;
+            }
+
+            if (!voulue || voulue === COURANTE) return;
+            if (PUBLIEES.indexOf(voulue) === -1) return;
+
+            var cible = (voulue === DEFAUT ? PREFIXE : PREFIXE + voulue + "/") + PAGE;
+            location.replace(cible + location.hash);
+          })();
+          </script>
+        JS;
     }
 
     /** Liens alternatifs hreflang, pour que Google relie les versions. */

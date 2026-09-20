@@ -1,0 +1,14 @@
+Traductions conservees mais non publiees
+========================================
+
+L allemand et l italien ont ete retires du site a la demande du client.
+Leurs traductions sont completes et restent ici, intactes.
+
+POUR REMETTRE UNE LANGUE EN LIGNE
+1. Deplacez le fichier dans data/i18n/  (un cran au-dessus)
+2. Ouvrez lib/i18n.php et rajoutez sa ligne dans la constante LANGUES :
+       'de' => ['nom' => 'Deutsch',  'locale' => 'de_DE', 'court' => 'DE'],
+       'it' => ['nom' => 'Italiano', 'locale' => 'it_IT', 'court' => 'IT'],
+3. Lancez : php tools/build.php
+
+Le selecteur, le sitemap et les liens hreflang se mettent a jour tout seuls.
