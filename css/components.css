@@ -555,3 +555,136 @@ a.ideal-card__open { text-decoration: none; }
 @media (max-width: 400px) {
   .langsel__item { min-width: 28px; padding: 0 4px; font-size: 10.5px; }
 }
+
+/* ══════════════════════════════════════════════════
+   CARTES CHAMBRE — lisibilite du texte sur la photo
+   ══════════════════════════════════════════════════ */
+
+/* Le corps de la carte contient desormais le nom, le sous-titre, la
+   description, les equipements, le tarif et un lien : il monte bien plus
+   haut qu avant. L ancien degrade s arretait trop bas et le haut du texte
+   se retrouvait sur la photo nue. On le remonte et on le renforce, en
+   gardant une transition douce pour ne pas noircir toute la carte. */
+.ideal-card__overlay {
+  background: linear-gradient(
+    to top,
+    rgba(0,0,0,.90) 0%,
+    rgba(0,0,0,.82) 30%,
+    rgba(0,0,0,.70) 50%,
+    rgba(0,0,0,.52) 66%,
+    rgba(0,0,0,.24) 82%,
+    transparent 100%
+  );
+}
+
+/* Lueur sombre discrete portee par le texte lui-meme : elle rattrape les
+   photos tres claires, ou le degrade seul ne suffit pas. */
+.ideal-card__body {
+  text-shadow: 0 1px 3px rgba(0,0,0,.55);
+}
+.ideal-card__name {
+  text-shadow: 0 1px 4px rgba(0,0,0,.7);
+}
+.ideal-card__loc,
+.ideal-card__desc {
+  /* Ces deux lignes sont attenuees par leur opacite : on compense. */
+  opacity: .92;
+  text-shadow: 0 1px 3px rgba(0,0,0,.65);
+}
+.ideal-card__price {
+  text-shadow: 0 1px 4px rgba(0,0,0,.7);
+}
+
+/* L etiquette en haut de carte est seule sur la photo, sans degrade. */
+.ideal-card__tag {
+  background: rgba(0,0,0,.42);
+  border-color: rgba(255,255,255,.3);
+  text-shadow: 0 1px 2px rgba(0,0,0,.5);
+}
+
+/* ══════════════════════════════════════════════════
+   FLECHES DE DEFILEMENT posees sur le carrousel
+   ══════════════════════════════════════════════════ */
+
+.carousel__stage {
+  position: relative;
+}
+
+.carousel-float {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 3;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--c-surface);
+  border: 1.5px solid var(--c-line);
+  color: var(--c-ink);
+  box-shadow: 0 6px 20px rgba(0,0,0,.18);
+  transition: background .2s, color .2s, opacity .2s, transform .2s;
+}
+.carousel-float--prev { left: -12px; }
+.carousel-float--next { right: -12px; }
+
+.carousel-float svg { width: 24px; height: 24px; }
+
+.carousel-float:hover:not(:disabled) {
+  background: var(--c-accent);
+  border-color: var(--c-accent);
+  color: #fff;
+}
+
+/* Bout de course : la fleche s efface au lieu de disparaitre, pour que le
+   visiteur comprenne qu il est arrive au bout et non que le bouton a bougé. */
+.carousel-float:disabled {
+  opacity: .32;
+  cursor: default;
+  box-shadow: none;
+}
+
+/* La fleche « suivant » attire discretement l oeil tant qu il reste des
+   chambres a decouvrir. Respecte prefers-reduced-motion. */
+@media (prefers-reduced-motion: no-preference) {
+  .carousel-float--next.is-active {
+    animation: fleche-invite 2.6s ease-in-out 1.2s 3;
+  }
+}
+@keyframes fleche-invite {
+  0%, 100%   { transform: translateY(-50%) translateX(0); }
+  45%        { transform: translateY(-50%) translateX(5px); }
+  70%        { transform: translateY(-50%) translateX(0); }
+}
+
+/* Les cartes ne doivent pas passer sous les fleches. */
+.carousel__stage .carousel__viewport {
+  /* Le debordement reste masque : on ajoute juste la place des fleches. */
+  margin-inline: 0;
+}
+
+@media (max-width: 1279px) {
+  /* Plus de place hors du conteneur : on ramene les fleches a l interieur. */
+  .carousel-float--prev { left: 8px; }
+  .carousel-float--next { right: 8px; }
+}
+
+@media (max-width: 639px) {
+  .carousel-float {
+    width: 42px;
+    height: 42px;
+    background: rgba(255,255,255,.92);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+  }
+  .carousel-float svg { width: 21px; height: 21px; }
+  .carousel-float--prev { left: 4px; }
+  .carousel-float--next { right: 4px; }
+
+  /* Sur telephone, les fleches de l en-tete font doublon avec celles
+     posees sur le carrousel : on ne garde que ces dernieres, plus
+     grandes et mieux placees pour le pouce. */
+  .ideal .carousel__arrows { display: none; }
+}

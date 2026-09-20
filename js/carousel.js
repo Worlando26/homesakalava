@@ -5,8 +5,8 @@
 function initCarousel() {
   const viewport = document.querySelector('[data-carousel-viewport]');
   const track    = document.querySelector('[data-carousel-track]');
-  const btnPrev  = document.querySelector('[data-prev]');
-  const btnNext  = document.querySelector('[data-next]');
+  const btnsPrev = Array.from(document.querySelectorAll('[data-prev]'));
+  const btnsNext = Array.from(document.querySelectorAll('[data-next]'));
 
   if (!viewport || !track) return;
 
@@ -60,24 +60,28 @@ function initCarousel() {
   }
 
   function updateArrows() {
-    if (!btnPrev || !btnNext) return;
-    btnPrev.classList.toggle('is-active', currentX < -10);
-    btnNext.classList.toggle('is-active', currentX > getMaxX() + 10);
+    const versLaGauche = currentX < -10;              // on peut revenir en arriere
+    const versLaDroite = currentX > getMaxX() + 10;   // il reste des chambres a droite
+
+    btnsPrev.forEach(b => {
+      b.classList.toggle('is-active', versLaGauche);
+      b.disabled = !versLaGauche;
+    });
+    btnsNext.forEach(b => {
+      b.classList.toggle('is-active', versLaDroite);
+      b.disabled = !versLaDroite;
+    });
   }
 
   // ── Flèches ──────────────────────────────────────────────
-  if (btnPrev) {
-    btnPrev.addEventListener('click', () => {
-      moveTo(currentX + getCardWidth());
-      updateArrows();
-    });
-  }
-  if (btnNext) {
-    btnNext.addEventListener('click', () => {
-      moveTo(currentX - getCardWidth());
-      updateArrows();
-    });
-  }
+  btnsPrev.forEach(b => b.addEventListener('click', () => {
+    moveTo(currentX + getCardWidth());
+    updateArrows();
+  }));
+  btnsNext.forEach(b => b.addEventListener('click', () => {
+    moveTo(currentX - getCardWidth());
+    updateArrows();
+  }));
 
   // ── Drag souris ───────────────────────────────────────────
   viewport.addEventListener('mousedown', e => {

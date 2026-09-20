@@ -1,6 +1,6 @@
 {
     "version": 1,
-    "updated_at": "2026-09-19T22:34:13+02:00",
+    "updated_at": "2026-09-20T18:18:00+02:00",
     "settings": {
         "showPrices": true,
         "priceFallback": "250.000Ar"
@@ -114,66 +114,6 @@
             },
             "original": "storage/originals/images-4-ea73bfbe.jpg",
             "added_at": "2026-09-19T13:30:50+02:00"
-        },
-        "img-2309-1024x683-9050f9b3": {
-            "id": "img-2309-1024x683-9050f9b3",
-            "alt": "Grand bassin bordé de dalles claires, pelouse plantée de cocotiers et plage en arrière-plan",
-            "src": "uploads/img-2309-1024x683-9050f9b3-med.jpg",
-            "webp": "uploads/img-2309-1024x683-9050f9b3-med.webp",
-            "width": 1024,
-            "height": 683,
-            "variants": {
-                "thumb": {
-                    "webp": "uploads/img-2309-1024x683-9050f9b3-thumb.webp",
-                    "fallback": "uploads/img-2309-1024x683-9050f9b3-thumb.jpg",
-                    "w": 320,
-                    "h": 213
-                },
-                "small": {
-                    "webp": "uploads/img-2309-1024x683-9050f9b3-small.webp",
-                    "fallback": "uploads/img-2309-1024x683-9050f9b3-small.jpg",
-                    "w": 640,
-                    "h": 427
-                },
-                "med": {
-                    "webp": "uploads/img-2309-1024x683-9050f9b3-med.webp",
-                    "fallback": "uploads/img-2309-1024x683-9050f9b3-med.jpg",
-                    "w": 1024,
-                    "h": 683
-                }
-            },
-            "original": "storage/originals/img-2309-1024x683-9050f9b3.jpg",
-            "added_at": "2026-09-19T13:55:22+02:00"
-        },
-        "whatsapp-image-2026-08-26-at-23-54-53-00c45911": {
-            "id": "whatsapp-image-2026-08-26-at-23-54-53-00c45911",
-            "alt": "Bassin turquoise bordé d'une terrasse en bois, mur végétalisé et bougainvillées en fleurs",
-            "src": "uploads/whatsapp-image-2026-08-26-at-23-54-53-00c45911-med.jpg",
-            "webp": "uploads/whatsapp-image-2026-08-26-at-23-54-53-00c45911-med.webp",
-            "width": 1280,
-            "height": 1059,
-            "variants": {
-                "thumb": {
-                    "webp": "uploads/whatsapp-image-2026-08-26-at-23-54-53-00c45911-thumb.webp",
-                    "fallback": "uploads/whatsapp-image-2026-08-26-at-23-54-53-00c45911-thumb.jpg",
-                    "w": 320,
-                    "h": 265
-                },
-                "small": {
-                    "webp": "uploads/whatsapp-image-2026-08-26-at-23-54-53-00c45911-small.webp",
-                    "fallback": "uploads/whatsapp-image-2026-08-26-at-23-54-53-00c45911-small.jpg",
-                    "w": 640,
-                    "h": 530
-                },
-                "med": {
-                    "webp": "uploads/whatsapp-image-2026-08-26-at-23-54-53-00c45911-med.webp",
-                    "fallback": "uploads/whatsapp-image-2026-08-26-at-23-54-53-00c45911-med.jpg",
-                    "w": 1280,
-                    "h": 1059
-                }
-            },
-            "original": "storage/originals/whatsapp-image-2026-08-26-at-23-54-53-00c45911.jpg",
-            "added_at": "2026-09-19T13:57:04+02:00"
         },
         "images-3-91832ad7": {
             "id": "images-3-91832ad7",
@@ -744,6 +684,102 @@
             },
             "original": "storage/originals/standard-double-03-2ff56239.png",
             "added_at": "2026-09-19T22:08:40+02:00"
+        },
+        "whatsapp-image-2026-09-18-at-17-22-49-bb3c8a1d": {
+            "id": "whatsapp-image-2026-09-18-at-17-22-49-bb3c8a1d",
+            "alt": "Le jardin et la terrasse",
+            "src": "uploads/whatsapp-image-2026-09-18-at-17-22-49-bb3c8a1d-med.jpg",
+            "webp": "uploads/whatsapp-image-2026-09-18-at-17-22-49-bb3c8a1d-med.webp",
+            "width": 675,
+            "height": 900,
+            "variants": {
+                "thumb": {
+                    "webp": "uploads/whatsapp-image-2026-09-18-at-17-22-49-bb3c8a1d-thumb.webp",
+                    "fallback": "uploads/whatsapp-image-2026-09-18-at-17-22-49-bb3c8a1d-thumb.jpg",
+                    "w": 320,
+                    "h": 427
+                },
+                "small": {
+                    "webp": "uploads/whatsapp-image-2026-09-18-at-17-22-49-bb3c8a1d-small.webp",
+                    "fallback": "uploads/whatsapp-image-2026-09-18-at-17-22-49-bb3c8a1d-small.jpg",
+                    "w": 640,
+                    "h": 853
+                },
+                "med": {
+                    "webp": "uploads/whatsapp-image-2026-09-18-at-17-22-49-bb3c8a1d-med.webp",
+                    "fallback": "uploads/whatsapp-image-2026-09-18-at-17-22-49-bb3c8a1d-med.jpg",
+                    "w": 675,
+                    "h": 900
+                }
+            },
+            "original": "storage/originals/whatsapp-image-2026-09-18-at-17-22-49-bb3c8a1d.jpg",
+            "added_at": "2026-09-20T18:10:47+02:00"
+        },
+        "whatsapp-image-2026-09-18-at-17-18-40-6e359c46": {
+            "id": "whatsapp-image-2026-09-18-at-17-18-40-6e359c46",
+            "alt": "restaurantion",
+            "src": "uploads/whatsapp-image-2026-09-18-at-17-18-40-6e359c46-med.jpg",
+            "webp": "uploads/whatsapp-image-2026-09-18-at-17-18-40-6e359c46-med.webp",
+            "width": 1200,
+            "height": 900,
+            "variants": {
+                "thumb": {
+                    "webp": "uploads/whatsapp-image-2026-09-18-at-17-18-40-6e359c46-thumb.webp",
+                    "fallback": "uploads/whatsapp-image-2026-09-18-at-17-18-40-6e359c46-thumb.jpg",
+                    "w": 320,
+                    "h": 240
+                },
+                "small": {
+                    "webp": "uploads/whatsapp-image-2026-09-18-at-17-18-40-6e359c46-small.webp",
+                    "fallback": "uploads/whatsapp-image-2026-09-18-at-17-18-40-6e359c46-small.jpg",
+                    "w": 640,
+                    "h": 480
+                },
+                "med": {
+                    "webp": "uploads/whatsapp-image-2026-09-18-at-17-18-40-6e359c46-med.webp",
+                    "fallback": "uploads/whatsapp-image-2026-09-18-at-17-18-40-6e359c46-med.jpg",
+                    "w": 1200,
+                    "h": 900
+                }
+            },
+            "original": "storage/originals/whatsapp-image-2026-09-18-at-17-18-40-6e359c46.jpg",
+            "added_at": "2026-09-20T18:11:00+02:00"
+        },
+        "whatsapp-image-2026-09-18-at-17-11-16-1-a00e13b5": {
+            "id": "whatsapp-image-2026-09-18-at-17-11-16-1-a00e13b5",
+            "alt": "hero",
+            "src": "uploads/whatsapp-image-2026-09-18-at-17-11-16-1-a00e13b5-large.jpg",
+            "webp": "uploads/whatsapp-image-2026-09-18-at-17-11-16-1-a00e13b5-large.webp",
+            "width": 1600,
+            "height": 1066,
+            "variants": {
+                "thumb": {
+                    "webp": "uploads/whatsapp-image-2026-09-18-at-17-11-16-1-a00e13b5-thumb.webp",
+                    "fallback": "uploads/whatsapp-image-2026-09-18-at-17-11-16-1-a00e13b5-thumb.jpg",
+                    "w": 320,
+                    "h": 213
+                },
+                "small": {
+                    "webp": "uploads/whatsapp-image-2026-09-18-at-17-11-16-1-a00e13b5-small.webp",
+                    "fallback": "uploads/whatsapp-image-2026-09-18-at-17-11-16-1-a00e13b5-small.jpg",
+                    "w": 640,
+                    "h": 426
+                },
+                "med": {
+                    "webp": "uploads/whatsapp-image-2026-09-18-at-17-11-16-1-a00e13b5-med.webp",
+                    "fallback": "uploads/whatsapp-image-2026-09-18-at-17-11-16-1-a00e13b5-med.jpg",
+                    "w": 1280,
+                    "h": 853
+                },
+                "large": {
+                    "webp": "uploads/whatsapp-image-2026-09-18-at-17-11-16-1-a00e13b5-large.webp",
+                    "fallback": "uploads/whatsapp-image-2026-09-18-at-17-11-16-1-a00e13b5-large.jpg",
+                    "w": 1600,
+                    "h": 1066
+                }
+            },
+            "original": "storage/originals/whatsapp-image-2026-09-18-at-17-11-16-1-a00e13b5.jpg",
+            "added_at": "2026-09-20T18:12:24+02:00"
         }
     },
     "nav": {
@@ -771,7 +807,7 @@
         }
     },
     "hero": {
-        "mediaId": "plage-coucher-soleil-59c20778",
+        "mediaId": "whatsapp-image-2026-09-18-at-17-11-16-1-a00e13b5",
         "logoName": "HOME SAKALAVA",
         "logoSub": "NOSY BE · MADAGASCAR",
         "bookLabel": "NOUS ÉCRIRE",
@@ -824,14 +860,14 @@
             {
                 "name": "Le jardin et la terrasse",
                 "meta": "Solarium, parasols, salon commun",
-                "mediaId": "img-2309-1024x683-9050f9b3",
+                "mediaId": "whatsapp-image-2026-09-18-at-17-22-49-bb3c8a1d",
                 "gradient": "linear-gradient(145deg, #2d5a3d 0%, #4a8a5e 100%)",
                 "big": false
             },
             {
                 "name": "Le restaurant",
                 "meta": "Fruits de mer, midi et soir",
-                "mediaId": "whatsapp-image-2026-08-26-at-23-54-53-00c45911",
+                "mediaId": "whatsapp-image-2026-09-18-at-17-18-40-6e359c46",
                 "gradient": "linear-gradient(145deg, #5a1e1e 0%, #aa5050 100%)",
                 "big": false
             }
@@ -1072,7 +1108,7 @@
                 "label": "Les chambres"
             },
             {
-                "mediaId": "",
+                "mediaId": "whatsapp-image-2026-09-18-at-17-22-49-bb3c8a1d",
                 "gradient": "linear-gradient(145deg, #0e3020 0%, #1a5a35 100%)",
                 "label": "Le jardin"
             },
@@ -1092,7 +1128,7 @@
         "kicker": "À table",
         "title": "Le restaurant de la maison",
         "text": "On mange ici midi et soir, dans une salle qui tient autant de la cuisine familiale que du restaurant. Fruits de mer surtout, et quelques plats européens. Les cocktails se prennent dehors.",
-        "mediaId": "",
+        "mediaId": "whatsapp-image-2026-09-18-at-17-18-40-6e359c46",
         "gradient": "linear-gradient(145deg, #5a1e1e 0%, #aa5050 100%)",
         "items": [
             {

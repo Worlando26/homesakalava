@@ -261,8 +261,22 @@
           </button>
         </div>
       </div>
-      <div class="carousel__viewport" data-carousel-viewport>
-        <ul class="carousel__track" data-carousel-track></ul>
+      <!-- Flèches posées sur le carrousel lui-même : celles de
+           l'en-tête passent inaperçues, surtout sur téléphone. -->
+      <div class="carousel__stage">
+        <button class="carousel-float carousel-float--prev" data-prev type="button"
+                aria-label="Chambre précédente" data-t-aria="prevRoom">
+          <i data-lucide="chevron-left" aria-hidden="true"></i>
+        </button>
+
+        <div class="carousel__viewport" data-carousel-viewport>
+          <ul class="carousel__track" data-carousel-track></ul>
+        </div>
+
+        <button class="carousel-float carousel-float--next is-active" data-next type="button"
+                aria-label="Chambre suivante" data-t-aria="nextRoom">
+          <i data-lucide="chevron-right" aria-hidden="true"></i>
+        </button>
       </div>
       <div class="ideal__shared" data-ideal-shared></div>
       <p class="ideal__more">

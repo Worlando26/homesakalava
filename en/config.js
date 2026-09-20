@@ -7,7 +7,7 @@
 //
 //  Source des données : data/content.json
 //  Régénérer          : php tools/build.php
-//  Généré le          : 19/09/2026 à 22:34
+//  Généré le          : 20/09/2026 à 18:18
 // ═══════════════════════════════════════════════════════════════
 
 const CONFIG = {
@@ -51,16 +51,16 @@ const CONFIG = {
     },
     "hero": {
         "image": {
-            "src": "../uploads/plage-coucher-soleil-59c20778-med.jpg",
-            "webp": "../uploads/plage-coucher-soleil-59c20778-med.webp",
+            "src": "../uploads/whatsapp-image-2026-09-18-at-17-11-16-1-a00e13b5-large.jpg",
+            "webp": "../uploads/whatsapp-image-2026-09-18-at-17-11-16-1-a00e13b5-large.webp",
             "srcset": {
-                "webp": "../uploads/plage-coucher-soleil-59c20778-thumb.webp 320w, ../uploads/plage-coucher-soleil-59c20778-small.webp 640w, ../uploads/plage-coucher-soleil-59c20778-med.webp 1200w",
-                "jpg": "../uploads/plage-coucher-soleil-59c20778-thumb.jpg 320w, ../uploads/plage-coucher-soleil-59c20778-small.jpg 640w, ../uploads/plage-coucher-soleil-59c20778-med.jpg 1200w"
+                "webp": "../uploads/whatsapp-image-2026-09-18-at-17-11-16-1-a00e13b5-thumb.webp 320w, ../uploads/whatsapp-image-2026-09-18-at-17-11-16-1-a00e13b5-small.webp 640w, ../uploads/whatsapp-image-2026-09-18-at-17-11-16-1-a00e13b5-med.webp 1280w, ../uploads/whatsapp-image-2026-09-18-at-17-11-16-1-a00e13b5-large.webp 1600w",
+                "jpg": "../uploads/whatsapp-image-2026-09-18-at-17-11-16-1-a00e13b5-thumb.jpg 320w, ../uploads/whatsapp-image-2026-09-18-at-17-11-16-1-a00e13b5-small.jpg 640w, ../uploads/whatsapp-image-2026-09-18-at-17-11-16-1-a00e13b5-med.jpg 1280w, ../uploads/whatsapp-image-2026-09-18-at-17-11-16-1-a00e13b5-large.jpg 1600w"
             },
             "sizes": "100vw",
-            "alt": "Coucher de soleil sur la plage à marée basse, un arbre isolé se reflétant dans l'eau, à quelques pas de Home Sakalava",
-            "width": 1200,
-            "height": 900,
+            "alt": "hero",
+            "width": 1600,
+            "height": 1066,
             "eager": true
         },
         "gradient": "linear-gradient(145deg, #0a1a1a 0%, #1d3f3d 100%)",
@@ -131,16 +131,16 @@ const CONFIG = {
                 "name": "The garden and terrace",
                 "meta": "Sun deck, parasols, shared lounge",
                 "image": {
-                    "src": "../uploads/img-2309-1024x683-9050f9b3-med.jpg",
-                    "webp": "../uploads/img-2309-1024x683-9050f9b3-med.webp",
+                    "src": "../uploads/whatsapp-image-2026-09-18-at-17-22-49-bb3c8a1d-med.jpg",
+                    "webp": "../uploads/whatsapp-image-2026-09-18-at-17-22-49-bb3c8a1d-med.webp",
                     "srcset": {
-                        "webp": "../uploads/img-2309-1024x683-9050f9b3-thumb.webp 320w, ../uploads/img-2309-1024x683-9050f9b3-small.webp 640w, ../uploads/img-2309-1024x683-9050f9b3-med.webp 1024w",
-                        "jpg": "../uploads/img-2309-1024x683-9050f9b3-thumb.jpg 320w, ../uploads/img-2309-1024x683-9050f9b3-small.jpg 640w, ../uploads/img-2309-1024x683-9050f9b3-med.jpg 1024w"
+                        "webp": "../uploads/whatsapp-image-2026-09-18-at-17-22-49-bb3c8a1d-thumb.webp 320w, ../uploads/whatsapp-image-2026-09-18-at-17-22-49-bb3c8a1d-small.webp 640w, ../uploads/whatsapp-image-2026-09-18-at-17-22-49-bb3c8a1d-med.webp 675w",
+                        "jpg": "../uploads/whatsapp-image-2026-09-18-at-17-22-49-bb3c8a1d-thumb.jpg 320w, ../uploads/whatsapp-image-2026-09-18-at-17-22-49-bb3c8a1d-small.jpg 640w, ../uploads/whatsapp-image-2026-09-18-at-17-22-49-bb3c8a1d-med.jpg 675w"
                     },
                     "sizes": "(max-width: 639px) 92vw, (max-width: 1023px) 48vw, 600px",
-                    "alt": "Grand bassin bordé de dalles claires, pelouse plantée de cocotiers et plage en arrière-plan",
-                    "width": 1024,
-                    "height": 683,
+                    "alt": "Le jardin et la terrasse",
+                    "width": 675,
+                    "height": 900,
                     "eager": false
                 },
                 "gradient": "linear-gradient(145deg, #2d5a3d 0%, #4a8a5e 100%)",
@@ -150,16 +150,16 @@ const CONFIG = {
                 "name": "The restaurant",
                 "meta": "Seafood, lunch and dinner",
                 "image": {
-                    "src": "../uploads/whatsapp-image-2026-08-26-at-23-54-53-00c45911-med.jpg",
-                    "webp": "../uploads/whatsapp-image-2026-08-26-at-23-54-53-00c45911-med.webp",
+                    "src": "../uploads/whatsapp-image-2026-09-18-at-17-18-40-6e359c46-med.jpg",
+                    "webp": "../uploads/whatsapp-image-2026-09-18-at-17-18-40-6e359c46-med.webp",
                     "srcset": {
-                        "webp": "../uploads/whatsapp-image-2026-08-26-at-23-54-53-00c45911-thumb.webp 320w, ../uploads/whatsapp-image-2026-08-26-at-23-54-53-00c45911-small.webp 640w, ../uploads/whatsapp-image-2026-08-26-at-23-54-53-00c45911-med.webp 1280w",
-                        "jpg": "../uploads/whatsapp-image-2026-08-26-at-23-54-53-00c45911-thumb.jpg 320w, ../uploads/whatsapp-image-2026-08-26-at-23-54-53-00c45911-small.jpg 640w, ../uploads/whatsapp-image-2026-08-26-at-23-54-53-00c45911-med.jpg 1280w"
+                        "webp": "../uploads/whatsapp-image-2026-09-18-at-17-18-40-6e359c46-thumb.webp 320w, ../uploads/whatsapp-image-2026-09-18-at-17-18-40-6e359c46-small.webp 640w, ../uploads/whatsapp-image-2026-09-18-at-17-18-40-6e359c46-med.webp 1200w",
+                        "jpg": "../uploads/whatsapp-image-2026-09-18-at-17-18-40-6e359c46-thumb.jpg 320w, ../uploads/whatsapp-image-2026-09-18-at-17-18-40-6e359c46-small.jpg 640w, ../uploads/whatsapp-image-2026-09-18-at-17-18-40-6e359c46-med.jpg 1200w"
                     },
                     "sizes": "(max-width: 639px) 92vw, (max-width: 1023px) 48vw, 600px",
-                    "alt": "Bassin turquoise bordé d'une terrasse en bois, mur végétalisé et bougainvillées en fleurs",
-                    "width": 1280,
-                    "height": 1059,
+                    "alt": "restaurantion",
+                    "width": 1200,
+                    "height": 900,
                     "eager": false
                 },
                 "gradient": "linear-gradient(145deg, #5a1e1e 0%, #aa5050 100%)",
@@ -734,7 +734,19 @@ const CONFIG = {
                 "label": "The rooms"
             },
             {
-                "image": null,
+                "image": {
+                    "src": "../uploads/whatsapp-image-2026-09-18-at-17-22-49-bb3c8a1d-med.jpg",
+                    "webp": "../uploads/whatsapp-image-2026-09-18-at-17-22-49-bb3c8a1d-med.webp",
+                    "srcset": {
+                        "webp": "../uploads/whatsapp-image-2026-09-18-at-17-22-49-bb3c8a1d-thumb.webp 320w, ../uploads/whatsapp-image-2026-09-18-at-17-22-49-bb3c8a1d-small.webp 640w, ../uploads/whatsapp-image-2026-09-18-at-17-22-49-bb3c8a1d-med.webp 675w",
+                        "jpg": "../uploads/whatsapp-image-2026-09-18-at-17-22-49-bb3c8a1d-thumb.jpg 320w, ../uploads/whatsapp-image-2026-09-18-at-17-22-49-bb3c8a1d-small.jpg 640w, ../uploads/whatsapp-image-2026-09-18-at-17-22-49-bb3c8a1d-med.jpg 675w"
+                    },
+                    "sizes": "(max-width: 639px) 45vw, 220px",
+                    "alt": "Le jardin et la terrasse",
+                    "width": 675,
+                    "height": 900,
+                    "eager": false
+                },
                 "gradient": "linear-gradient(145deg, #0e3020 0%, #1a5a35 100%)",
                 "label": "The garden"
             },
@@ -766,7 +778,19 @@ const CONFIG = {
         "kicker": "At the table",
         "title": "The house restaurant",
         "text": "We eat here at lunch and dinner, in a room that is as much a family kitchen as a restaurant. Seafood above all, and a few European dishes. Cocktails are taken outside.",
-        "image": null,
+        "image": {
+            "src": "../uploads/whatsapp-image-2026-09-18-at-17-18-40-6e359c46-med.jpg",
+            "webp": "../uploads/whatsapp-image-2026-09-18-at-17-18-40-6e359c46-med.webp",
+            "srcset": {
+                "webp": "../uploads/whatsapp-image-2026-09-18-at-17-18-40-6e359c46-thumb.webp 320w, ../uploads/whatsapp-image-2026-09-18-at-17-18-40-6e359c46-small.webp 640w, ../uploads/whatsapp-image-2026-09-18-at-17-18-40-6e359c46-med.webp 1200w",
+                "jpg": "../uploads/whatsapp-image-2026-09-18-at-17-18-40-6e359c46-thumb.jpg 320w, ../uploads/whatsapp-image-2026-09-18-at-17-18-40-6e359c46-small.jpg 640w, ../uploads/whatsapp-image-2026-09-18-at-17-18-40-6e359c46-med.jpg 1200w"
+            },
+            "sizes": "(max-width: 639px) 92vw, (max-width: 1023px) 48vw, 600px",
+            "alt": "restaurantion",
+            "width": 1200,
+            "height": 900,
+            "eager": false
+        },
         "gradient": "linear-gradient(145deg, #5a1e1e 0%, #aa5050 100%)",
         "items": [
             {
