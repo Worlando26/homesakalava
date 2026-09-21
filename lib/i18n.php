@@ -83,20 +83,26 @@ final class I18n
             'formRoomType'  => 'Chambre souhaitée',
             'formGuests'    => 'Voyageurs',
             'formMessage'   => 'Votre message',
-            'formSubmit'    => 'Préparer ma demande',
+            'formSubmit'    => 'Envoyer ma demande',
             'formSelect'    => '— Sélectionner —',
             'guest'         => 'voyageur',
             'guests'        => 'voyageurs',
             'formError'     => 'Merci de compléter les champs obligatoires.',
-            'formNote'      => "Ce bouton ouvre votre messagerie avec le message déjà rédigé. "
-                             . "Rien n'est envoyé automatiquement, vous relisez avant.",
+            'formNote'      => "Votre demande nous est envoyée directement. Vous recevez "
+                             . "une confirmation par e-mail dans la foulée.",
             'formNoEmail'   => "L'adresse e-mail de la maison n'est pas encore en ligne. "
                              . "En attendant, écrivez-nous sur Facebook :",
             'formFbLink'    => 'Ouvrir la page Facebook',
-            'formSuccessTitle' => 'Votre message est prêt',
-            'formSuccessText'  => "Votre messagerie vient de s'ouvrir avec la demande pré-remplie. "
-                                . "Relisez-la et envoyez-la — nous répondons sous quelques jours.",
-            'formReset'     => 'Recommencer',
+            'formSuccessTitle' => 'Demande envoyée',
+            'formSuccessText'  => "Merci. Nous avons bien reçu votre demande et vous répondons "
+                                . "sous deux jours. Une confirmation vient de vous être envoyée.",
+            'formReset'     => 'Envoyer une autre demande',
+            'formSending'   => 'Envoi en cours…',
+            'formOffline'   => "La connexion a été interrompue. Vérifiez votre réseau et réessayez.",
+            'formRequired'  => 'Ce champ est obligatoire.',
+            'formBadEmail'  => "Cette adresse e-mail ne semble pas valide.",
+            'formBadDates'  => "Le départ doit être après l'arrivée.",
+            'formPastDate'  => "Cette date est déjà passée.",
             'phFirstName'   => 'Prénom',
             'phLastName'    => 'Nom',
             'phEmail'       => 'vous@exemple.com',

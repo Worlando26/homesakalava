@@ -510,9 +510,20 @@ final class SiteBuilder
             'intro'    => $b['intro']    ?? '',
             'infoCard' => array_values(array_filter($infoCard, fn($r) => $r['value'] !== '')),
             'rooms'    => array_map(fn(array $r) => $r['name'] ?? '', $this->activeRooms()),
-            // Destination réelle du formulaire. Tant que l'e-mail n'est pas
-            // renseigné, le site bascule sur Facebook et le dit clairement.
-            'mailto'   => $this->contactEmail(),
+
+            /**
+             * Destination du formulaire. Le point d'entrée est à la racine :
+             * les pages anglaises, qui vivent dans en/, doivent le préfixer.
+             */
+            'endpoint' => $this->i18n->prefixe() . 'contact.php',
+            'lang'     => $this->i18n->lang(),
+
+            /**
+             * Le formulaire n'est proposé que s'il peut réellement aboutir :
+             * adresse de réception renseignée, et SMTP configuré hors mode
+             * test. Sinon le site le dit et renvoie vers Facebook.
+             */
+            'actif'    => Config::formulaireActif(),
             'facebook' => $k['facebook'] ?? '',
             'labels'   => [
                 'firstName' => $this->t('formFirstName'),
@@ -531,6 +542,18 @@ final class SiteBuilder
                 'successTitle' => $this->t('formSuccessTitle'),
                 'successText'  => $this->t('formSuccessText'),
                 'resetBtn'     => $this->t('formReset'),
+
+                // Messages de validation et d'état, affichés sans recharger.
+                'error'    => $this->t('formError'),
+                'sending'  => $this->t('formSending'),
+                'offline'  => $this->t('formOffline'),
+                'required' => $this->t('formRequired'),
+                'badEmail' => $this->t('formBadEmail'),
+                'badDates' => $this->t('formBadDates'),
+                'pastDate' => $this->t('formPastDate'),
+                'select'   => $this->t('formSelect'),
+                'guest'    => $this->t('guest'),
+                'guests'   => $this->t('guests'),
                 'ph' => [
                     'firstName' => $this->t('phFirstName'),
                     'lastName'  => $this->t('phLastName'),

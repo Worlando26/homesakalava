@@ -76,6 +76,37 @@ class Node {
   set width(v)   { this.setAttribute('width', v); }
   get height()   { return this.attrs.height ?? ''; }
   set height(v)  { this.setAttribute('height', v); }
+  get name()     { return this.attrs.name ?? ''; }
+  set name(v)    { this.setAttribute('name', v); }
+  get action()   { return this.attrs.action ?? ''; }
+  set action(v)  { this.setAttribute('action', v); }
+  get method()   { return this.attrs.method ?? ''; }
+  set method(v)  { this.setAttribute('method', v); }
+  get value()    { return this.attrs.value ?? ''; }
+  set value(v)   { this.setAttribute('value', v); }
+  get placeholder()  { return this.attrs.placeholder ?? ''; }
+  set placeholder(v) { this.setAttribute('placeholder', v); }
+  get autocomplete()  { return this.attrs.autocomplete ?? ''; }
+  set autocomplete(v) { this.setAttribute('autocomplete', v); }
+  get rows()     { return this.attrs.rows ?? ''; }
+  set rows(v)    { this.setAttribute('rows', v); }
+  get min()      { return this.attrs.min ?? ''; }
+  set min(v)     { this.setAttribute('min', v); }
+  get target()   { return this.attrs.target ?? ''; }
+  set target(v)  { this.setAttribute('target', v); }
+  get rel()      { return this.attrs.rel ?? ''; }
+  set rel(v)     { this.setAttribute('rel', v); }
+  get title()    { return this.attrs.title ?? ''; }
+  set title(v)   { this.setAttribute('title', v); }
+  get tabIndex()  { return this.attrs.tabindex ?? ''; }
+  set tabIndex(v) { this.setAttribute('tabindex', String(v)); }
+  // Propriétés booléennes : présentes ou absentes, jamais « false ».
+  get required()  { return 'required' in this.attrs; }
+  set required(v) { v ? this.setAttribute('required', '') : delete this.attrs.required; }
+  get disabled()  { return 'disabled' in this.attrs; }
+  set disabled(v) { v ? this.setAttribute('disabled', '') : delete this.attrs.disabled; }
+  get hidden()    { return 'hidden' in this.attrs; }
+  set hidden(v)   { v ? this.setAttribute('hidden', '') : delete this.attrs.hidden; }
   // Recherche descendante, suffisante pour les sélecteurs utilisés
   querySelector(sel) { return this.querySelectorAll(sel)[0] || null; }
   querySelectorAll(sel) {
@@ -209,9 +240,44 @@ const rendered = tree.textContent;
 ['Talinjoo', 'Fort Dauphin', 'Le Port', 'leporthotel', 'Lorem', 'picsum', 'Marie Dupont']
   .forEach(bad => { if (rendered.includes(bad)) problems.push('Reliquat détecté dans le rendu : ' + bad); });
 
-// 4. Aucun numéro ou e-mail inventé
-const invented = rendered.match(/\+261[\d\sX]+|[a-z0-9._-]+@[a-z0-9.-]+\.[a-z]{2,}/gi) || [];
-invented.filter(v => !v.includes('exemple.com')).forEach(v => problems.push('Coordonnée en dur dans le rendu : ' + v));
+// 4. Aucune coordonnée qui ne vienne du fichier de configuration.
+//
+//    Le but n'est pas d'interdire les coordonnées — elles ont vocation à
+//    s'afficher — mais de garantir qu'aucune n'est écrite en dur quelque
+//    part. Toute adresse ou tout numéro rendu doit se retrouver dans
+//    config/site.php.
+const configBrut = fs.existsSync(path.join(ROOT, 'config/site.php'))
+  ? fs.readFileSync(path.join(ROOT, 'config/site.php'), 'utf8')
+  : '';
+
+/** Compare en ignorant espaces et séparateurs, comme le fait un téléphone. */
+const chiffresSeuls = (s) => s.replace(/\D/g, '');
+
+/**
+ * textContent colle bout à bout les textes voisins : « …67 » suivi de
+ * « E-mail » devient « 67E-mail », ce qui fabrique de faux jetons. Pour
+ * cette analyse on sépare chaque nœud par une espace.
+ */
+function texteEspace(n) {
+  let out = n._text ? n._text + ' ' : '';
+  n.children.forEach(c => { out += texteEspace(c); });
+  return out;
+}
+const rendu = texteEspace(tree) + ' '
+  + tree.querySelectorAll('A').map(a => (a.attrs.href || '')).join(' ');
+
+const emailsRendus = rendu.match(/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}/gi) || [];
+emailsRendus
+  .filter(v => !/exemple\.com|example\.com/i.test(v))
+  .filter(v => !configBrut.toLowerCase().includes(v.toLowerCase()))
+  .forEach(v => problems.push('E-mail absent de config/site.php : ' + v));
+
+const telsRendus = rendu.match(/\+\d[\d\s().\-]{7,}/g) || [];
+const telsConfig = (configBrut.match(/\+\d[\d\s().\-]{7,}/g) || []).map(chiffresSeuls);
+telsRendus
+  .map(chiffresSeuls)
+  .filter(v => v.length >= 8 && !telsConfig.includes(v))
+  .forEach(v => problems.push('Numéro absent de config/site.php : ' + v));
 
 // 5. Hiérarchie des titres : un seul h1, et jamais de niveau saute
 const headings = [];

@@ -946,3 +946,112 @@ a.ideal-card__open { text-decoration: none; }
   .nav__brand-name { font-size: 11.5px; letter-spacing: .14em; text-indent: .14em; }
   .langsel__item   { padding: 0 4px; }
 }
+
+/* ══════════════════════════════════════════════════
+   FORMULAIRE DE DEMANDE — validation et envoi
+   ══════════════════════════════════════════════════ */
+
+/* Piege a robots. Deplace hors de l ecran plutot que display:none :
+   les automates ignorent souvent les champs caches, mais remplissent
+   ceux qui sont simplement invisibles. Aucun lecteur d ecran ne
+   l annonce, il est marque aria-hidden. */
+.booking__hp {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+/* Message d erreur propre a un champ */
+.booking__field-error {
+  margin-top: 6px;
+  font-size: 12.5px;
+  line-height: 1.45;
+  color: #8f2018;
+  font-weight: 500;
+}
+
+.booking__field.has-error .booking__input,
+.booking__field.has-error .booking__select,
+.booking__field.has-error .booking__textarea {
+  border-color: #c0392b;
+  background: #fffafa;
+}
+.booking__field.has-error .booking__label { color: #8f2018; }
+
+/* Message global : erreur par defaut, vert quand tout va bien */
+.booking__error--ok {
+  color: #125c47;
+  background: #e6f4ef;
+  border-color: #b6ddd0;
+}
+
+/* Pendant l envoi : le formulaire reste lisible mais ne repond plus */
+.booking__form.is-sending {
+  opacity: .62;
+  pointer-events: none;
+}
+.booking__form.is-sending .booking__submit-row { pointer-events: auto; }
+
+/* Le bouton indique clairement qu il travaille */
+.booking__submit-row .btn:disabled {
+  opacity: .65;
+  cursor: progress;
+}
+
+/* Le bloc de confirmation prend la place du formulaire */
+.booking__success-title:focus-visible {
+  outline: 2.5px solid var(--c-accent);
+  outline-offset: 4px;
+  border-radius: 6px;
+}
+
+/* ══════════════════════════════════════════════════
+   BOUTON D APPEL FLOTTANT (mobile)
+   ══════════════════════════════════════════════════ */
+
+.joindre {
+  position: fixed;
+  right: 14px;
+  bottom: calc(14px + env(safe-area-inset-bottom));
+  z-index: 90;
+  display: none;            /* affiche uniquement sur petit ecran */
+  flex-direction: column;
+  gap: 10px;
+}
+
+.joindre__btn {
+  width: 54px;
+  height: 54px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  color: #fff;
+  box-shadow: 0 6px 22px rgba(0,0,0,.26);
+  transition: transform .2s ease;
+}
+.joindre__btn svg { width: 26px; height: 26px; }
+
+.joindre__btn--wa  { background: #25d366; }   /* couleur officielle WhatsApp */
+.joindre__btn--tel { background: var(--c-accent); }
+
+@media (hover: hover) {
+  .joindre__btn:hover { transform: scale(1.06); }
+}
+
+/* Sur telephone et petite tablette : la ou l on appelle vraiment. */
+@media (max-width: 899px) {
+  .joindre { display: flex; }
+}
+
+/* Le bouton ne doit pas masquer le pied de page ni la barre
+   d enregistrement : on reserve la place en bas de page. */
+@media (max-width: 899px) {
+  .footer { padding-bottom: 86px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .joindre__btn { transition: none; }
+}

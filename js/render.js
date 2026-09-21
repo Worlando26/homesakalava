@@ -510,6 +510,7 @@ function renderAccess() {
 }
 
 // ─── Demande de réservation ───────────────────────────────
+// ─── Demande de réservation ───────────────────────────────
 function renderBooking() {
   const { booking } = CONFIG;
   const left  = document.querySelector('[data-booking-left]');
@@ -542,9 +543,9 @@ function renderBooking() {
   // ── Colonne droite : formulaire ───────────────────────
   const wrap = el('div', 'booking__form-wrap');
 
-  // Tant que l'adresse e-mail n'est pas renseignée en admin, on le dit
+  // Tant que l'adresse de réception n'est pas configurée, on le dit
   // franchement et on renvoie vers Facebook, qui est connu.
-  if (!booking.mailto) {
+  if (!booking.actif) {
     const notice = el('div', 'booking__notice');
     notice.appendChild(el('p', '', L.noEmail));
     if (booking.facebook) {
@@ -557,8 +558,47 @@ function renderBooking() {
     wrap.appendChild(notice);
   }
 
+  // Le formulaire est un vrai formulaire : sans JavaScript, il se soumet
+  // normalement vers contact.php, qui répond alors une page complète.
   const form = el('form', 'booking__form');
+  form.method = 'post';
+  form.action = booking.endpoint || 'contact.php';
   form.setAttribute('novalidate', '');
+  form.setAttribute('accept-charset', 'UTF-8');
+
+  /** Champ caché, transmis tel quel au serveur. */
+  function cache(nom, valeur) {
+    const i = el('input');
+    i.type  = 'hidden';
+    i.name  = nom;
+    i.value = valeur;
+    return i;
+  }
+
+  form.appendChild(cache('lang', booking.lang || 'fr'));
+  // Horodatage d'ouverture : un envoi en moins de trois secondes vient
+  // d'un automate, pas d'un visiteur.
+  form.appendChild(cache('_t', String(Math.floor(Date.now() / 1000))));
+
+  /**
+   * Piège à robots. Invisible à l'écran et retiré du parcours clavier,
+   * mais rempli par les automates qui remplissent tous les champs.
+   * Masqué en CSS plutôt qu'en type="hidden" : les robots ignorent les
+   * champs cachés mais pas ceux qui sont simplement déplacés hors écran.
+   */
+  const piege = el('div', 'booking__hp');
+  piege.setAttribute('aria-hidden', 'true');
+  const piegeInput = el('input');
+  piegeInput.type = 'text';
+  piegeInput.name = 'site_web';
+  piegeInput.tabIndex = -1;
+  piegeInput.autocomplete = 'off';
+  const piegeLabel = el('label', '', 'Ne remplissez pas ce champ');
+  piegeLabel.setAttribute('for', 'bk-hp');
+  piegeInput.id = 'bk-hp';
+  piege.appendChild(piegeLabel);
+  piege.appendChild(piegeInput);
+  form.appendChild(piege);
 
   let fieldIdx = 0;
   function field(labelText, inputEl, fullWidth) {
@@ -567,22 +607,30 @@ function renderBooking() {
     const w   = el('div', 'booking__field' + (fullWidth ? ' booking__field--full' : ''));
     const lbl = el('label', 'booking__label', labelText);
     lbl.setAttribute('for', id);
+    // Emplacement du message d'erreur propre à ce champ.
+    const err = el('p', 'booking__field-error');
+    err.id = id + '-err';
+    err.hidden = true;
     w.appendChild(lbl);
     w.appendChild(inputEl);
+    w.appendChild(err);
+    inputEl.setAttribute('aria-describedby', err.id);
     return w;
   }
 
-  function inp(type, placeholder, required, autocomplete) {
+  function inp(type, name, placeholder, required, autocomplete) {
     const i = el('input', 'booking__input');
     i.type = type;
+    i.name = name;
     if (placeholder)  i.placeholder = placeholder;
-    if (required)     i.required = true;
+    if (required)   { i.required = true; i.setAttribute('aria-required', 'true'); }
     if (autocomplete) i.autocomplete = autocomplete;
     return i;
   }
 
-  function sel(options) {
+  function sel(name, options) {
     const s = el('select', 'booking__select');
+    s.name = name;
     options.forEach(([val, txt]) => {
       const o = el('option', '', txt);
       o.value = val;
@@ -593,63 +641,132 @@ function renderBooking() {
 
   const today = new Date().toISOString().split('T')[0];
 
-  const iFirst = inp('text',  ph.firstName, true, 'given-name');
-  const iLast  = inp('text',  ph.lastName,  true, 'family-name');
-  const iMail  = inp('email', ph.email,     true, 'email');
-  const iPhone = inp('tel',   ph.phone,     false, 'tel');
-  const iIn    = inp('date', '', true);  iIn.min  = today;
-  const iOut   = inp('date', '', true);  iOut.min = today;
+  const iFirst = inp('text',  'prenom',    ph.firstName, true, 'given-name');
+  const iLast  = inp('text',  'nom',       ph.lastName,  true, 'family-name');
+  const iMail  = inp('email', 'email',     ph.email,     true, 'email');
+  const iPhone = inp('tel',   'telephone', ph.phone,     false, 'tel');
+  const iIn    = inp('date',  'arrivee',   '', false);  iIn.min  = today;
+  const iOut   = inp('date',  'depart',    '', false);  iOut.min = today;
 
-  const sRoom = sel([['', T('formSelect', '— Sélectionner —')], ...booking.rooms.map(r => [r, r])]);
-  const sGuests = sel(
-    ['1','2','3','4','5','6'].map(n => [n, n + ' ' + (n === '1' ? T('guest', 'voyageur') : T('guests', 'voyageurs'))])
+  const sRoom = sel('chambre', [['', L.select || '— Sélectionner —'],
+    ...booking.rooms.map(r => [r, r])]);
+  const sGuests = sel('voyageurs',
+    ['1','2','3','4','5','6'].map(n => [n, n + ' ' + (n === '1' ? L.guest : L.guests)])
   );
   const iMsg = el('textarea', 'booking__textarea');
+  iMsg.name = 'message';
   iMsg.placeholder = ph.message;
   iMsg.rows = 4;
 
-  form.appendChild(field(L.firstName, iFirst));
-  form.appendChild(field(L.lastName,  iLast));
-  form.appendChild(field(L.email,     iMail));
-  form.appendChild(field(L.phone,     iPhone));
-  form.appendChild(field(L.checkIn,   iIn));
-  form.appendChild(field(L.checkOut,  iOut));
-  form.appendChild(field(L.roomType,  sRoom));
-  form.appendChild(field(L.guests,    sGuests));
-  form.appendChild(field(L.message,   iMsg, true));
+  const champs = {
+    prenom:    field(L.firstName, iFirst),
+    nom:       field(L.lastName,  iLast),
+    email:     field(L.email,     iMail),
+    telephone: field(L.phone,     iPhone),
+    arrivee:   field(L.checkIn,   iIn),
+    depart:    field(L.checkOut,  iOut),
+    chambre:   field(L.roomType,  sRoom),
+    voyageurs: field(L.guests,    sGuests),
+    message:   field(L.message,   iMsg, true),
+  };
+  Object.values(champs).forEach(f => form.appendChild(f));
 
-  const errorEl = el('p', 'booking__error');
-  errorEl.setAttribute('role', 'alert');
-  errorEl.hidden = true;
-  form.appendChild(errorEl);
+  // Message global, annoncé aux lecteurs d'écran dès qu'il apparaît.
+  const avis = el('p', 'booking__error');
+  avis.setAttribute('role', 'alert');
+  avis.hidden = true;
+  form.appendChild(avis);
 
   const submitRow = el('div', 'booking__submit-row');
   const submitBtn = el('button', 'btn btn--accent btn--pill', L.submit);
   submitBtn.type = 'submit';
-  if (!booking.mailto) submitBtn.disabled = true;
+  if (!booking.actif) submitBtn.disabled = true;
   submitRow.appendChild(submitBtn);
   submitRow.appendChild(el('p', 'booking__note', L.note));
   form.appendChild(submitRow);
 
-  // État « message prêt »
+  // État « demande envoyée »
   const success = el('div', 'booking__success');
   const iconWrap = el('div', 'booking__success-icon');
   iconWrap.innerHTML =
     '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
     '<path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>' +
     '<polyline points="22 4 12 14.01 9 11.01"/></svg>';
+  const successTitre = el('div', 'booking__success-title', L.successTitle);
+  const successTexte = el('p',   'booking__success-text',  L.successText);
   const resetBtn = el('button', 'btn btn--outline btn--pill', L.resetBtn);
   resetBtn.type = 'button';
   success.appendChild(iconWrap);
-  success.appendChild(el('div', 'booking__success-title', L.successTitle));
-  success.appendChild(el('p',   'booking__success-text',  L.successText));
+  success.appendChild(successTitre);
+  success.appendChild(successTexte);
   success.appendChild(resetBtn);
 
   wrap.appendChild(form);
   wrap.appendChild(success);
   right.appendChild(wrap);
 
-  // ── Logique ───────────────────────────────────────────
+  // ── Validation et envoi ───────────────────────────────
+
+  /** Affiche ou efface l'erreur d'un champ. */
+  function marquer(nom, message) {
+    const bloc = champs[nom];
+    if (!bloc) return;
+    const saisie = bloc.querySelector('input, select, textarea');
+    const err    = bloc.querySelector('.booking__field-error');
+    if (!err) return;
+
+    if (message) {
+      bloc.classList.add('has-error');
+      err.textContent = message;
+      err.hidden = false;
+      if (saisie) saisie.setAttribute('aria-invalid', 'true');
+    } else {
+      bloc.classList.remove('has-error');
+      err.textContent = '';
+      err.hidden = true;
+      if (saisie) saisie.removeAttribute('aria-invalid');
+    }
+  }
+
+  function effacerErreurs() {
+    Object.keys(champs).forEach(n => marquer(n, ''));
+    avis.hidden = true;
+  }
+
+  /**
+   * Contrôles côté navigateur. Ils font gagner un aller-retour, mais ne
+   * remplacent jamais ceux du serveur : contact.php revalide tout.
+   */
+  function verifier() {
+    const erreurs = {};
+
+    if (!iFirst.value.trim()) erreurs.prenom = L.required;
+    if (!iLast.value.trim())  erreurs.nom    = L.required;
+
+    const mail = iMail.value.trim();
+    if (!mail) {
+      erreurs.email = L.required;
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(mail)) {
+      erreurs.email = L.badEmail;
+    }
+
+    const auj = new Date(); auj.setHours(0, 0, 0, 0);
+    const din = iIn.value  ? new Date(iIn.value  + 'T00:00:00') : null;
+    const dout = iOut.value ? new Date(iOut.value + 'T00:00:00') : null;
+
+    if (din && din < auj)  erreurs.arrivee = L.pastDate;
+    if (dout && dout < auj) erreurs.depart  = L.pastDate;
+    if (din && dout && dout <= din) erreurs.depart = L.badDates;
+
+    return erreurs;
+  }
+
+  // La correction d'un champ efface son erreur immédiatement.
+  Object.entries(champs).forEach(([nom, bloc]) => {
+    const saisie = bloc.querySelector('input, select, textarea');
+    if (saisie) saisie.addEventListener('input', () => marquer(nom, ''));
+  });
+
   iIn.addEventListener('change', () => {
     if (iIn.value) {
       iOut.min = iIn.value;
@@ -657,66 +774,78 @@ function renderBooking() {
     }
   });
 
-  /**
-   * Le formulaire ne parle à aucun serveur : il compose un e-mail et ouvre
-   * la messagerie du visiteur. Rien n'est stocké, rien n'est envoyé à notre
-   * insu, et la maison n'a pas de boîte de réception à surveiller ailleurs
-   * que dans sa propre messagerie.
-   */
+  function afficherAvis(texte, estErreur) {
+    avis.textContent = texte;
+    avis.classList.toggle('booking__error--ok', !estErreur);
+    avis.hidden = false;
+  }
+
   form.addEventListener('submit', e => {
-    e.preventDefault();
+    if (!booking.actif) { e.preventDefault(); return; }
 
-    if (!booking.mailto) return;
-
-    if (!form.checkValidity()) {
-      errorEl.textContent = T('formError', 'Merci de compléter les champs obligatoires.');
-      errorEl.hidden = false;
-      const firstInvalid = form.querySelector(':invalid');
-      if (firstInvalid) firstInvalid.focus();
+    const erreurs = verifier();
+    if (Object.keys(erreurs).length) {
+      e.preventDefault();
+      effacerErreurs();
+      Object.entries(erreurs).forEach(([nom, msg]) => marquer(nom, msg));
+      afficherAvis(L.error, true);
+      const premier = form.querySelector('.has-error input, .has-error select, .has-error textarea');
+      if (premier) premier.focus();
       return;
     }
-    errorEl.hidden = true;
 
-    // Le message est rédigé dans la langue du visiteur : c'est lui qui le
-    // relit avant de l'envoyer, et les hôtes parlent français et anglais.
-    const nights = [iIn.value, iOut.value].filter(Boolean).join(' → ');
-    const lines = [
-      T('mailGreeting', 'Bonjour Boda et Bakoly,'),
-      '',
-      T('mailIntro', 'Je souhaite réserver une chambre à Home Sakalava.'),
-      '',
-      T('mailName',   'Nom')       + ' : ' + iFirst.value + ' ' + iLast.value,
-      T('mailEmail',  'E-mail')    + ' : ' + iMail.value,
-      T('mailPhone',  'Téléphone') + ' : ' + (iPhone.value || '—'),
-      T('mailDates',  'Dates')     + ' : ' + (nights || '—'),
-      T('mailRoom',   'Chambre')   + ' : ' + (sRoom.value || T('mailAdvise', 'à conseiller')),
-      T('mailGuests', 'Voyageurs') + ' : ' + sGuests.value,
-      '',
-      T('mailMessage', 'Message') + ' :',
-      iMsg.value || '—',
-      '',
-      T('mailThanks', "Merci d'avance,"),
-      iFirst.value + ' ' + iLast.value,
-    ];
+    // Sans fetch, on laisse le formulaire se soumettre normalement :
+    // contact.php répondra une page complète.
+    if (typeof window.fetch !== 'function') return;
 
-    const subject = T('mailSubject', 'Demande de réservation')
-      + ' — ' + (nights || T('mailNoDates', 'dates à définir'));
-    const href = 'mailto:' + booking.mailto
-      + '?subject=' + encodeURIComponent(subject)
-      + '&body='    + encodeURIComponent(lines.join('\n'));
+    e.preventDefault();
+    effacerErreurs();
 
-    window.location.href = href;
+    submitBtn.disabled = true;
+    submitBtn.textContent = L.sending;
+    form.classList.add('is-sending');
 
-    form.style.display = 'none';
-    success.classList.add('is-visible');
-    if (typeof gsap !== 'undefined') {
-      gsap.fromTo(success, { y: 24, opacity: 0 }, { y: 0, opacity: 1, duration: 0.7, ease: 'power2.out' });
-    }
+    fetch(form.action, {
+      method: 'POST',
+      body: new FormData(form),
+      headers: { 'Accept': 'application/json', 'X-Requested-With': 'fetch' },
+    })
+      .then(r => r.json().then(j => ({ status: r.status, body: j })))
+      .then(({ body }) => {
+        if (body && body.ok) {
+          form.hidden = true;
+          success.classList.add('is-visible');
+          successTexte.textContent = body.message || L.successText;
+          if (typeof gsap !== 'undefined') {
+            gsap.fromTo(success, { y: 24, opacity: 0 },
+              { y: 0, opacity: 1, duration: 0.7, ease: 'power2.out' });
+          }
+          // Le focus suit l'information : sans cela, un lecteur d'écran
+          // resterait sur un bouton qui n'existe plus à l'écran.
+          successTitre.setAttribute('tabindex', '-1');
+          successTitre.focus();
+          return;
+        }
+
+        if (body && body.champs) {
+          Object.entries(body.champs).forEach(([nom, msg]) => marquer(nom, String(msg)));
+          const premier = form.querySelector('.has-error input, .has-error select, .has-error textarea');
+          if (premier) premier.focus();
+        }
+        afficherAvis((body && body.message) || L.offline, true);
+      })
+      .catch(() => afficherAvis(L.offline, true))
+      .finally(() => {
+        submitBtn.disabled = false;
+        submitBtn.textContent = L.submit;
+        form.classList.remove('is-sending');
+      });
   });
 
   resetBtn.addEventListener('click', () => {
     form.reset();
-    form.style.display = '';
+    effacerErreurs();
+    form.hidden = false;
     success.classList.remove('is-visible');
     iFirst.focus();
   });
@@ -804,4 +933,73 @@ function renderAll() {
   renderRoomsPage();
   renderBooking();
   renderFooter();
+  renderJoindre();
+}
+
+// ─── Bouton d'appel flottant (mobile) ─────────────────────
+/**
+ * Affiche WhatsApp et l'appel direct en bas d'écran, sur téléphone.
+ * Les deux liens viennent de config/site.php : sans numéro renseigné,
+ * le bloc reste vide et masqué plutôt que d'offrir un lien mort.
+ */
+function renderJoindre() {
+  const bloc = document.querySelector('[data-joindre]');
+  if (!bloc) return;
+
+  const a = CONFIG.access || {};
+  const liens = [];
+
+  if (a.whatsapp) {
+    liens.push({
+      href:  a.whatsapp,
+      cls:   'joindre__btn--wa',
+      label: 'WhatsApp',
+      externe: true,
+      // Logo WhatsApp officiel, en chemin unique.
+      svg: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">'
+         + '<path d="M17.47 14.38c-.3-.15-1.75-.86-2.02-.96-.27-.1-.47-.15-.67.15'
+         + '-.2.3-.77.96-.94 1.16-.17.2-.35.22-.65.07-.3-.15-1.25-.46-2.38-1.47'
+         + '-.88-.78-1.48-1.75-1.65-2.05-.17-.3-.02-.46.13-.61.14-.13.3-.35.45-.52'
+         + '.15-.18.2-.3.3-.5.1-.2.05-.38-.02-.53-.08-.15-.67-1.62-.92-2.22'
+         + '-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.8.38-.27.3-1.04 1.02-1.04 2.48'
+         + '0 1.46 1.07 2.88 1.22 3.08.15.2 2.1 3.2 5.08 4.49.71.3 1.26.49 1.69.63'
+         + '.71.22 1.36.19 1.87.12.57-.09 1.75-.72 2-1.41.25-.69.25-1.28.17-1.4'
+         + '-.07-.13-.27-.2-.57-.35z"/>'
+         + '<path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95'
+         + 'L2 22l5.25-1.38a9.87 9.87 0 0 0 4.79 1.22h.01c5.46 0 9.91-4.45 9.91-9.91'
+         + 'C21.96 6.45 17.5 2 12.04 2zm0 18.15h-.01a8.2 8.2 0 0 1-4.19-1.15l-.3-.18'
+         + '-3.12.82.83-3.04-.2-.31a8.22 8.22 0 0 1-1.26-4.38c0-4.54 3.7-8.23 8.25-8.23'
+         + 'a8.23 8.23 0 0 1 8.24 8.24c0 4.54-3.7 8.23-8.24 8.23z"/></svg>',
+    });
+  }
+
+  if (a.telLink) {
+    liens.push({
+      href:  a.telLink,
+      cls:   'joindre__btn--tel',
+      label: T('phone', 'Téléphone'),
+      externe: false,
+      svg: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"'
+         + ' stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'
+         + '<path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07'
+         + ' 19.5 19.5 0 0 1-6-6A19.79 19.79 0 0 1 2.12 4.18 2 2 0 0 1 4.11 2h3'
+         + 'a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91'
+         + 'a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7'
+         + 'A2 2 0 0 1 22 16.92z"/></svg>',
+    });
+  }
+
+  if (!liens.length) return;
+
+  liens.forEach(l => {
+    const a2 = el('a', 'joindre__btn ' + l.cls);
+    a2.href = l.href;
+    a2.setAttribute('aria-label', l.label);
+    a2.title = l.label;
+    if (l.externe) { a2.target = '_blank'; a2.rel = 'noopener noreferrer'; }
+    a2.innerHTML = l.svg;
+    bloc.appendChild(a2);
+  });
+
+  bloc.hidden = false;
 }
