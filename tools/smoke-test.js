@@ -319,9 +319,14 @@ if (untyped) problems.push(`${untyped} bouton(s) sans attribut type`);
 //    de la page. C'est ce qui attrape une page de langue qui pointerait sur
 //    un fichier de la racine, ou un chemin relatif oublié.
 const pageDir = path.dirname(path.join(ROOT, PAGE));
+
+// La balise <base> porte une URL de référence, pas un chemin de fichier :
+// elle n'a rien à faire dans ce contrôle. On la retire avant analyse.
+const htmlSansBase = html.replace(/<base\b[^>]*>/gi, '');
+
 const refs = [
-  ...[...html.matchAll(/\ssrc="([^"]+)"/g)].map(m => m[1]),
-  ...[...html.matchAll(/\shref="([^"]+)"/g)].map(m => m[1]),
+  ...[...htmlSansBase.matchAll(/\ssrc="([^"]+)"/g)].map(m => m[1]),
+  ...[...htmlSansBase.matchAll(/\shref="([^"]+)"/g)].map(m => m[1]),
 ];
 const manquants = new Set();
 refs.forEach(ref => {
