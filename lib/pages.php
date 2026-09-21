@@ -41,6 +41,7 @@ final class PageTemplates
             'chambres'  => self::roomsPage(),
             'activites' => self::activitiesPage(),
             'acces'     => self::accessPage(),
+            '404'       => self::notFoundPage(),
             default     => self::homePage(),
         };
 
@@ -93,6 +94,32 @@ final class PageTemplates
         }
 
         return $html;
+    }
+
+    /**
+     * Page introuvable.
+     *
+     * Volontairement utile plutot que decorative : elle explique, et elle
+     * propose les quatre pages du site. Un visiteur arrive ici par un lien
+     * peri ou une faute de frappe ; on lui donne une porte de sortie.
+     */
+    private static function notFoundPage(): string
+    {
+        return <<<HTML
+              <section class="pagehead" data-section="e404">
+                <div class="container pagehead__inner">
+                  <p class="kicker">404</p>
+                  <h1 class="pagehead__title" data-t="e404Title">Page introuvable</h1>
+                  <p class="pagehead__text" data-t="e404Text">Cette page n'existe pas.</p>
+                </div>
+              </section>
+
+              <section class="section e404">
+                <div class="container">
+                  <ul class="e404__liens" data-e404-liens></ul>
+                </div>
+              </section>
+        HTML;
     }
 
     // ══ Enveloppe commune ═══════════════════════════════════════════════

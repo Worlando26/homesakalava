@@ -7,7 +7,7 @@
 //
 //  Source des données : data/content.json
 //  Régénérer          : php tools/build.php
-//  Généré le          : 21/09/2026 à 21:58
+//  Généré le          : 21/09/2026 à 22:03
 // ═══════════════════════════════════════════════════════════════
 
 const CONFIG = {
@@ -1098,7 +1098,7 @@ const CONFIG = {
             "checkIn": "Date d'arrivée",
             "checkOut": "Date de départ",
             "roomType": "Chambre souhaitée",
-            "guests": "voyageurs",
+            "guests": "Voyageurs",
             "message": "Votre message",
             "submit": "Envoyer ma demande",
             "note": "Votre demande nous est envoyée directement. Vous recevez une confirmation par e-mail dans la foulée.",
@@ -1115,7 +1115,8 @@ const CONFIG = {
             "badDates": "Le départ doit être après l'arrivée.",
             "pastDate": "Cette date est déjà passée.",
             "select": "— Sélectionner —",
-            "guest": "voyageur",
+            "guestOne": "voyageur",
+            "guestMany": "voyageurs",
             "ph": {
                 "firstName": "Prénom",
                 "lastName": "Nom",
@@ -1258,7 +1259,10 @@ const CONFIG = {
         "mailNoDates": "dates à définir",
         "pageRooms": "Nos chambres",
         "pageActivities": "Activités",
-        "pageAccess": "Accès et contact"
+        "pageAccess": "Accès et contact",
+        "e404Title": "Page introuvable",
+        "e404Text": "Cette page n'existe pas, ou elle a changé d'adresse. Voici par où reprendre.",
+        "e404Home": "Retour à l'accueil"
     },
     "lang": "fr"
 };

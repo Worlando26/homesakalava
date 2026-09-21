@@ -651,7 +651,7 @@ function renderBooking() {
   const sRoom = sel('chambre', [['', L.select || '— Sélectionner —'],
     ...booking.rooms.map(r => [r, r])]);
   const sGuests = sel('voyageurs',
-    ['1','2','3','4','5','6'].map(n => [n, n + ' ' + (n === '1' ? L.guest : L.guests)])
+    ['1','2','3','4','5','6'].map(n => [n, n + ' ' + (n === '1' ? L.guestOne : L.guestMany)])
   );
   const iMsg = el('textarea', 'booking__textarea');
   iMsg.name = 'message';
@@ -934,6 +934,7 @@ function renderAll() {
   renderBooking();
   renderFooter();
   renderJoindre();
+  renderNotFound();
 }
 
 // ─── Bouton d'appel flottant (mobile) ─────────────────────
@@ -1002,4 +1003,25 @@ function renderJoindre() {
   });
 
   bloc.hidden = false;
+}
+
+// ─── Page introuvable ─────────────────────────────────────
+/**
+ * Propose les pages du site à un visiteur égaré. Les liens viennent de la
+ * navigation : ils restent justes si le menu change.
+ */
+function renderNotFound() {
+  const liste = document.querySelector('[data-e404-liens]');
+  if (!liste) return;
+
+  const liens = [{ label: T('e404Home', "Retour à l'accueil"), href: 'index.html' }]
+    .concat(CONFIG.nav && CONFIG.nav.links ? CONFIG.nav.links : []);
+
+  liens.forEach(l => {
+    const li = el('li');
+    const a  = el('a', 'e404__lien', l.label);
+    a.href   = l.href;
+    li.appendChild(a);
+    liste.appendChild(li);
+  });
 }

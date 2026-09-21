@@ -128,6 +128,12 @@ final class I18n
             'pageRooms'     => 'Nos chambres',
             'pageActivities'=> 'Activités',
             'pageAccess'    => 'Accès et contact',
+
+            // Page 404
+            'e404Title'     => 'Page introuvable',
+            'e404Text'      => "Cette page n'existe pas, ou elle a changé d'adresse. "
+                             . "Voici par où reprendre.",
+            'e404Home'      => "Retour à l'accueil",
         ];
     }
 

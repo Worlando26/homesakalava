@@ -146,6 +146,52 @@ final class SiteBuilder
         ];
     }
 
+    /**
+     * Fourchette de prix, déduite des tarifs réellement publiés.
+     *
+     * Renvoie une chaîne vide si les tarifs sont masqués ou absents :
+     * annoncer une fourchette inventée serait pire que ne rien annoncer.
+     */
+    private function fourchettePrix(): string
+    {
+        if (empty($this->c['settings']['showPrices'])) {
+            return '';
+        }
+
+        $montants = [];
+        foreach ($this->activeRooms() as $r) {
+            // On retient le premier nombre du tarif : « À partir de 56 € la
+            // nuit » donne 56.
+            if (preg_match('/(\d[\d\s]*)/u', (string) ($r['price'] ?? ''), $m)) {
+                $n = (int) preg_replace('/\D/', '', $m[1]);
+                if ($n > 0) {
+                    $montants[] = $n;
+                }
+            }
+        }
+
+        if (!$montants) {
+            return '';
+        }
+
+        // La devise est celle écrite dans les tarifs ; à défaut, rien.
+        $devise = '';
+        foreach ($this->activeRooms() as $r) {
+            if (preg_match('/([€$£]|\bAr\b|\bMGA\b|\bEUR\b|\bUSD\b)/u',
+                           (string) ($r['price'] ?? ''), $m)) {
+                $devise = $m[1];
+                break;
+            }
+        }
+
+        $min = min($montants);
+        $max = max($montants);
+
+        return $min === $max
+            ? trim($min . ' ' . $devise)
+            : trim($min . '–' . $max . ' ' . $devise);
+    }
+
     /** Adresse du site : le fichier de configuration fait autorité. */
     private function siteUrl(): string
     {
@@ -178,7 +224,9 @@ final class SiteBuilder
             $ecrits[$dossier . 'config.js'] =
                 $this->writeFile($dossier . 'config.js', $this->buildConfigJs());
 
-            foreach (PageTemplates::PAGES as $page) {
+            // La page introuvable est generee avec les autres, mais elle
+            // reste hors du menu et hors du plan du site.
+            foreach (array_merge(PageTemplates::PAGES, ['404']) as $page) {
                 $fichier = $dossier . $page . '.html';
                 $ecrits[$fichier] = $this->writeFile($fichier, PageTemplates::render(
                     $page,
@@ -552,8 +600,10 @@ final class SiteBuilder
                 'badDates' => $this->t('formBadDates'),
                 'pastDate' => $this->t('formPastDate'),
                 'select'   => $this->t('formSelect'),
-                'guest'    => $this->t('guest'),
-                'guests'   => $this->t('guests'),
+                // Singulier et pluriel du menu deroulant. La cle « guests »
+                // sert deja au libelle du champ : on ne la reutilise pas.
+                'guestOne'  => $this->t('guest'),
+                'guestMany' => $this->t('guests'),
                 'ph' => [
                     'firstName' => $this->t('phFirstName'),
                     'lastName'  => $this->t('phLastName'),
@@ -750,6 +800,25 @@ final class SiteBuilder
         $lines[] = '  <title>' . $e($title) . '</title>';
         $lines[] = '  <meta name="description" content="' . $e($desc) . '">';
         $lines[] = '  <meta name="theme-color" content="' . $e($this->c['theme']['dark'] ?? '#0a1a1a') . '">';
+        if ($page === '404') {
+            // Une page d erreur n a rien a faire dans un index.
+            $lines[] = '  <meta name="robots" content="noindex, follow">';
+
+            /**
+             * Le serveur sert cette page en gardant l adresse demandee :
+             * un visiteur egare sur /chambres/vue-mer verrait les chemins
+             * relatifs se resoudre depuis /chambres/, donc casser. La balise
+             * base les reancre a la racine du site.
+             */
+            $racine = '/';
+            if ($url !== '') {
+                $chemin = trim((string) parse_url($url, PHP_URL_PATH), '/');
+                $racine = '/' . ($chemin !== '' ? $chemin . '/' : '');
+            }
+            // La base pointe sur le dossier de la page elle-meme, pour que
+            // les chemins relatifs du gabarit se resolvent sans detour.
+            $lines[] = '  <base href="' . $e($racine . $this->i18n->dossier()) . '">';
+        }
         if ($url !== '') {
             $lines[] = '  <link rel="canonical" href="' . $e($url . '/' . $file) . '">';
         }
@@ -771,12 +840,12 @@ final class SiteBuilder
         $alt = $this->i18n->hreflang($page, $url);
         if ($alt !== '') { $lines[] = ''; $lines[] = $alt; }
         $lines[] = '';
-        if ($page === 'index') {
-            $lines[] = '';
-            $lines[] = '  <script type="application/ld+json">';
-            $lines[] = '  ' . $this->buildJsonLd();
-            $lines[] = '  </script>';
-        }
+        // Le bloc decrit l etablissement : il a sa place sur chaque page,
+        // et non sur la seule page d accueil.
+        $lines[] = '';
+        $lines[] = '  <script type="application/ld+json">';
+        $lines[] = '  ' . $this->buildJsonLd($page);
+        $lines[] = '  </script>';
 
         return implode("\n", $lines) . "\n";
     }
@@ -907,7 +976,7 @@ final class SiteBuilder
     }
 
     /** Données structurées LodgingBusiness — uniquement des faits connus. */
-    private function buildJsonLd(): string
+    private function buildJsonLd(string $page = 'index'): string
     {
         $k     = $this->contact();
         $brand = $this->c['brand']   ?? [];
@@ -917,7 +986,7 @@ final class SiteBuilder
 
         $ld = [
             '@context' => 'https://schema.org',
-            '@type'    => 'LodgingBusiness',
+            '@type'    => 'Hotel',
             'name'     => $brand['name'] ?? '',
             'description' => $seo['description'] ?? '',
             // L'adresse suit celle saisie en admin. Si le gérant la corrige,
@@ -962,6 +1031,53 @@ final class SiteBuilder
         $ogImg = $this->c['media'][$seo['ogImageId'] ?? ''] ?? null;
         if ($ogImg && $url !== '') {
             $ld['image'] = $url . '/' . $ogImg['src'];
+        }
+
+        // Lien vers le plan : Google l'exploite pour l'itinéraire.
+        if ($maps = ($k['maps'] ?? '')) {
+            $ld['hasMap'] = $maps;
+        }
+
+        // Fourchette de prix, déduite des tarifs réellement publiés.
+        if ($fourchette = $this->fourchettePrix()) {
+            $ld['priceRange'] = $fourchette;
+        }
+
+        /**
+         * Sur la page des chambres, on décrit chaque chambre. C'est ce qui
+         * permet à Google de comprendre l'offre, plutôt que de ne voir
+         * qu'une page de texte.
+         */
+        if ($page === 'chambres') {
+            $chambres = [];
+            foreach ($this->activeRooms() as $r) {
+                $chambre = [
+                    '@type' => 'HotelRoom',
+                    'name'  => $r['name'] ?? '',
+                ];
+                if (!empty($r['desc'])) {
+                    $chambre['description'] = $r['desc'];
+                }
+                // « 30 m² » → valeur numérique exploitable.
+                if (preg_match('/(\d+)/', (string) ($r['area'] ?? ''), $m)) {
+                    $chambre['floorSize'] = [
+                        '@type'    => 'QuantitativeValue',
+                        'value'    => (int) $m[1],
+                        'unitCode' => 'MTK',   // mètre carré
+                    ];
+                }
+                if (!empty($r['amenities'])) {
+                    $chambre['amenityFeature'] = array_map(
+                        fn($a) => ['@type' => 'LocationFeatureSpecification',
+                                   'name' => $a, 'value' => true],
+                        array_slice($r['amenities'], 0, 8)
+                    );
+                }
+                $chambres[] = $chambre;
+            }
+            if ($chambres) {
+                $ld['containsPlace'] = $chambres;
+            }
         }
 
         // JSON_HEX_TAG est indispensable : ce JSON est écrit DANS une balise

@@ -76,7 +76,10 @@
         "formRequired": "This field is required.",
         "formBadEmail": "This email address does not look valid.",
         "formBadDates": "Departure must be after arrival.",
-        "formPastDate": "This date is in the past."
+        "formPastDate": "This date is in the past.",
+        "e404Title": "Page not found",
+        "e404Text": "This page does not exist, or it has moved. Here is where to pick up again.",
+        "e404Home": "Back to the home page"
     },
     "content": {
         "settings": {

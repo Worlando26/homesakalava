@@ -4,14 +4,16 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Getting here &amp; contact — Home Sakalava</title>
-  <meta name="description" content="We are in Ampasikely, in the commune of Dzamandzar, 25 km from Fascene airport. Tell us your arrival time: we can arrange the shuttle.">
+  <title>Home Sakalava — Beachfront guest house, Nosy Be</title>
+  <meta name="description" content="Five rooms run by Boda and Bakoly in Ampasikely, Nosy Be, a few steps from Djamanjary beach. Seafood restaurant, free wifi and parking, airport shuttle. Rated 9.6/10 on Booking.">
   <meta name="theme-color" content="#0a1a1a">
+  <meta name="robots" content="noindex, follow">
+  <base href="/en/">
 
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Home Sakalava">
-  <meta property="og:title" content="Getting here &amp; contact — Home Sakalava">
-  <meta property="og:description" content="We are in Ampasikely, in the commune of Dzamandzar, 25 km from Fascene airport. Tell us your arrival time: we can arrange the shuttle.">
+  <meta property="og:title" content="Home Sakalava — Beachfront guest house, Nosy Be">
+  <meta property="og:description" content="Five rooms run by Boda and Bakoly in Ampasikely, Nosy Be, a few steps from Djamanjary beach. Seafood restaurant, free wifi and parking, airport shuttle. Rated 9.6/10 on Booking.">
   <meta property="og:locale" content="en_GB">
   <meta property="og:image" content="uploads/plage-coucher-soleil-59c20778-med.jpg">
   <meta property="og:image:alt" content="Coucher de soleil sur la plage à marée basse, un arbre isolé se reflétant dans l&#039;eau, à quelques pas de Home Sakalava">
@@ -100,7 +102,7 @@
   (function () {
     var PUBLIEES = ["fr","en"];
     var COURANTE = "en";
-    var PAGE     = "acces.html";
+    var PAGE     = "404.html";
     var PREFIXE  = "../";
     var DEFAUT   = "fr";
     var CLE      = "sakalava_langue";
@@ -147,7 +149,7 @@
   <link rel="stylesheet" href="../css/components.css">
   <link rel="stylesheet" href="../css/sections.css">
 </head>
-<body data-page="acces">
+<body data-page="404">
 
   <a class="skip-link" href="#contenu" data-t="skip">Skip to content</a>
 
@@ -172,7 +174,7 @@
       </a>
 
       <div class="nav__side nav__side--right">
-        <div class="langsel" role="group" aria-label="Choose a language"><a class="langsel__item" href="../acces.html" lang="fr" hreflang="fr" data-lang="fr" title="Français">FR</a><a class="langsel__item is-active" href="../en/acces.html" lang="en" hreflang="en" data-lang="en" title="English" aria-current="true">EN</a></div>
+        <div class="langsel" role="group" aria-label="Choose a language"><a class="langsel__item" href="../404.html" lang="fr" hreflang="fr" data-lang="fr" title="Français">FR</a><a class="langsel__item is-active" href="../en/404.html" lang="en" hreflang="en" data-lang="en" title="English" aria-current="true">EN</a></div>
         <a class="nav__cta" data-nav-cta href="#booking"></a>
       </div>
 
@@ -184,36 +186,19 @@
   </nav>
 
   <main id="contenu">
+      <section class="pagehead" data-section="e404">
+        <div class="container pagehead__inner">
+          <p class="kicker">404</p>
+          <h1 class="pagehead__title" data-t="e404Title">Page introuvable</h1>
+          <p class="pagehead__text" data-t="e404Text">Cette page n'existe pas.</p>
+        </div>
+      </section>
 
-  <header class="pagehead section" data-section="pagehead">
-    <div class="container">
-      <p class="kicker" data-page-kicker></p>
-      <h1 class="pagehead__title" data-page-title></h1>
-      <p class="pagehead__intro" data-page-intro></p>
-    </div>
-  </header>
-
-  <section class="acces section" data-section="acces">
-    <div class="container acces__inner">
-      <div class="acces__body">
-        <div class="acces__map" data-acces-map></div>
-        <a class="btn btn--pill btn--outline acces__fb" data-acces-fb
-           target="_blank" rel="noopener noreferrer">
-          <i data-lucide="facebook" aria-hidden="true"></i>
-          <span data-t="facebookPage">Our Facebook page</span>
-        </a>
-      </div>
-      <dl class="acces__rows" data-acces-rows></dl>
-    </div>
-  </section>
-
-  <section class="booking section" data-section="booking" aria-labelledby="booking-title">
-    <div class="container booking__inner">
-      <div class="booking__left"  data-booking-left></div>
-      <div class="booking__right" data-booking-right></div>
-    </div>
-  </section>
-
+      <section class="section e404">
+        <div class="container">
+          <ul class="e404__liens" data-e404-liens></ul>
+        </div>
+      </section>
   </main>
 
   <footer class="footer" data-section="footer">

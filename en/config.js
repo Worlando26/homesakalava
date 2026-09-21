@@ -7,7 +7,7 @@
 //
 //  Source des données : data/content.json
 //  Régénérer          : php tools/build.php
-//  Généré le          : 21/09/2026 à 21:58
+//  Généré le          : 21/09/2026 à 22:03
 // ═══════════════════════════════════════════════════════════════
 
 const CONFIG = {
@@ -1098,7 +1098,7 @@ const CONFIG = {
             "checkIn": "Arrival date",
             "checkOut": "Departure date",
             "roomType": "Preferred room",
-            "guests": "guests",
+            "guests": "Guests",
             "message": "Your message",
             "submit": "Send my request",
             "note": "Your request is sent to us directly. You will receive a confirmation by email straight away.",
@@ -1115,7 +1115,8 @@ const CONFIG = {
             "badDates": "Departure must be after arrival.",
             "pastDate": "This date is in the past.",
             "select": "— Select —",
-            "guest": "guest",
+            "guestOne": "guest",
+            "guestMany": "guests",
             "ph": {
                 "firstName": "First name",
                 "lastName": "Last name",
@@ -1258,7 +1259,10 @@ const CONFIG = {
         "mailNoDates": "dates to be confirmed",
         "pageRooms": "Our rooms",
         "pageActivities": "Activities",
-        "pageAccess": "Getting here & contact"
+        "pageAccess": "Getting here & contact",
+        "e404Title": "Page not found",
+        "e404Text": "This page does not exist, or it has moved. Here is where to pick up again.",
+        "e404Home": "Back to the home page"
     },
     "lang": "en"
 };
