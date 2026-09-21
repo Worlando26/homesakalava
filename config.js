@@ -7,7 +7,7 @@
 //
 //  Source des données : data/content.json
 //  Régénérer          : php tools/build.php
-//  Généré le          : 20/09/2026 à 21:35
+//  Généré le          : 21/09/2026 à 21:46
 // ═══════════════════════════════════════════════════════════════
 
 const CONFIG = {
@@ -982,6 +982,18 @@ const CONFIG = {
                 "href": ""
             }
         ],
+        "phone": "",
+        "telLink": "",
+        "whatsapp": "",
+        "mailLink": "",
+        "maps": "https://www.google.com/maps/search/?api=1&query=Home%20Sakalava%2C%20Ampasikely%2C%20207%20Dzamandzar%2C%20Nosy%20Be%2C%20r%C3%A9gion%20Diana%2C%20Madagascar",
+        "reseaux": [
+            {
+                "cle": "facebook",
+                "label": "Facebook",
+                "href": "https://www.facebook.com/home.sakalava.nosybe"
+            }
+        ],
         "facebook": "https://www.facebook.com/home.sakalava.nosybe"
     },
     "faq": {
@@ -1075,7 +1087,7 @@ const CONFIG = {
             "Standard Double"
         ],
         "mailto": "",
-        "facebook": "https://www.facebook.com/home.sakalava.nosybe",
+        "facebook": "",
         "labels": {
             "firstName": "Prénom",
             "lastName": "Nom",

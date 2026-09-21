@@ -14,6 +14,7 @@ declare(strict_types=1);
 require_once __DIR__ . '/images.php';
 require_once __DIR__ . '/pages.php';
 require_once __DIR__ . '/i18n.php';
+require_once __DIR__ . '/config.php';
 
 final class ContentStore
 {
@@ -94,6 +95,62 @@ final class SiteBuilder
     private function t(string $cle, string $repli = ''): string
     {
         return $this->i18n->t($cle, $repli);
+    }
+
+    /**
+     * Coordonnées de la maison, composées de deux sources :
+     *
+     *   - config/site.php pour tout ce qui est opérationnel — téléphone,
+     *     e-mail, WhatsApp, GPS, adresse, réseaux, lien Maps. C'est le
+     *     fichier unique que le client remplit ;
+     *   - data/content.json pour ce qui est éditorial et dépend de la
+     *     langue — horaires d'arrivée, langues parlées, moyens de paiement.
+     *
+     * Un champ resté à « A_REMPLIR » revient vide : l'affichage décide
+     * ensuite de masquer le lien ou d'écrire « à renseigner ».
+     */
+    private function contact(): array
+    {
+        $editorial = $this->c['contact'] ?? [];
+
+        $adresse = Config::liste('hotel.adresse');
+        if (!$adresse) {
+            $adresse = array_values(array_filter($editorial['addressLines'] ?? []));
+        }
+        // Le nom de la maison ouvre toujours l'adresse postale.
+        $nom = Config::val('hotel.nom') ?: ($this->c['brand']['name'] ?? '');
+        if ($nom !== '' && (!$adresse || strcasecmp($adresse[0], $nom) !== 0)) {
+            array_unshift($adresse, $nom);
+        }
+
+        return [
+            'phone'        => Config::val('hotel.telephone'),
+            'email'        => Config::val('hotel.email'),
+            'whatsapp'     => Config::whatsappLien(),
+            'gps'          => Config::val('hotel.gps'),
+            'maps'         => Config::mapsLien(),
+            'addressLines' => $adresse,
+            'reseaux'      => Config::reseaux(),
+
+            // Liens prêts à l'emploi, fabriqués une seule fois ici.
+            'telLink'      => Config::telLien(),
+            'mailLink'     => Config::mailtoLien(),
+
+            // Partie éditoriale, traduite avec le reste du contenu.
+            'checkinFrom'  => $editorial['checkinFrom']  ?? '',
+            'checkinTo'    => $editorial['checkinTo']    ?? '',
+            'checkoutFrom' => $editorial['checkoutFrom'] ?? '',
+            'checkoutTo'   => $editorial['checkoutTo']   ?? '',
+            'languages'    => $editorial['languages']    ?? '',
+            'payment'      => $editorial['payment']      ?? '',
+        ];
+    }
+
+    /** Adresse du site : le fichier de configuration fait autorité. */
+    private function siteUrl(): string
+    {
+        return Config::siteUrl()
+            ?: rtrim((string) ($this->c['seo']['siteUrl'] ?? ''), '/');
     }
 
     /** @return array<string,int> fichier => octets écrits */
@@ -355,7 +412,7 @@ final class SiteBuilder
     private function access(): array
     {
         $a = $this->c['access']  ?? [];
-        $k = $this->c['contact'] ?? [];
+        $k = $this->contact();
 
         // Chaque coordonnée manquante devient un placeholder visible : le
         // gérant voit tout de suite ce qu'il reste à renseigner, et aucun
@@ -366,13 +423,18 @@ final class SiteBuilder
              'href'  => ''],
             ['icon' => 'phone', 'label' => $this->t('phone'),
              'value' => ($k['phone'] ?? '') ?: $this->t('toFill'),
-             'href'  => ($k['phone'] ?? '') ? 'tel:' . preg_replace('/\s+/', '', $k['phone']) : ''],
+             'href'  => $k['telLink'] ?? ''],
+            ['icon' => 'message-circle', 'label' => 'WhatsApp',
+             'value' => ($k['whatsapp'] ?? '') ? ($k['phone'] ?: 'WhatsApp') : '',
+             'href'  => $k['whatsapp'] ?? ''],
             ['icon' => 'mail', 'label' => $this->t('email'),
              'value' => ($k['email'] ?? '') ?: $this->t('toFill'),
-             'href'  => ($k['email'] ?? '') ? 'mailto:' . $k['email'] : ''],
+             'href'  => $k['mailLink'] ?? ''],
+            // La ligne GPS mène au plan : c'est ce qu'on attend en cliquant
+            // sur des coordonnées, bien plus qu'un texte à recopier.
             ['icon' => 'navigation', 'label' => $this->t('gps'),
              'value' => ($k['gps'] ?? '') ?: $this->t('toFill'),
-             'href'  => ''],
+             'href'  => ($k['gps'] ?? '') ? ($k['maps'] ?? '') : ''],
             ['icon' => 'log-in', 'label' => $this->t('checkin'),
              'value' => trim(($k['checkinFrom'] ?? '') . ' – ' . ($k['checkinTo'] ?? ''), ' –'),
              'href'  => ''],
@@ -390,7 +452,25 @@ final class SiteBuilder
             'title'     => $a['title']  ?? '',
             'text'      => $a['text']   ?? '',
             'rows'      => array_values(array_filter($rows, fn($r) => $r['value'] !== '')),
-            'facebook'  => $k['facebook'] ?? '',
+
+            // Liens exploités ailleurs sur la page : bouton d'appel flottant,
+            // lien vers le plan, réseaux sociaux du pied de page.
+            'phone'     => $k['phone']    ?? '',
+            'telLink'   => $k['telLink']  ?? '',
+            'whatsapp'  => $k['whatsapp'] ?? '',
+            'mailLink'  => $k['mailLink'] ?? '',
+            'maps'      => $k['maps']     ?? '',
+            'reseaux'   => $k['reseaux']  ?? [],
+
+            // Conservé pour compatibilité : le premier réseau social connu.
+            'facebook'  => (function () use ($k) {
+                foreach ($k['reseaux'] ?? [] as $r) {
+                    if (($r['cle'] ?? '') === 'facebook') {
+                        return $r['href'];
+                    }
+                }
+                return '';
+            })(),
         ];
     }
 
@@ -412,7 +492,7 @@ final class SiteBuilder
     private function booking(): array
     {
         $b = $this->c['booking'] ?? [];
-        $k = $this->c['contact'] ?? [];
+        $k = $this->contact();
 
         $infoCard = [
             ['label' => $this->t('checkin'),  'value' => trim(($k['checkinFrom'] ?? '') . ' – ' . ($k['checkinTo'] ?? ''), ' –')],
@@ -495,16 +575,17 @@ final class SiteBuilder
     private function footer(): array
     {
         $f = $this->c['footer']  ?? [];
-        $k = $this->c['contact'] ?? [];
+        $k = $this->contact();
 
         $address = $k['addressLines'] ?? [];
         if ($k['email'] ?? '') { $address[] = $k['email']; }
         if ($k['phone'] ?? '') { $address[] = $k['phone']; }
 
-        $social = [];
-        if ($k['facebook'] ?? '') {
-            $social[] = ['label' => 'Facebook', 'href' => $k['facebook']];
-        }
+        // Tous les réseaux renseignés dans config/site.php, dans l'ordre.
+        $social = array_map(
+            fn(array $r) => ['label' => $r['label'], 'href' => $r['href']],
+            $k['reseaux'] ?? []
+        );
 
         return [
             'cta' => [
@@ -535,7 +616,7 @@ final class SiteBuilder
 
     private function contactEmail(): string
     {
-        $e = trim((string) ($this->c['contact']['email'] ?? ''));
+        $e = Config::val('hotel.email');
         return filter_var($e, FILTER_VALIDATE_EMAIL) ? $e : '';
     }
 
@@ -635,7 +716,7 @@ final class SiteBuilder
         $brand = $this->c['brand'] ?? [];
 
         [$title, $desc] = $this->pageSeo($page);
-        $url  = rtrim((string) ($seo['siteUrl'] ?? ''), '/');
+        $url  = $this->siteUrl();
         $file = $page === 'index' ? '' : $page . '.html';
         $ogImg = $this->c['media'][$seo['ogImageId'] ?? ''] ?? null;
         $ogAbs = $ogImg ? ($url !== '' ? $url . '/' . $ogImg['src'] : $ogImg['src']) : '';
@@ -688,7 +769,7 @@ final class SiteBuilder
     private function postalAddress(): array
     {
         $lines = array_values(array_filter(
-            array_map('trim', $this->c['contact']['addressLines'] ?? [])
+            array_map('trim', $this->contact()['addressLines'] ?? [])
         ));
 
         // La première ligne répète le nom de l'établissement : on l'écarte.
@@ -805,11 +886,11 @@ final class SiteBuilder
     /** Données structurées LodgingBusiness — uniquement des faits connus. */
     private function buildJsonLd(): string
     {
-        $k     = $this->c['contact'] ?? [];
+        $k     = $this->contact();
         $brand = $this->c['brand']   ?? [];
         $seo   = $this->c['seo']     ?? [];
         $rep   = $this->c['reputation'] ?? [];
-        $url   = rtrim((string) ($seo['siteUrl'] ?? ''), '/');
+        $url   = $this->siteUrl();
 
         $ld = [
             '@context' => 'https://schema.org',
@@ -876,7 +957,7 @@ final class SiteBuilder
 
     private function buildSitemap(): string
     {
-        $url = rtrim((string) ($this->c['seo']['siteUrl'] ?? ''), '/');
+        $url = $this->siteUrl();
         $day = date('Y-m-d');
 
         if ($url === '') {
