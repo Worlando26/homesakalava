@@ -48,7 +48,7 @@ DirectoryIndex index.html index.php
 <FilesMatch "^(about|gestionnaire|run_autonome)\.txt$">
   Require all denied
 </FilesMatch>
-<FilesMatch "^(package\.json|package-lock\.json|RAPPORT\.md|\.gitignore)$">
+<FilesMatch "^(package\.json|package-lock\.json|RAPPORT\.md|DEPLOIEMENT\.md|README\.md|\.gitignore)$">
   Require all denied
 </FilesMatch>
 

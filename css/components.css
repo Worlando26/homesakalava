@@ -1055,3 +1055,43 @@ a.ideal-card__open { text-decoration: none; }
 @media (prefers-reduced-motion: reduce) {
   .joindre__btn { transition: none; }
 }
+
+/* ══════════════════════════════════════════════════════════
+   CIBLES TACTILES
+   Au doigt, tout ce qui se clique doit faire au moins 44 px.
+   La regle ne s applique qu aux appareils sans survol : a la
+   souris, un bouton de 44 px de haut alourdirait la barre.
+   ══════════════════════════════════════════════════════════ */
+
+@media (hover: none), (max-width: 899px) {
+
+  /* Barre de navigation */
+  .nav__cta       { min-height: 44px; }
+  .langsel__item  { min-height: 44px; min-width: 44px; justify-content: center; }
+  .nav__burger    { min-width: 44px; min-height: 44px; }
+
+  /* Carrousel des chambres */
+  .carousel-float    { width: 46px; height: 46px; }
+  .ideal-card__open  { min-height: 44px; padding: 10px 16px; }
+
+  /* Encart sombre de la section services */
+  .trusted__card-btn { width: 44px; height: 44px; }
+
+  /* En-tete des pages interieures */
+  .pagehead__jump-item { min-height: 44px; }
+
+  /* Visionneuse de photos */
+  .room__zoom     { width: 44px; height: 44px; }
+  .lightbox__nav  { width: 48px; height: 48px; }
+  .lightbox__close{ width: 48px; height: 48px; }
+
+  /* Liens du pied de page et du menu deroulant */
+  .footer__social a,
+  .footer__legal li { min-height: 40px; display: flex; align-items: center; }
+}
+
+/* Le selecteur de langue reste lisible meme resserre : on lui rend sa
+   place plutot que de le comprimer sous la cible tactile. */
+@media (max-width: 360px) {
+  .langsel__item { min-width: 44px; padding: 0 6px; font-size: 11px; }
+}

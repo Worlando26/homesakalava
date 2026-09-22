@@ -29,12 +29,18 @@ const EXCLUS = [
     // Identifiants — la règle absolue.
     'data/admin.json',
     'data/erreurs.log',
+    'data/emails-test.log',
+    'data/envois.json',
+    'data/apercu-add-img',
+    'data/media.generated.json',
 
     // Fiches de travail internes.
     'about.txt',
     'gestionnaire.txt',
     'run_autonome.txt',
     'RAPPORT.md',
+    'DEPLOIEMENT.md',
+    'README.md',
 
     // Outils de développement : inutiles en ligne, et autant de surface
     // d'attaque en moins. On conserve en revanche create-admin.php et
@@ -46,6 +52,7 @@ const EXCLUS = [
     'tools/seed-content.php',
 
     'photos_sakalava',
+    'add_img',
     '_archive_ancien_site',
     'livraison',
 
@@ -124,18 +131,15 @@ try {
 echo "Régénération du site…\n";
 $store->write($content);
 
-if (($content['seo']['siteUrl'] ?? '') === '') {
-    $avertissements[] = "L'adresse définitive du site n'est pas renseignée "
-        . "(Réglages → Référencement). Le plan du site et l'aperçu de partage "
-        . "resteront incomplets.";
+// Ce qui reste a renseigner vient du fichier de configuration.
+foreach (Config::manquants() as $m) {
+    $avertissements[] = $m['libelle']
+        . ($m['bloquant'] ? ' — indispensable avant la mise en ligne.' : ' — facultatif.');
 }
-if (($content['contact']['email'] ?? '') === '') {
-    $avertissements[] = "L'adresse e-mail n'est pas renseignée : le formulaire "
-        . "de contact du site restera désactivé.";
-}
-if (($content['contact']['phone'] ?? '') === '') {
-    $avertissements[] = "Le numéro de téléphone n'est pas renseigné : le site "
-        . "affichera « à renseigner ».";
+
+if (Config::modeTest()) {
+    $avertissements[] = "Le MODE TEST est actif : aucun e-mail ne partira. "
+        . "Decochez-le dans Reglages avant la mise en ligne.";
 }
 
 $sansPhoto = 0;
