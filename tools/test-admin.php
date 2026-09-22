@@ -205,8 +205,8 @@ http("$base/admin/textes.php", ['_csrf' => $tok, 'action' => 'contact', 'email' 
 check('E-mail invalide refusé', str_contains(flash("$base/admin/textes.php"), "n'est pas valide"));
 
 $tok = token("$base/admin/textes.php");
-http("$base/admin/textes.php", ['_csrf' => $tok, 'action' => 'contact', 'email' => '', 'facebook' => 'pas-une-url']);
-check('Lien Facebook invalide refusé', str_contains(flash("$base/admin/textes.php"), 'adresse complète'));
+http("$base/admin/textes.php", ['_csrf' => $tok, 'action' => 'contact', 'email' => '', 'reseau_facebook' => 'pas-une-url']);
+check('Lien de réseau social invalide refusé', str_contains(flash("$base/admin/textes.php"), 'adresse complète'));
 
 $tok = token("$base/admin/reglages.php");
 http("$base/admin/reglages.php", ['_csrf' => $tok, 'action' => 'theme', 'accent' => 'rouge', 'dark' => '#000000', 'bg' => '#ffffff']);
@@ -431,15 +431,180 @@ http("$base/admin/chambres.php", ['_csrf' => $tok, 'action' => 'delete', 'id' =>
 check('Suppression d\'une chambre inexistante refusée',
     str_contains(flash("$base/admin/chambres.php"), "n'existe plus"));
 
+section('Fichier de configuration');
+
+$confFile = $root . '/config/site.php';
+$confSave = $confFile . '.avant-test';
+copy($confFile, $confSave);
+register_shutdown_function(function () use ($confSave, $confFile, $root) {
+    if (is_file($confSave)) {
+        copy($confSave, $confFile);
+        unlink($confSave);
+        require_once $root . '/lib/content.php';
+        $st = new ContentStore($root);
+        $st->write($st->read());
+    }
+});
+
+/** Relit config/site.php depuis le disque, hors du processus web. */
+function conf(): array
+{
+    global $confFile;
+    return (array) (include $confFile);
+}
+
+$r = http("$base/config/site.php");
+check('config/site.php refusé par le serveur', $r['code'] === 403, "HTTP {$r['code']}");
+
+// Enregistrement complet depuis l'onglet Textes
+$tok = token("$base/admin/textes.php");
+http("$base/admin/textes.php", [
+    '_csrf' => $tok, 'action' => 'contact',
+    'phone' => '+261 32 11 222 33', 'whatsapp' => '0261321122233',
+    'email' => 'test@homesakalava.mg', 'gps' => '-13,40 ; 48,26', 'maps' => '',
+    'address' => ['Ampasikely', 'Nosy Be'],
+    'reseau_facebook' => 'https://facebook.com/test',
+    'reseau_instagram' => '', 'reseau_tripadvisor' => '', 'reseau_booking' => '',
+    'checkin_from' => '12h00', 'checkin_to' => '23h00',
+    'checkout_from' => '11h00', 'checkout_to' => '12h00',
+    'languages' => 'Français', 'payment' => 'Espèces',
+]);
+
+$c = conf();
+check('Téléphone écrit dans config/site.php',
+    ($c['hotel']['telephone'] ?? '') === '+261 32 11 222 33');
+check('Réglages SMTP préservés par une écriture des coordonnées',
+    isset($c['smtp']['hote'], $c['smtp']['port'], $c['smtp']['motdepasse']));
+check('Réseau non renseigné remis à A_REMPLIR',
+    ($c['reseaux']['instagram'] ?? '') === 'A_REMPLIR');
+check('Le fichier produit reste du PHP valide', is_array($c) && isset($c['hotel']));
+
+// Les liens fabriqués se retrouvent sur le site
+check('Lien WhatsApp propagé au site public',
+    str_contains(generated(), 'wa.me/261321122233'));
+check('Lien d\'appel propagé au site public',
+    str_contains(generated(), 'tel:+261321122233'));
+check('Plan déduit des coordonnées GPS',
+    str_contains(generated(), 'maps/search/?api=1&query=-13.40,48.26'),
+    'lien non trouvé dans config.js');
+
+// Le mot de passe SMTP ne doit jamais repartir vers le navigateur
+$tok = token("$base/admin/reglages.php");
+http("$base/admin/reglages.php", [
+    '_csrf' => $tok, 'action' => 'smtp', 'mode_test' => '1',
+    'hote' => 'smtp.exemple.net', 'port' => '587', 'securite' => 'tls',
+    'utilisateur' => 'u@exemple.net', 'motdepasse' => 'MotDePasseSecret42',
+    'expediteur_email' => 'u@exemple.net', 'expediteur_nom' => 'Test',
+    'max_par_heure' => '5', 'copie_cachee' => '',
+]);
+$page = http("$base/admin/reglages.php")['body'];
+check('Le mot de passe SMTP n\'est jamais réaffiché',
+    !str_contains($page, 'MotDePasseSecret42'));
+
+// Un champ mot de passe vide ne doit pas effacer l'existant
+$tok = token("$base/admin/reglages.php");
+http("$base/admin/reglages.php", [
+    '_csrf' => $tok, 'action' => 'smtp', 'mode_test' => '1',
+    'hote' => 'smtp.exemple.net', 'port' => '465', 'securite' => 'ssl',
+    'utilisateur' => 'u@exemple.net', 'motdepasse' => '',
+    'expediteur_email' => 'u@exemple.net', 'expediteur_nom' => 'Test',
+    'max_par_heure' => '5', 'copie_cachee' => '',
+]);
+$c = conf();
+check('Mot de passe conservé quand le champ est laissé vide',
+    ($c['smtp']['motdepasse'] ?? '') === 'MotDePasseSecret42');
+check('Port bien mis à jour au passage', (int) ($c['smtp']['port'] ?? 0) === 465);
+
+$tok = token("$base/admin/reglages.php");
+http("$base/admin/reglages.php", [
+    '_csrf' => $tok, 'action' => 'smtp', 'mode_test' => '1',
+    'hote' => 'x', 'port' => '99999', 'securite' => 'tls',
+    'utilisateur' => 'u@exemple.net', 'motdepasse' => '',
+    'expediteur_email' => 'u@exemple.net', 'expediteur_nom' => '',
+    'max_par_heure' => '5', 'copie_cachee' => '',
+]);
+check('Port hors bornes refusé',
+    str_contains(flash("$base/admin/reglages.php"), 'entre 1 et 65535'));
+
+section('Formulaire public');
+
+// Le compteur d envois est remis a zero : les controles qui suivent
+// doivent tester la validation, pas la limitation.
+@unlink($root . '/data/envois.json');
+@unlink($root . '/data/emails-test.log');
+
+$post = [
+    'lang' => 'fr', 'prenom' => 'Jean', 'nom' => 'Dupont',
+    'email' => 'jean@exemple.com',
+];
+
+$r = http("$base/contact.php", ['lang' => 'fr']);
+check('Champs obligatoires exigés côté serveur', $r['code'] === 422, "HTTP {$r['code']}");
+
+$r = http("$base/contact.php", array_merge($post, ['email' => 'pas-un-email']));
+check('E-mail invalide refusé par le serveur', $r['code'] === 422);
+
+$r = http("$base/contact.php", array_merge($post, ['arrivee' => '2020-01-01']));
+check('Date passée refusée', $r['code'] === 422);
+
+$r = http("$base/contact.php", array_merge($post, ['arrivee' => '2027-03-21', 'depart' => '2027-03-16']));
+check('Départ avant arrivée refusé', $r['code'] === 422);
+
+@unlink($root . '/data/envois.json');
+@unlink($root . '/data/emails-test.log');
+
+$r = http("$base/contact.php", array_merge($post, ['site_web' => 'http://spam.example']));
+$journal = (string) @file_get_contents($root . '/data/emails-test.log');
+check('Piège à robots : réponse positive mais aucun envoi',
+    $r['code'] === 200 && substr_count($journal, 'MODE TEST') === 0);
+
+$r = http("$base/contact.php", array_merge($post, [
+    'telephone' => '+33 6 12 34 56 78', 'arrivee' => '2027-03-21',
+    'depart' => '2027-03-28', 'chambre' => 'Comfort Triple',
+    'voyageurs' => '2', 'message' => 'Bonjour',
+]));
+$journal = (string) @file_get_contents($root . '/data/emails-test.log');
+check('Demande valide acceptée', $r['code'] === 200, "HTTP {$r['code']}");
+check('Deux e-mails produits en mode test',
+    substr_count($journal, 'MODE TEST') === 2,
+    substr_count($journal, 'MODE TEST') . ' message(s)');
+check('Reply-To sur l\'adresse du client',
+    str_contains($journal, 'Reply-To: Jean Dupont <jean@exemple.com>'));
+check('Accusé de réception adressé au client',
+    str_contains($journal, 'Vers      : jean@exemple.com'));
+
+// Injection d'en-tête via le nom
+@unlink($root . '/data/envois.json');
+@unlink($root . '/data/emails-test.log');
+http("$base/contact.php", array_merge($post, ['nom' => "Dupont\r\nBcc: pirate@exemple.net"]));
+$journal = (string) @file_get_contents($root . '/data/emails-test.log');
+/**
+ * On isole les blocs d'en-têtes. « Bcc: » recopié dans le corps du message
+ * est inoffensif : c'est une ligne de texte. Seul un en-tête réellement
+ * injecté compte, et il apparaîtrait avant la ligne vide qui sépare les
+ * en-têtes du contenu.
+ */
+preg_match_all('/^Date: .*?(?=\r?\n\r?\n)/ms', $journal, $blocs);
+$entetes = implode("\n", $blocs[0] ?? []);
+
+check('Injection d\'en-tête neutralisée',
+    $entetes !== '' && !preg_match('/^(Bcc|Cc):/mi', $entetes),
+    $entetes === '' ? 'aucun en-tête trouvé' : 'un en-tête a été injecté');
+
+@unlink($root . '/data/envois.json');
+@unlink($root . '/data/emails-test.log');
 section('Diagnostic');
 
 $r = http("$base/admin/diagnostic.php");
 check('La page de diagnostic répond', $r['code'] === 200);
 check('Aucune erreur PHP sur la page de diagnostic',
     !preg_match('/(Fatal error|Warning:|Notice:|Undefined)/i', $r['body']));
+// On isole le groupe « Fichiers protégés » : le reste de la page signale
+// legitimement la configuration incomplete.
+preg_match('#Fichiers protégés</h2>(.*?)</ul>#s', $r['body'], $grp);
 check('Le diagnostic confirme les dossiers protégés',
-    substr_count($r['body'], 'probe--error') === 0,
-    substr_count($r['body'], 'probe--error') . ' problème(s) signalé(s)');
+    isset($grp[1]) && !str_contains($grp[1], 'probe--error'),
+    isset($grp[1]) ? 'un dossier est public' : 'groupe introuvable');
 
 section('Photos');
 

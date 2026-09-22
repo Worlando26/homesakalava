@@ -12,14 +12,29 @@ require __DIR__ . '/inc/layout.php';
 Auth::require();
 
 $content = $store->read();
-$contact = $content['contact'] ?? [];
 
-// ─── Ce qu'il reste à compléter ───────────────────────────────────────────
+/**
+ * Ce qu'il reste à compléter vient de config/site.php : la même source que
+ * celle lue par le site, pour que cette liste ne mente jamais.
+ * Chaque champ renvoie vers l'onglet où il se saisit.
+ */
 $todo = [];
-if (($contact['phone'] ?? '') === '')  { $todo[] = ['Le numéro de téléphone', 'textes.php#contact']; }
-if (($contact['email'] ?? '') === '')  { $todo[] = ['L\'adresse e-mail (le formulaire de contact en dépend)', 'textes.php#contact']; }
-if (($contact['gps'] ?? '') === '')    { $todo[] = ['Les coordonnées GPS', 'textes.php#contact']; }
-if (($content['seo']['siteUrl'] ?? '') === '') { $todo[] = ['L\'adresse définitive du site (pour le référencement)', 'reglages.php']; }
+foreach (Config::manquants() as $m) {
+    $page = (str_starts_with($m['cle'], 'smtp.') || $m['cle'] === 'site.url')
+        ? 'reglages.php'
+        : 'textes.php#contact';
+    $todo[] = [
+        $m['libelle'] . ($m['bloquant'] ? '' : ' — facultatif'),
+        $page,
+    ];
+}
+
+if (Config::modeTest()) {
+    $todo[] = [
+        'Le mode test est actif : aucun e-mail ne part réellement',
+        'reglages.php',
+    ];
+}
 
 $noPrice = array_filter(
     $content['rooms']['items'] ?? [],

@@ -48,6 +48,14 @@ if (is_post()) {
 
             // ── Coordonnées et infos pratiques ───────────────────────────
             case 'contact':
+                /**
+                 * Les coordonnées vivent dans config/site.php, le fichier
+                 * unique que le client remplit. L'admin écrit dans ce même
+                 * fichier : une seule source, deux façons d'y accéder.
+                 *
+                 * Les horaires, langues parlées et moyens de paiement restent
+                 * dans data/content.json : ils sont éditoriaux et traduits.
+                 */
                 $email = post_str('email');
                 if ($email !== '' && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
                     throw new RuntimeException(
@@ -56,19 +64,39 @@ if (is_post()) {
                     );
                 }
 
-                $facebook = post_str('facebook');
-                if ($facebook !== '' && !filter_var($facebook, FILTER_VALIDATE_URL)) {
+                $reseaux = [];
+                foreach (['facebook', 'instagram', 'tripadvisor', 'booking'] as $r) {
+                    $url = post_str('reseau_' . $r);
+                    if ($url !== '' && !filter_var($url, FILTER_VALIDATE_URL)) {
+                        throw new RuntimeException(
+                            'Le lien ' . ucfirst($r) . " doit être une adresse "
+                            . "complète, commençant par https://"
+                        );
+                    }
+                    $reseaux[$r] = $url !== '' ? $url : Config::A_REMPLIR;
+                }
+
+                $maps = post_str('maps');
+                if ($maps !== '' && !filter_var($maps, FILTER_VALIDATE_URL)) {
                     throw new RuntimeException(
-                        "Le lien Facebook doit être une adresse complète, "
-                        . "commençant par https://"
+                        "Le lien Google Maps doit être une adresse complète."
                     );
                 }
 
-                $content['contact']['phone']        = post_str('phone');
-                $content['contact']['email']        = $email;
-                $content['contact']['gps']          = post_str('gps');
-                $content['contact']['facebook']     = $facebook;
-                $content['contact']['addressLines'] = post_list('address');
+                // On repart du fichier existant pour ne perdre aucun réglage
+                // absent de ce formulaire — les paramètres SMTP en tête.
+                $conf = require APP_ROOT . '/config/site.php';
+
+                $conf['hotel']['telephone'] = post_str('phone')    ?: Config::A_REMPLIR;
+                $conf['hotel']['whatsapp']  = post_str('whatsapp') ?: Config::A_REMPLIR;
+                $conf['hotel']['email']     = $email               ?: Config::A_REMPLIR;
+                $conf['hotel']['gps']       = post_str('gps')      ?: Config::A_REMPLIR;
+                $conf['hotel']['maps']      = $maps                ?: Config::A_REMPLIR;
+                $conf['hotel']['adresse']   = post_list('address');
+                $conf['reseaux']            = $reseaux;
+
+                Config::ecrire($conf);
+
                 $content['contact']['checkinFrom']  = post_str('checkin_from');
                 $content['contact']['checkinTo']    = post_str('checkin_to');
                 $content['contact']['checkoutFrom'] = post_str('checkout_from');
@@ -77,9 +105,10 @@ if (is_post()) {
                 $content['contact']['payment']      = post_str('payment');
 
                 $store->write($content);
+
                 Flash::ok(
-                    $email !== ''
-                        ? 'Coordonnées enregistrées. Le formulaire de contact du site est désormais actif.'
+                    Config::formulaireActif()
+                        ? 'Coordonnées enregistrées. Le formulaire du site est actif.'
                         : 'Coordonnées enregistrées.'
                 );
                 break;
@@ -127,59 +156,97 @@ layout_head('Textes');
   <div class="card">
     <div class="card__head"><h2 class="card__title">Coordonnées</h2></div>
     <p class="card__hint">
-      Tant qu'un champ reste vide, le site affiche « à renseigner » à sa place
-      plutôt qu'une information inventée.
+      Ces informations sont enregistrées dans <code>config/site.php</code>, le
+      fichier unique du site. Vous pouvez les modifier ici ou directement dans
+      ce fichier : c'est le même endroit. Un champ laissé vide affiche
+      « à renseigner » sur le site, jamais une information inventée.
     </p>
 
     <div class="grid-2">
       <div class="field">
         <label for="phone">Téléphone</label>
         <input id="phone" name="phone" type="tel" maxlength="40"
-               placeholder="+261 32 12 345 67" value="<?= e($k['phone'] ?? '') ?>">
+               placeholder="+261 32 12 345 67" value="<?= e(Config::val('hotel.telephone')) ?>">
+        <p class="field__hint">Avec l'indicatif du pays. Crée le bouton d'appel sur mobile.</p>
       </div>
       <div class="field">
-        <label for="email">Adresse e-mail</label>
-        <input id="email" name="email" type="email" maxlength="120"
-               placeholder="contact@…" value="<?= e($k['email'] ?? '') ?>">
+        <label for="whatsapp">WhatsApp</label>
+        <input id="whatsapp" name="whatsapp" type="tel" maxlength="40"
+               placeholder="261321234567" value="<?= e(Config::val('hotel.whatsapp')) ?>">
         <p class="field__hint">
-          <?php if (($k['email'] ?? '') === ''): ?>
-            <strong>Important :</strong> le formulaire de contact du site reste
-            désactivé tant que cette adresse n'est pas renseignée.
-          <?php else: ?>
-            Le formulaire du site prépare un message vers cette adresse.
-          <?php endif; ?>
+          Format international, sans espaces ni « + ». Laissez vide si la
+          maison n'a pas de WhatsApp : le bouton ne s'affichera pas.
         </p>
       </div>
+    </div>
+
+    <div class="field">
+      <label for="email">Adresse e-mail</label>
+      <input id="email" name="email" type="email" maxlength="120"
+             placeholder="contact@…" value="<?= e(Config::val('hotel.email')) ?>">
+      <p class="field__hint">
+        <?php if (!Config::rempli('hotel.email')): ?>
+          <strong>Important :</strong> c'est elle qui reçoit les demandes du
+          formulaire. Tant qu'elle est vide, le formulaire reste désactivé.
+        <?php else: ?>
+          Les demandes du formulaire arrivent sur cette adresse.
+        <?php endif; ?>
+      </p>
     </div>
 
     <div class="grid-2">
       <div class="field">
         <label for="gps">Coordonnées GPS</label>
         <input id="gps" name="gps" type="text" maxlength="60"
-               placeholder="-13.3987, 48.2345" value="<?= e($k['gps'] ?? '') ?>">
+               placeholder="-13.3987, 48.2345" value="<?= e(Config::val('hotel.gps')) ?>">
         <p class="field__hint">
-          Se relève dans Google Maps : appui long sur la maison, les chiffres
+          Se relèvent dans Google Maps : appui long sur la maison, les chiffres
           s'affichent en haut.
         </p>
       </div>
       <div class="field">
-        <label for="facebook">Page Facebook</label>
-        <input id="facebook" name="facebook" type="url" maxlength="200"
-               value="<?= e($k['facebook'] ?? '') ?>">
+        <label for="maps">Lien Google Maps</label>
+        <input id="maps" name="maps" type="url" maxlength="300"
+               value="<?= e(Config::val('hotel.maps')) ?>">
+        <p class="field__hint">
+          Dans Google Maps : Partager → Copier le lien. Laissé vide, le site
+          en fabrique un à partir des coordonnées GPS.
+        </p>
       </div>
     </div>
 
     <div class="field">
       <label>Adresse postale</label>
-      <p class="field__hint" style="margin:0 0 8px">Une ligne par champ.</p>
+      <p class="field__hint" style="margin:0 0 8px">
+        Une ligne par champ, sans répéter le nom de la maison.
+      </p>
       <div class="stack">
-        <?php foreach (array_merge($k['addressLines'] ?? [], ['']) as $line): ?>
+        <?php foreach (array_merge(Config::liste('hotel.adresse'), ['']) as $line): ?>
           <input type="text" name="address[]" maxlength="120" value="<?= e($line) ?>">
         <?php endforeach; ?>
       </div>
     </div>
   </div>
 
+  <div class="card">
+    <div class="card__head"><h2 class="card__title">Réseaux sociaux</h2></div>
+    <p class="card__hint">
+      Adresse complète, commençant par https://. Un champ vide n'affiche
+      simplement pas le lien.
+    </p>
+    <?php foreach ([
+        'facebook'    => 'Facebook',
+        'instagram'   => 'Instagram',
+        'tripadvisor' => 'TripAdvisor',
+        'booking'     => 'Booking.com',
+    ] as $cle => $nom): ?>
+      <div class="field">
+        <label for="r-<?= e($cle) ?>"><?= e($nom) ?></label>
+        <input id="r-<?= e($cle) ?>" name="reseau_<?= e($cle) ?>" type="url"
+               maxlength="200" value="<?= e(Config::val('reseaux.' . $cle)) ?>">
+      </div>
+    <?php endforeach; ?>
+  </div>
   <div class="card">
     <div class="card__head"><h2 class="card__title">Informations pratiques</h2></div>
 

@@ -237,8 +237,15 @@ if (tropDEnvois()) {
 //  Lecture et validation
 // ══════════════════════════════════════════════════════════════════════
 
-/** Nettoie une saisie : UTF-8 garanti, caractères de contrôle retirés. */
-function champ(string $nom, int $max = 200): string
+/**
+ * Nettoie une saisie : UTF-8 garanti, caractères de contrôle retirés.
+ *
+ * @param bool $multiligne Seul le champ « message » garde ses retours à la
+ *        ligne. Partout ailleurs ils sont remplacés par une espace : un nom
+ *        ou un numéro n'en contient pas, et ces champs finissent dans des
+ *        en-têtes d'e-mail, où un saut de ligne n'a rien à faire.
+ */
+function champ(string $nom, int $max = 200, bool $multiligne = false): string
 {
     $v = $_POST[$nom] ?? '';
     if (!is_string($v)) {
@@ -247,8 +254,14 @@ function champ(string $nom, int $max = 200): string
     if (!mb_check_encoding($v, 'UTF-8')) {
         $v = mb_convert_encoding($v, 'UTF-8', 'Windows-1252');
     }
-    // On conserve les sauts de ligne du message, on retire le reste.
+
     $v = preg_replace('/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/u', '', $v) ?? '';
+
+    if (!$multiligne) {
+        $v = str_replace(["\r", "\n"], ' ', $v);
+        $v = preg_replace('/\s{2,}/u', ' ', $v) ?? $v;
+    }
+
     return mb_substr(trim($v), 0, $max);
 }
 
@@ -262,7 +275,7 @@ $d = [
     'depart'    => champ('depart', 10),
     'chambre'   => champ('chambre', 80),
     'voyageurs' => champ('voyageurs', 10),
-    'message'   => champ('message', 2000),
+    'message'   => champ('message', 2000, true),
 ];
 
 $erreurs = [];

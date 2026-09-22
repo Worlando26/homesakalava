@@ -198,6 +198,31 @@ if (is_file($adminFile)) {
         'Lancez php tools/create-admin.php');
 }
 
+// ─── Configuration du site ────────────────────────────────────────────────
+$manquants = Config::manquants();
+$bloquants = array_filter($manquants, fn($m) => $m['bloquant']);
+
+$checks['Configuration'][] = $manquants === []
+    ? probe('config/site.php', 'ok', 'Toutes les coordonnées sont renseignées')
+    : probe('config/site.php', $bloquants ? 'error' : 'warn',
+        count($manquants) . ' champ(s) encore à « A_REMPLIR » : '
+        . implode(', ', array_column($manquants, 'libelle')),
+        "Ouvrez config/site.php, ou l'onglet Textes pour les coordonnées et "
+        . "l'onglet Réglages pour l'envoi des e-mails.");
+
+$checks['Configuration'][] = Config::modeTest()
+    ? probe('Envoi des e-mails', 'warn', 'MODE TEST : aucun e-mail ne part',
+        "Les messages sont écrits dans data/emails-test.log. C'est ce qu'il "
+        . "faut pour vérifier le formulaire, mais pas pour un site en ligne. "
+        . "Décochez « Mode test » dans Réglages le jour de la mise en ligne.")
+    : probe('Envoi des e-mails', 'ok', 'Les e-mails partent réellement par SMTP');
+
+$checks['Configuration'][] = Config::formulaireActif()
+    ? probe('Formulaire de réservation', 'ok', 'Actif')
+    : probe('Formulaire de réservation', 'error', 'Désactivé',
+        "Le site affiche un renvoi vers Facebook à la place. Renseignez "
+        . "l'adresse e-mail de réception et les réglages SMTP.");
+
 // ─── Contenu ──────────────────────────────────────────────────────────────
 try {
     $content = $store->read();
@@ -230,12 +255,8 @@ $checks['Contenu'][] = $missing === 0
         'Des photos ont été perdues lors du transfert. Renvoyez le dossier '
         . 'uploads/ complet, ou réimportez les photos concernées.');
 
-$seoUrl = (string) ($content['seo']['siteUrl'] ?? '');
-$checks['Contenu'][] = $seoUrl !== ''
-    ? probe('Adresse du site', 'ok', $seoUrl)
-    : probe('Adresse du site', 'warn', 'Non renseignée',
-        'Renseignez-la dans Réglages → Référencement : le plan du site et '
-        . 'l\'aperçu de partage en dépendent.');
+// L'adresse du site est contrôlée avec le reste de la configuration,
+// plus haut : elle vit désormais dans config/site.php.
 
 // ─── Synthèse ─────────────────────────────────────────────────────────────
 $errors = 0;

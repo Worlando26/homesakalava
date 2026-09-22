@@ -1,6 +1,6 @@
 {
     "version": 1,
-    "updated_at": "2026-09-21T22:03:51+02:00",
+    "updated_at": "2026-09-22T21:21:07+02:00",
     "settings": {
         "showPrices": true,
         "priceFallback": "250.000Ar"
@@ -1330,8 +1330,8 @@
         "copyright": "© 2026 Home Sakalava. Tous droits réservés."
     },
     "seo": {
-        "title": "Home Sakalava — Maison d'hôtes au bord de la plage, Nosy Be",
-        "description": "Cinq chambres tenues par Boda et Bakoly à Ampasikely, Nosy Be, à quelques pas de la plage de Djamanjary. Restaurant de fruits de mer, wifi et parking gratuits, navette aéroport. Noté 9,6/10 sur Booking.",
+        "title": "Home Sakalava — Maison d hotes, Nosy Be",
+        "description": "Cinq chambres au bord de la plage.",
         "ogImageId": "plage-coucher-soleil-59c20778",
         "siteUrl": "",
         "locale": "fr_FR"

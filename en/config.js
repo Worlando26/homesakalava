@@ -7,7 +7,7 @@
 //
 //  Source des données : data/content.json
 //  Régénérer          : php tools/build.php
-//  Généré le          : 21/09/2026 à 22:04
+//  Généré le          : 22/09/2026 à 21:21
 // ═══════════════════════════════════════════════════════════════
 
 const CONFIG = {
@@ -713,7 +713,7 @@ const CONFIG = {
         "note": "Services marked \"extra charge\" are billed on top of the stay.",
         "floatCard": {
             "title": "A question before you come? Boda and Bakoly answer themselves, in French as well as English.",
-            "email": "Adresse e-mail à renseigner"
+            "email": "test@homesakalava.mg"
         },
         "floatImages": [
             {
@@ -936,26 +936,32 @@ const CONFIG = {
             {
                 "icon": "map-pin",
                 "label": "Address",
-                "value": "Ampasikely, 207 Dzamandzar, Nosy Be, région Diana, Madagascar",
+                "value": "Ampasikely, Nosy Be",
                 "href": ""
             },
             {
                 "icon": "phone",
                 "label": "Phone",
-                "value": "[to be added]",
-                "href": ""
+                "value": "+261 32 11 222 33",
+                "href": "tel:+261321122233"
+            },
+            {
+                "icon": "message-circle",
+                "label": "WhatsApp",
+                "value": "+261 32 11 222 33",
+                "href": "https://wa.me/261321122233"
             },
             {
                 "icon": "mail",
                 "label": "Email",
-                "value": "[to be added]",
-                "href": ""
+                "value": "test@homesakalava.mg",
+                "href": "mailto:test@homesakalava.mg"
             },
             {
                 "icon": "navigation",
                 "label": "GPS coordinates",
-                "value": "[to be added]",
-                "href": ""
+                "value": "-13,40 ; 48,26",
+                "href": "https://www.google.com/maps/search/?api=1&query=-13.40,48.26"
             },
             {
                 "icon": "log-in",
@@ -982,19 +988,19 @@ const CONFIG = {
                 "href": ""
             }
         ],
-        "phone": "",
-        "telLink": "",
-        "whatsapp": "",
-        "mailLink": "",
-        "maps": "https://www.google.com/maps/search/?api=1&query=Home%20Sakalava%2C%20Ampasikely%2C%20207%20Dzamandzar%2C%20Nosy%20Be%2C%20r%C3%A9gion%20Diana%2C%20Madagascar",
+        "phone": "+261 32 11 222 33",
+        "telLink": "tel:+261321122233",
+        "whatsapp": "https://wa.me/261321122233",
+        "mailLink": "mailto:test@homesakalava.mg",
+        "maps": "https://www.google.com/maps/search/?api=1&query=-13.40,48.26",
         "reseaux": [
             {
                 "cle": "facebook",
                 "label": "Facebook",
-                "href": "https://www.facebook.com/home.sakalava.nosybe"
+                "href": "https://facebook.com/test"
             }
         ],
-        "facebook": "https://www.facebook.com/home.sakalava.nosybe"
+        "facebook": "https://facebook.com/test"
     },
     "faq": {
         "kicker": "Frequently asked questions",
@@ -1072,11 +1078,11 @@ const CONFIG = {
             },
             {
                 "label": "Phone",
-                "value": "[to be added]"
+                "value": "+261 32 11 222 33"
             },
             {
                 "label": "Email",
-                "value": "[to be added]"
+                "value": "test@homesakalava.mg"
             }
         ],
         "rooms": [
@@ -1088,7 +1094,7 @@ const CONFIG = {
         ],
         "endpoint": "../contact.php",
         "lang": "en",
-        "actif": false,
+        "actif": true,
         "facebook": "",
         "labels": {
             "firstName": "First name",
@@ -1150,14 +1156,14 @@ const CONFIG = {
         "address": [
             "Home Sakalava",
             "Ampasikely",
-            "207 Dzamandzar",
-            "Nosy Be, région Diana",
-            "Madagascar"
+            "Nosy Be",
+            "test@homesakalava.mg",
+            "+261 32 11 222 33"
         ],
         "social": [
             {
                 "label": "Facebook",
-                "href": "https://www.facebook.com/home.sakalava.nosybe"
+                "href": "https://facebook.com/test"
             }
         ],
         "legal": [
