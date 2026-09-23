@@ -34,3 +34,6 @@ config/site.local.php
 data/emails-test.log
 data/envois.json
 data/media.generated.json
+
+# Sauvegardes creees par le banc de test
+*.avant-test

@@ -279,6 +279,23 @@ telsRendus
   .filter(v => v.length >= 8 && !telsConfig.includes(v))
   .forEach(v => problems.push('Numéro absent de config/site.php : ' + v));
 
+// 4 bis. Aucune coordonnée de test dans ce qui est publié.
+//
+//        Des valeurs de banc d'essai se sont déjà retrouvées en ligne : le
+//        générateur avait reconstruit le site avec une configuration encore
+//        chargée en mémoire. Ce contrôle refuse tout ce qui ressemble à une
+//        donnée d'essai dans le rendu.
+const motifsTest = [
+  /\btest@/i, /@test\./i, /\bexemple\.(com|net|org)\b/i, /\bexample\.(com|net|org)\b/i,
+  /facebook\.com\/test\b/i, /wa\.me\/2613211222\d+/,
+];
+motifsTest.forEach(motif => {
+  const trouve = rendu.match(motif);
+  if (trouve) {
+    problems.push(`Coordonnée de test publiée : « ${trouve[0]} »`);
+  }
+});
+
 // 5. Hiérarchie des titres : un seul h1, et jamais de niveau saute
 const headings = [];
 (function collect(n) {

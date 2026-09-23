@@ -202,6 +202,18 @@ final class SiteBuilder
     /** @return array<string,int> fichier => octets écrits */
     public function buildAll(): array
     {
+        /**
+         * La configuration est relue depuis le disque avant chaque
+         * génération.
+         *
+         * Elle est mise en cache pour la durée du processus : un script qui
+         * modifie config/site.php puis régénère — le banc de test, par
+         * exemple, qui restaure l'état d'origine avant de reconstruire —
+         * produisait sinon un site figé sur les valeurs déjà chargées. Des
+         * coordonnées de test se sont retrouvées publiées de cette façon.
+         */
+        Config::recharger();
+
         $ecrits = [];
 
         // Une passe complète par langue. Le français sort à la racine, les
