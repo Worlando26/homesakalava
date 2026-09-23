@@ -1,6 +1,6 @@
 {
     "version": 1,
-    "updated_at": "2026-09-22T21:24:59+02:00",
+    "updated_at": "2026-09-23T17:24:20+02:00",
     "settings": {
         "showPrices": true,
         "priceFallback": "250.000Ar"
@@ -785,11 +785,15 @@
     "nav": {
         "links": [
             {
-                "label": "Nos chambres",
+                "label": "Accueil",
+                "href": "index.html"
+            },
+            {
+                "label": "Chambres",
                 "href": "chambres.html"
             },
             {
-                "label": "Le restaurant",
+                "label": "Restaurant",
                 "href": "index.html#restaurant"
             },
             {
@@ -797,7 +801,7 @@
                 "href": "activites.html"
             },
             {
-                "label": "Accès & Contact",
+                "label": "Accès",
                 "href": "acces.html"
             }
         ],

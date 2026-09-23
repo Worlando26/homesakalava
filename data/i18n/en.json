@@ -95,16 +95,19 @@
         "nav": {
             "links": [
                 {
-                    "label": "Our rooms"
+                    "label": "Home"
                 },
                 {
-                    "label": "The restaurant"
+                    "label": "Rooms"
+                },
+                {
+                    "label": "Restaurant"
                 },
                 {
                     "label": "Activities"
                 },
                 {
-                    "label": "Getting here"
+                    "label": "Find us"
                 }
             ],
             "cta": {

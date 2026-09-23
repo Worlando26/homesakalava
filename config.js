@@ -7,7 +7,7 @@
 //
 //  Source des données : data/content.json
 //  Régénérer          : php tools/build.php
-//  Généré le          : 22/09/2026 à 21:25
+//  Généré le          : 23/09/2026 à 17:24
 // ═══════════════════════════════════════════════════════════════
 
 const CONFIG = {
@@ -28,11 +28,15 @@ const CONFIG = {
     "nav": {
         "links": [
             {
-                "label": "Nos chambres",
+                "label": "Accueil",
+                "href": "index.html"
+            },
+            {
+                "label": "Chambres",
                 "href": "chambres.html"
             },
             {
-                "label": "Le restaurant",
+                "label": "Restaurant",
                 "href": "index.html#restaurant"
             },
             {
@@ -40,7 +44,7 @@ const CONFIG = {
                 "href": "activites.html"
             },
             {
-                "label": "Accès & Contact",
+                "label": "Accès",
                 "href": "acces.html"
             }
         ],

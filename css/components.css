@@ -783,7 +783,7 @@ a.ideal-card__open { text-decoration: none; }
 .nav--solid .nav__brand-sub { color: var(--c-muted); }
 
 /* ── Liens ───────────────────────────────────────────────── */
-.nav__links { display: flex; gap: 26px; }
+.nav__links { display: flex; gap: 22px; }
 .nav__links a {
   position: relative;
   font-size: 11px;
@@ -923,15 +923,16 @@ a.ideal-card__open { text-decoration: none; }
 
 /* ══ RESPONSIVE ══════════════════════════════════════════ */
 
-/* Sous 1024 px, les libelles ne tiennent plus a cote du nom centre :
-   on bascule sur le menu au doigt. */
-@media (max-width: 1023px) {
+/* Sous 1200 px, les cinq libelles ne tiennent plus a cote du nom centre :
+   on bascule sur le menu au doigt. Mesure faite sur la largeur reelle des
+   textes, pas au juge. */
+@media (max-width: 1199px) {
   .nav__links { display: none; }
   .nav__burger { display: flex; }
   .nav__cta { display: none; }   /* repris dans le tiroir */
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 1200px) {
   .nav__drawer { display: none !important; }
 }
 

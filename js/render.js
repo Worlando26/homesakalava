@@ -138,7 +138,9 @@ function renderNav() {
 
   nav.links.forEach(link => {
     const cible = link.href.split('#')[0].replace('.html', '') || 'index';
-    const actif = cible === page;
+    // Un lien vers une ancre de l accueil (« Restaurant ») ne doit pas etre
+    // marque comme page courante en meme temps que « Accueil ».
+    const actif = cible === page && !link.href.includes('#');
 
     [navLinks, drawLinks].forEach(ul => {
       const li = el('li');
