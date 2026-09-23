@@ -446,11 +446,24 @@ register_shutdown_function(function () use ($confSave, $confFile, $root) {
     }
 });
 
-/** Relit config/site.php depuis le disque, hors du processus web. */
+/**
+ * Relit la configuration depuis le disque, hors du processus web.
+ * La surcouche locale est fusionnee comme le fait le site : le mot de passe
+ * SMTP y vit, hors du fichier versionne.
+ */
 function conf(): array
 {
-    global $confFile;
-    return (array) (include $confFile);
+    global $confFile, $root;
+    $base = (array) (include $confFile);
+    $loc  = $root . '/config/site.local.php';
+    if (is_file($loc)) {
+        $sur = (array) (include $loc);
+        foreach ($sur as $k => $v) {
+            $base[$k] = is_array($v) && isset($base[$k]) && is_array($base[$k])
+                ? array_merge($base[$k], $v) : $v;
+        }
+    }
+    return $base;
 }
 
 $r = http("$base/config/site.php");

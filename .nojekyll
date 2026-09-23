@@ -1,0 +1,4 @@
+# Ce fichier vide desactive Jekyll sur GitHub Pages.
+# Sans lui, Pages ignore tout dossier ou fichier commencant par un
+# tiret bas, et applique un traitement de gabarit dont ce site n a
+# pas besoin : le HTML est deja genere.

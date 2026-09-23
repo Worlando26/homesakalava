@@ -1,0 +1,37 @@
+# Dossier des photos publiees depuis le back-office.
+#
+# Les fichiers y sont ecrits par PHP apres validation stricte (type MIME reel,
+# taille, dimensions) et sont toujours reencodes par GD, ce qui detruit tout
+# contenu executable qui aurait ete cache dans une image. Cette configuration
+# est la seconde barriere : meme un fichier inattendu ne doit pas pouvoir etre
+# interprete comme un script.
+
+# 1. Aucun moteur de script ne traite les fichiers de ce dossier.
+#    php_flag n'existe que sous mod_php : on le conditionne pour ne pas
+#    provoquer d'erreur 500 si PHP tourne en FastCGI.
+<IfModule mod_php.c>
+  php_flag engine off
+</IfModule>
+<IfModule mod_php7.c>
+  php_flag engine off
+</IfModule>
+
+RemoveHandler .php .php3 .php4 .php5 .php7 .php8 .phtml .phps .phar .cgi .pl .py .asp .aspx .jsp
+RemoveType    .php .php3 .php4 .php5 .php7 .php8 .phtml .phps .phar
+
+# 2. Refus explicite des extensions executables, quoi qu'il arrive.
+<FilesMatch "\.(php[0-9]?|phtml|phps|phar|cgi|pl|py|asp|aspx|jsp|sh|exe|htaccess)$">
+  Require all denied
+</FilesMatch>
+
+# 3. Pas de deduction de type par le navigateur, et mise en cache longue :
+#    les noms de fichiers sont uniques, une photo modifiee change de nom.
+<IfModule mod_headers.c>
+  Header set X-Content-Type-Options "nosniff"
+</IfModule>
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType image/jpeg "access plus 1 year"
+  ExpiresByType image/webp "access plus 1 year"
+  ExpiresByType image/png  "access plus 1 year"
+</IfModule>

@@ -3,9 +3,11 @@ data/admin.json
 .env
 *.env
 
-# Médias uploadés depuis le back-office
-uploads/*
-!uploads/.gitkeep
+# Les photos publiees FONT PARTIE du site : elles doivent etre versionnees.
+# Les exclure les rendait absentes d un hebergement statique, ou rien ne les
+# reconstruit — c est ce qui provoquait les erreurs 404 en ligne.
+#
+# Les originaux, eux, ne sont jamais servis : ils restent hors du depot.
 storage/originals/*
 !storage/originals/.gitkeep
 
@@ -23,3 +25,12 @@ livraison/
 
 # Journal des erreurs PHP (genere a l execution)
 data/erreurs.log
+
+# Secrets hors depot : mot de passe SMTP.
+# Ce depot est public — rien de confidentiel ne doit y entrer.
+config/site.local.php
+
+# Journaux et compteurs generes a l execution
+data/emails-test.log
+data/envois.json
+data/media.generated.json

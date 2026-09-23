@@ -39,8 +39,39 @@ final class Config
         }
 
         $data = require $fichier;
-        self::$data = is_array($data) ? $data : [];
+        $data = is_array($data) ? $data : [];
+
+        /**
+         * Surcouche locale, jamais versionnée.
+         *
+         * Le dépôt de ce site est public : un mot de passe écrit dans
+         * config/site.php y serait lisible par tout le monde, d'autant que
+         * GitHub Pages sert les fichiers PHP tels quels, sans les exécuter.
+         * Les secrets vivent donc ici, à côté, hors de git.
+         */
+        $local = self::$racine . '/config/site.local.php';
+        if (is_file($local)) {
+            $surcouche = require $local;
+            if (is_array($surcouche)) {
+                $data = self::fusionner($data, $surcouche);
+            }
+        }
+
+        self::$data = $data;
         return self::$data;
+    }
+
+    /** Fusion récursive : la surcouche remplace, elle n'efface jamais. */
+    private static function fusionner(array $base, array $surcouche): array
+    {
+        foreach ($surcouche as $cle => $valeur) {
+            if (is_array($valeur) && isset($base[$cle]) && is_array($base[$cle])) {
+                $base[$cle] = self::fusionner($base[$cle], $valeur);
+            } elseif ($valeur !== null && $valeur !== '') {
+                $base[$cle] = $valeur;
+            }
+        }
+        return $base;
     }
 
     /** Rechargement forcé — utilisé après une écriture depuis l'admin. */
@@ -281,6 +312,19 @@ final class Config
         $racine  = dirname(__DIR__);
         $fichier = $racine . '/config/site.php';
 
+        /**
+         * Le mot de passe SMTP est mis de côté, dans un fichier exclu de git.
+         *
+         * Il ne doit jamais entrer dans config/site.php, qui est versionné et
+         * se retrouverait publiquement lisible sur un dépôt ouvert. Ce
+         * déroutement est automatique : personne n'a à y penser.
+         */
+        $secret = (string) ($data['smtp']['motdepasse'] ?? '');
+        if ($secret !== '' && $secret !== self::A_REMPLIR) {
+            self::ecrireSecrets(['smtp' => ['motdepasse' => $secret]]);
+            $data['smtp']['motdepasse'] = self::A_REMPLIR;
+        }
+
         $entete = <<<'PHP'
             <?php
             /**
@@ -328,6 +372,60 @@ final class Config
 
         @chmod($fichier, 0640);
         self::recharger();
+    }
+
+    /**
+     * Écrit la surcouche locale, hors de git.
+     *
+     * Le fichier est recréé entièrement à partir de ce qu'il contenait,
+     * fusionné avec les nouveaux secrets : mettre à jour le mot de passe
+     * n'efface pas les autres valeurs qu'on aurait pu y placer.
+     */
+    private static function ecrireSecrets(array $secrets): void
+    {
+        $racine  = dirname(__DIR__);
+        $fichier = $racine . '/config/site.local.php';
+
+        $actuel = is_file($fichier) ? (require $fichier) : [];
+        $fusion = self::fusionner(is_array($actuel) ? $actuel : [], $secrets);
+
+        $entete = <<<'PHP'
+            <?php
+            /**
+             * config/site.local.php — SECRETS, HORS DÉPÔT
+             *
+             * Ce fichier n'est pas versionné : il est exclu par .gitignore.
+             * Il contient le mot de passe SMTP, qui ne doit jamais se
+             * retrouver dans un dépôt public.
+             *
+             * Ses valeurs recouvrent celles de config/site.php.
+             *
+             * EN CAS DE DÉMÉNAGEMENT : ce fichier ne suit pas automatiquement.
+             * Recopiez-le à la main sur le nouveau serveur, ou ressaisissez le
+             * mot de passe depuis Réglages → Envoi des e-mails.
+             */
+
+            declare(strict_types=1);
+
+            return
+            PHP;
+
+        $php = $entete . ' ' . self::exporter($fusion, 0) . ";\n";
+
+        $tmp = $fichier . '.tmp';
+        if (file_put_contents($tmp, $php, LOCK_EX) === false) {
+            throw new RuntimeException("Écriture impossible dans config/.");
+        }
+        if (!is_array(@include $tmp)) {
+            @unlink($tmp);
+            throw new RuntimeException("Le fichier de secrets produit est invalide.");
+        }
+        if (!rename($tmp, $fichier)) {
+            @unlink($tmp);
+            throw new RuntimeException("Remplacement de config/site.local.php impossible.");
+        }
+
+        @chmod($fichier, 0600);
     }
 
     /** Export récursif en PHP littéral, indenté et lisible. */

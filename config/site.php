@@ -38,7 +38,7 @@ return [
         'booking' => 'A_REMPLIR',
     ],
     'site' => [
-        'url' => 'A_REMPLIR',
+        'url' => 'https://worlando26.github.io/homesakalava',
     ],
     'smtp' => [
         'hote' => 'smtp.gmail.com',
